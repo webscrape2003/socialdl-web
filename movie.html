@@ -3,137 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajira Search</title>
+    <title>Vajira Movie Box - Optimized</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff1e2a; --bg: #0a0a0a; --card: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
 
-        /* Search Bar Header */
-        .header { 
-            padding: 20px; 
-            background: #000; 
-            border-bottom: 1px solid #222; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-        }
-        .search-box { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            display: flex; 
-            gap: 10px; 
-            background: #1a1a1a; 
-            padding: 5px; 
-            border-radius: 12px; 
-            border: 1px solid #333;
-        }
-        input { 
-            flex: 1; 
-            background: transparent; 
-            border: none; 
-            color: white; 
-            padding: 12px; 
-            outline: none; 
-            font-size: 1rem;
-        }
-        button { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 0 20px; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            cursor: pointer; 
-        }
+        .header { padding: 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
+        .search-box { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; background: #1a1a1a; padding: 5px; border-radius: 12px; border: 1px solid #333; }
+        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 1rem; }
+        button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        button:hover { opacity: 0.8; }
 
         .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
-        .section-title { 
-            font-size: 1.2rem; 
-            font-weight: 800; 
-            margin-bottom: 25px; 
-            color: #eee;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; color: #fff; text-transform: capitalize; border-left: 5px solid var(--primary); padding-left: 15px; }
 
-        /* Movie Grid Layout */
-        .movie-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 20px; 
-        }
-        .movie-card { 
-            background: var(--card); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            transition: transform 0.3s; 
-            cursor: pointer; 
-            border: 1px solid #222;
-            position: relative;
-        }
-        .movie-card:hover { 
-            transform: translateY(-8px); 
-            border-color: var(--primary); 
-        }
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         
-        .image-container {
-            position: relative;
-            width: 100%;
-            padding-top: 150%; /* 2:3 Aspect Ratio */
-        }
-        .movie-card img { 
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-        }
+        .movie-card { background: var(--card); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; border: 1px solid #222; position: relative; display: flex; flex-direction: column; }
+        .movie-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(255, 30, 42, 0.2); }
         
-        .card-info { padding: 12px; background: var(--card); }
-        .card-title { 
-            font-size: 0.85rem; 
-            font-weight: 600; 
-            line-height: 1.4; 
-            color: #fff;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-align: center;
-        }
+        .badge-container { position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 5px; z-index: 10; }
+        .badge { font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; color: white; }
+        .badge.lang { background: #3b82f6; }
+        .badge.quality { background: var(--primary); }
+        .badge.resolution { background: #a855f7; }
 
-        /* Quality Badges (Static design like image) */
-        .badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: var(--primary);
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 4px;
-            z-index: 10;
-        }
+        .image-container { position: relative; width: 100%; padding-top: 145%; background: #1a1a1a; }
+        .movie-card img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-info { padding: 15px; background: linear-gradient(to top, #000 70%, transparent); margin-top: -50px; position: relative; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+        .card-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
 
-        @media (max-width: 600px) {
-            .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        }
+        @media (max-width: 600px) { .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search movies or year..." value="2026">
+        <input type="text" id="searchInput" placeholder="Search Movies..." value="2025">
         <button onclick="searchMovies()">SEARCH</button>
     </div>
 </div>
 
 <div class="container">
     <div class="section-title" id="statusText">Recently Added</div>
-    <div class="movie-grid" id="movieGrid">
-        </div>
+    <div id="loading" style="display:none; text-align:center; padding: 40px; color: var(--primary);">Loading movies...</div>
+    <div class="movie-grid" id="movieGrid"></div>
 </div>
 
 <script>
@@ -144,51 +61,70 @@
         const query = document.getElementById('searchInput').value.trim();
         const grid = document.getElementById('movieGrid');
         const status = document.getElementById('statusText');
+        const loader = document.getElementById('loading');
         
         if(!query) return;
 
-        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; opacity:0.5;">Searching...</p>';
+        // Reset UI
+        grid.innerHTML = '';
+        loader.style.display = 'block';
         status.innerText = `Results for: ${query}`;
 
         const searchUrl = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/search?q=${encodeURIComponent(query)}&apikey=${apikey}`;
 
         try {
             const resp = await fetch(proxy + encodeURIComponent(searchUrl));
-            const jsonWrapper = await resp.json();
-            const result = JSON.parse(jsonWrapper.contents);
-            const movies = result.data.data.data;
+            if (!resp.ok) throw new Error("Proxy Error");
 
-            grid.innerHTML = movies.map(m => {
-                if(!m.title || !m.image) return '';
-                return `
-                    <div class="movie-card" onclick="window.open('${m.link}', '_blank')">
-                        <div class="badge">FHD</div>
+            const jsonWrapper = await resp.json();
+            // AllOrigins stores the actual response as a string in 'contents'
+            const result = JSON.parse(jsonWrapper.contents);
+            
+            // Navigate the API response tree safely
+            const moviesArray = result?.data?.data?.data || result?.data || [];
+
+            loader.style.display = 'none';
+
+            if(moviesArray.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 50px;">No movies found. Try another keyword.</p>';
+                return;
+            }
+
+            let htmlBuffer = '';
+            moviesArray.forEach(movie => {
+                if(!movie.title) return;
+
+                // Handle missing images with a placeholder
+                const poster = movie.image || 'https://via.placeholder.com/300x450?text=No+Poster';
+
+                htmlBuffer += `
+                    <div class="movie-card" onclick="window.open('${movie.link}', '_blank')">
+                        <div class="badge-container">
+                            <span class="badge lang">Sinhala</span>
+                            <span class="badge quality">WEB-DL</span>
+                            <span class="badge resolution">HD</span>
+                        </div>
                         <div class="image-container">
-                            <img src="${m.image}" alt="poster" loading="lazy">
+                            <img src="${poster}" alt="movie poster" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=Image+Error'">
                         </div>
                         <div class="card-info">
-                            <div class="card-title">${m.title}</div>
+                            <div class="card-title">${movie.title}</div>
                         </div>
                     </div>
                 `;
-            }).join('');
+            });
 
-            if(grid.innerHTML === '') {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No movies found.</p>';
-            }
+            grid.innerHTML = htmlBuffer;
 
         } catch (e) {
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:red;">Error fetching search results.</p>';
+            console.error("Fetch Error:", e);
+            loader.style.display = 'none';
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--primary);">Error connecting to Movie API.</p>';
         }
     }
 
-    // Load initial 2026 results
-    searchMovies();
-
-    // Allow "Enter" key to search
-    document.getElementById('searchInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') searchMovies();
-    });
+    // Trigger initial search on load
+    window.onload = searchMovies;
 </script>
 
 </body>
