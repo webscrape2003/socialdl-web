@@ -24,10 +24,10 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: white;
-            overflow: hidden; /* Hide scroll during splash */
+            overflow: hidden; /* Prevent scroll during splash */
         }
 
-        /* --- SPLASH SCREEN --- */
+        /* --- SPLASH SCREEN ANIMATION --- */
         #splash-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -37,12 +37,13 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: transform 1s cubic-bezier(1, 0, 0, 1), opacity 1s;
+            transition: transform 1.2s cubic-bezier(1, 0, 0, 1), opacity 1s;
         }
 
         .logo-text {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
+            letter-spacing: -1px;
             background: linear-gradient(90deg, #fff, var(--accent), #fff);
             background-size: 200%;
             -webkit-background-clip: text;
@@ -51,7 +52,7 @@
         }
 
         .loading-bar {
-            width: 200px;
+            width: 180px;
             height: 2px;
             background: rgba(255,255,255,0.05);
             margin-top: 30px;
@@ -63,7 +64,7 @@
             width: 0%;
             height: 100%;
             background: var(--accent);
-            animation: progress 3s forwards ease-in-out;
+            animation: progress 3s forwards cubic-bezier(0.445, 0.05, 0.55, 0.95);
         }
 
         @keyframes shimmer { 0% { background-position: -200%; } 100% { background-position: 200%; } }
@@ -91,11 +92,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Social Media Grid */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
-            perspective: 1000px; /* For 3D feel */
+            perspective: 1000px;
         }
 
         .social-card {
@@ -107,58 +109,45 @@
             text-decoration: none;
             color: inherit;
             display: block;
-            position: relative;
             backdrop-filter: blur(15px);
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            opacity: 0; /* Animated via JS */
-            transform: translateY(50px) rotateX(10deg);
+            opacity: 0; 
+            transform: translateY(40px); /* Initial state for animation */
         }
 
-        .social-card.show {
+        /* Animation class added via JS */
+        .social-card.reveal {
             opacity: 1;
-            transform: translateY(0) rotateX(0);
+            transform: translateY(0);
         }
-
-        /* Animated Glowing Hover */
-        .social-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 40px;
-            background: radial-gradient(800px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%);
-            opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
-        }
-
-        .social-card:hover::before { opacity: 1; }
 
         .social-card:hover {
             transform: translateY(-15px) scale(1.02);
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.06);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
-        /* Icon Animations */
         .icon-box {
             font-size: 3rem;
             margin-bottom: 25px;
+            display: inline-block;
             transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .social-card:hover .icon-box {
-            transform: scale(1.2) rotate(5deg);
+            transform: scale(1.2) rotate(8deg);
         }
 
+        /* Brand Colors on Hover */
         .yt-card:hover .icon-box { color: var(--yt); filter: drop-shadow(0 0 15px var(--yt)); }
         .fb-card:hover .icon-box { color: var(--fb); filter: drop-shadow(0 0 15px var(--fb)); }
         .tt-card:hover .icon-box { color: var(--tt); filter: drop-shadow(0 0 15px var(--tt)); }
         .mv-card:hover .icon-box { color: var(--mv); filter: drop-shadow(0 0 15px var(--mv)); }
 
-        .social-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px; }
-        .social-card p { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; opacity: 0.8; }
-
+        .social-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; }
+        .social-card p { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; }
+        
         footer {
             margin-top: 80px;
             text-align: center;
@@ -182,81 +171,69 @@
 
     <div id="main-content">
         <header>
-            <h1 style="font-size: 3.5rem;">Vajira<span>Official</span></h1>
-            <p style="color: #64748b; margin-top: 10px; font-weight: 600;">Explore the Ultimate Social Ecosystem</p>
+            <h1>Vajira<span>Official</span></h1>
+            <p>The Ultimate Social Media & Movie Hub</p>
         </header>
 
         <div class="social-grid">
             <a href="ytdl.html" class="social-card yt-card">
                 <div class="icon-box"><i class="fa-brands fa-youtube"></i></div>
                 <h3>YouTube</h3>
-                <p>Premium 4K video extraction and high-fidelity audio conversion.</p>
+                <p>Download high-quality 4K videos and crystal clear MP3 audio instantly.</p>
             </a>
 
             <a href="#" class="social-card fb-card">
                 <div class="icon-box"><i class="fa-brands fa-facebook"></i></div>
                 <h3>Facebook</h3>
-                <p>Save Reels and private stories in full HD with zero quality loss.</p>
+                <p>Save your favorite reels, stories, and private videos in one click.</p>
             </a>
 
             <a href="#" class="social-card tt-card">
                 <div class="icon-box"><i class="fa-brands fa-tiktok"></i></div>
                 <h3>TikTok</h3>
-                <p>Watermark-free downloads with lightning fast cloud processing.</p>
+                <p>Extract trending TikTok videos without any watermark in HD quality.</p>
             </a>
 
             <a href="#" class="social-card mv-card">
                 <div class="icon-box"><i class="fa-solid fa-film"></i></div>
                 <h3>Movies</h3>
-                <p>Discover cinematic data, trending trailers, and global ratings.</p>
+                <p>Explore the latest releases, trailers, and hidden cinematic gems.</p>
             </a>
         </div>
 
         <footer>
-            VajiraOfficial <span>Social Media</span>
+            VajiraOfficial <span>SOCIAL MEDIA</span>
         </footer>
     </div>
 
     <script>
-        // Splash Screen Transition
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 const content = document.getElementById('main-content');
                 
-                splash.style.opacity = '0';
+                // Curtain slide up animation
                 splash.style.transform = 'translateY(-100%)';
                 
                 setTimeout(() => {
                     splash.style.display = 'none';
                     content.style.opacity = '1';
                     content.style.visibility = 'visible';
-                    document.body.style.overflow = 'auto';
-                    animateCards();
+                    document.body.style.overflowY = 'auto';
+                    revealCards();
                 }, 800);
-            }, 3000);
+            }, 3000); 
         });
 
-        // Staggered Card Animation
-        function animateCards() {
+        // Function to reveal cards one by one
+        function revealCards() {
             const cards = document.querySelectorAll('.social-card');
             cards.forEach((card, index) => {
                 setTimeout(() => {
-                    card.classList.add('show');
-                }, index * 150); // 150ms delay between cards
+                    card.classList.add('reveal');
+                }, index * 200); // 200ms delay between each card
             });
         }
-
-        // Mouse Tracker for Glowing Effect
-        document.querySelectorAll('.social-card').forEach(card => {
-            card.onmousemove = e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--x', `${x}px`);
-                card.style.setProperty('--y', `${y}px`);
-            };
-        });
     </script>
 </body>
 </html>
