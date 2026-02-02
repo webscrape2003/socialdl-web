@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajira Movie Box - TikTok Edition</title>
+    <title>Vajira Movie Box - Instant DL</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff1e2a; --bg: #0a0a0a; --card: #161616; --text: #ffffff; }
@@ -27,6 +27,12 @@
         #detailView { display: none; }
         .detail-card { background: var(--card); border-radius: 20px; padding: 25px; border: 1px solid #333; display: grid; grid-template-columns: 280px 1fr; gap: 30px; }
         .poster-detail { width: 100%; border-radius: 12px; border: 1px solid #444; }
+        
+        /* Screenshot Gallery */
+        .gallery-wrapper { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin: 20px 0; }
+        .gallery-wrapper img { height: 120px; border-radius: 8px; border: 1px solid #333; cursor: pointer; transition: 0.2s; }
+        .gallery-wrapper img:hover { border-color: var(--primary); transform: scale(1.05); }
+
         .dl-row { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #333; }
         .dl-btn { background: #00d26a; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 800; cursor: pointer; }
 
@@ -69,11 +75,16 @@
         if(view === 'grid') document.getElementById('status').innerHTML = "";
     }
 
-    // Helper to fetch and parse JSON safely through proxy
     async function secureFetch(targetUrl) {
-        const resp = await fetch(PROXY + encodeURIComponent(targetUrl));
-        const data = await resp.json();
-        return JSON.parse(data.contents);
+        try {
+            const resp = await fetch(PROXY + encodeURIComponent(targetUrl));
+            if (!resp.ok) throw new Error("Proxy Error");
+            const data = await resp.json();
+            return JSON.parse(data.contents);
+        } catch (err) {
+            console.error("Fetch failed:", err);
+            throw err;
+        }
     }
 
     async function searchMovies() {
@@ -84,13 +95,13 @@
         const grid = document.getElementById('movieGrid');
         const status = document.getElementById('status');
         grid.innerHTML = "";
-        status.innerHTML = "Fetching Movie List...";
+        status.innerHTML = "Searching Movie Database...";
 
         try {
             const result = await secureFetch(`https://vajira-mv-apikeys.netlify.app/api/pirate/search?q=${encodeURIComponent(query)}&apikey=${API_KEY}`);
             const movies = result.data?.data?.data || result.data?.data || [];
 
-            status.innerHTML = movies.length ? "" : "No movies found.";
+            status.innerHTML = movies.length ? "" : "No results found.";
             grid.innerHTML = movies.map(m => `
                 <div class="movie-card" onclick="loadDetails('${m.link}')">
                     <div class="img-box"><img src="${m.imageSrc || m.image}"></div>
@@ -98,7 +109,7 @@
                 </div>
             `).join('');
         } catch (e) {
-            status.innerHTML = "Error: Connection Timed Out. Try again.";
+            status.innerHTML = "Connection error. Please try again.";
         }
     }
 
@@ -106,13 +117,14 @@
         showView('detail');
         const content = document.getElementById('detailContent');
         const status = document.getElementById('status');
-        status.innerHTML = "Loading Movie Data...";
+        status.innerHTML = "Fetching Details & Screenshots...";
         content.innerHTML = "";
 
         try {
             const result = await secureFetch(`https://vajira-mv-apikeys.netlify.app/api/pirate/movie?url=${encodeURIComponent(movieUrl)}&apikey=${API_KEY}`);
             const data = result.data.data;
             const main = data.mainDetails;
+            const extra = data.moviedata;
             const links = data.dllinks.directDownloadLinks;
 
             status.innerHTML = "";
@@ -121,8 +133,15 @@
                     <img src="${main.imageUrl}" class="poster-detail">
                     <div>
                         <h2 style="margin:0;">${main.maintitle}</h2>
-                        <p style="color:#aaa; font-size:0.9rem; margin:15px 0;">${data.moviedata.description.substring(0, 300)}...</p>
+                        <p style="color:#aaa; font-size:0.9rem; margin:15px 0;">${extra.description || 'No description available.'}</p>
+                        
+                        <div style="font-size:0.75rem; color:var(--primary); font-weight:800; text-transform:uppercase; letter-spacing:1px;">Media Gallery</div>
+                        <div class="gallery-wrapper">
+                            ${extra.imageUrls.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('')}
+                        </div>
+
                         <div style="margin-top:20px;">
+                            <div style="font-size:0.75rem; color:var(--primary); font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Download Options</div>
                             ${links.map(l => `
                                 <div class="dl-row">
                                     <div><b>${l.quality}</b><br><small>${l.size}</small></div>
@@ -134,7 +153,7 @@
                 </div>
             `;
         } catch (e) {
-            status.innerHTML = "Error loading details.";
+            status.innerHTML = "Error: Could not load movie details.";
         }
     }
 
@@ -143,11 +162,11 @@
             const result = await secureFetch(`https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(dlUrl)}&apikey=${API_KEY}`);
             let link = result.data.data.link;
             if (link) {
-                // REDIRECT FIX: Swap api/file/ to u/
+                // Redirect logic: swap api/file/ to u/
                 window.location.href = link.replace('api/file/', 'u/').split('?')[0];
             }
         } catch (e) {
-            alert("Could not generate link.");
+            alert("Error generating download link.");
         }
     }
 
