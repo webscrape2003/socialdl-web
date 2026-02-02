@@ -3,205 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Rajasaab (2026) - Sinhala Subtitles</title>
+    <title>Vajira Movie Detailer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #ff1e2a;
-            --bg: #050505;
-            --surface: #121212;
-            --text: #ffffff;
-        }
+        :root { --primary: #ff1e2a; --bg: #050505; --card: #121212; --text: #ffffff; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        /* Hero Background */
-        .hero-bg {
-            position: fixed;
+        /* URL Input Header */
+        .url-header {
+            padding: 30px 20px;
+            background: #111;
+            border-bottom: 1px solid #222;
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.7), var(--bg)), 
-                        url('https://image.tmdb.org/t/p/original/5a9xbImnFttv7HuWgud7E23OFvv.jpg');
-            background-size: cover;
-            background-position: center;
-            z-index: -1;
-            filter: blur(5px);
-            opacity: 0.4;
+            z-index: 1000;
         }
-
-        .container {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 20px;
-        }
-
-        .movie-header {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        .poster-wrapper img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0 0 10px 0;
-        }
-
-        .meta {
+        .input-group {
+            max-width: 800px;
+            margin: 0 auto;
             display: flex;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 25px;
+            gap: 10px;
+            background: #000;
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid #333;
         }
-
-        .imdb-tag {
-            background: #f5c518;
-            color: #000;
-            padding: 3px 10px;
-            border-radius: 5px;
-            font-weight: 800;
-            font-size: 0.9rem;
+        #urlInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px;
+            outline: none;
         }
-
-        .genre-pill {
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        .description {
-            font-size: 1.1rem;
-            color: #ccc;
-            margin-bottom: 30px;
-        }
-
-        /* Download Section */
-        .download-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            margin-top: 40px;
-        }
-
-        .dl-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .dl-row:last-child { border: none; }
-
-        .quality-info { font-weight: 600; font-size: 1.1rem; }
-        .size-info { color: #888; font-size: 0.9rem; }
-
-        .btn-download {
+        #fetchBtn {
             background: var(--primary);
             color: white;
-            text-decoration: none;
+            border: none;
             padding: 10px 25px;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
-            transition: 0.3s;
+            cursor: pointer;
         }
 
-        .btn-download:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 30, 42, 0.4);
+        .container { max-width: 1100px; margin: 40px auto; padding: 20px; }
+
+        /* Image Slider */
+        .slider-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            background: #111;
+        }
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+        .slider-track img {
+            min-width: 100%;
+            object-fit: cover;
         }
 
-        @media (max-width: 800px) {
-            .movie-header { grid-template-columns: 1fr; text-align: center; }
-            .meta { justify-content: center; }
-            .poster-wrapper { max-width: 250px; margin: 0 auto; }
+        /* Movie Info Layout */
+        .movie-grid { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
+        .main-poster { width: 100%; border-radius: 15px; border: 1px solid #333; }
+        .imdb-badge { background: #f5c518; color: #000; padding: 4px 10px; border-radius: 5px; font-weight: 800; }
+        .description { color: #ccc; font-size: 1.1rem; margin: 20px 0; }
+        
+        /* Download Table */
+        .download-box {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #222;
+        }
+        .dl-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #222;
+        }
+        .dl-item:last-child { border: none; }
+        .dl-btn { background: var(--primary); color: white; text-decoration: none; padding: 8px 20px; border-radius: 6px; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .movie-grid { grid-template-columns: 1fr; }
+            .slider-container { height: 250px; }
         }
     </style>
 </head>
 <body>
 
-<div class="hero-bg"></div>
-
-<div class="container" id="movie-content">
-    <div style="text-align:center; padding: 100px;">Loading Movie Details...</div>
+<div class="url-header">
+    <div class="input-group">
+        <input type="text" id="urlInput" placeholder="Paste movie URL here..." value="https://sinhalasub.lk/movies/the-rajasaab-2026-sinhala-subtitles/">
+        <button id="fetchBtn" onclick="fetchMovieDetails()">Get Details</button>
+    </div>
 </div>
+
+<div class="container" id="content-area">
+    </div>
 
 <script>
     const apikey = "vajiraofficial";
-    const movieUrl = "https://sinhalasub.lk/movies/the-rajasaab-2026-sinhala-subtitles/";
     const proxy = "https://api.allorigins.win/get?url=";
+    let slideIndex = 0;
 
-    async function loadDetails() {
-        const fullUrl = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
-        
+    async function fetchMovieDetails() {
+        const movieUrl = document.getElementById('urlInput').value.trim();
+        if (!movieUrl) return alert("Please enter a URL");
+
+        const display = document.getElementById('content-area');
+        display.innerHTML = '<div style="text-align:center; padding:50px;">Fetching all details...</div>';
+
+        const apiUrl = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
+
         try {
-            const resp = await fetch(proxy + encodeURIComponent(fullUrl));
+            const resp = await fetch(proxy + encodeURIComponent(apiUrl));
             const json = JSON.parse((await resp.json()).contents);
-            const movie = json.data.data.mainDetails;
-            const links = json.data.data.dllinks.DownloadLinks;
+            const data = json.data.data;
+            const movie = data.mainDetails;
+            const links = data.dllinks.DownloadLinks;
 
-            document.getElementById('movie-content').innerHTML = `
-                <div class="movie-header">
-                    <div class="poster-wrapper">
-                        <img src="${movie.imageUrl}" alt="Poster">
+            display.innerHTML = `
+                <div class="slider-container">
+                    <div class="slider-track" id="sliderTrack">
+                        ${movie.imgUrls.map(url => `<img src="${url.trim()}" onerror="this.style.display='none'">`).join('')}
                     </div>
-                    <div class="info-wrapper">
-                        <h1>${movie.maintitle}</h1>
-                        <div class="meta">
-                            <span class="imdb-tag">${movie.imdbRating}</span>
-                            <span>${movie.dateCreated}</span>
-                            <span>${movie.country}</span>
+                </div>
+
+                <div class="movie-grid">
+                    <div>
+                        <img src="${movie.imageUrl}" class="main-poster">
+                        <div style="margin-top:20px; font-size:0.9rem; color:#888">
+                            <b>Director:</b> ${movie.director}<br>
+                            <b>Subtitles:</b> ${movie.subtitlesBy}<br>
+                            <b>Runtime:</b> ${movie.runtime}
                         </div>
-                        <div class="meta">
-                            ${movie.genres.map(g => `<span class="genre-pill">${g}</span>`).join('')}
+                    </div>
+                    <div>
+                        <h1 style="margin-top:0">${movie.maintitle}</h1>
+                        <div style="margin-bottom:15px;">
+                            <span class="imdb-badge">${movie.imdbRating}</span>
+                            <span style="margin-left:15px; color:#aaa">${movie.dateCreated} • ${movie.country}</span>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-bottom:20px;">
+                            ${movie.genres.map(g => `<span style="background:#222; padding:3px 12px; border-radius:20px; font-size:0.8rem">${g}</span>`).join('')}
                         </div>
                         <p class="description">${movie.description}</p>
-                        
-                        <div class="download-card">
-                            <h3 style="margin-top:0">Direct Download Links</h3>
+
+                        <div class="download-box">
+                            <h3 style="margin-top:0">Download Options</h3>
                             ${links.map(l => `
-                                <div class="dl-row">
-                                    <div>
-                                        <div class="quality-info">${l.quality}</div>
-                                        <div class="size-info">${l.size} (${l.type})</div>
-                                    </div>
-                                    <a href="${l.link}" target="_blank" class="btn-download">Download</a>
+                                <div class="dl-item">
+                                    <div><b>${l.quality}</b> <span style="color:#666; margin-left:10px;">${l.size}</span></div>
+                                    <a href="${l.link}" target="_blank" class="dl-btn">Download</a>
                                 </div>
                             `).join('')}
-                        </div>
-                        
-                        <div style="margin-top:20px; font-size: 0.8rem; color: #666;">
-                            Director: ${movie.director}<br>
-                            Subtitles by: ${movie.subtitlesBy}
                         </div>
                     </div>
                 </div>
             `;
+
+            startSlider();
+
         } catch (e) {
-            document.getElementById('movie-content').innerHTML = "Failed to load movie data.";
+            display.innerHTML = '<div style="color:red; text-align:center;">Failed to fetch. Ensure the URL is correct.</div>';
         }
     }
 
-    loadDetails();
+    function startSlider() {
+        const track = document.getElementById('sliderTrack');
+        const images = track.getElementsByTagName('img');
+        if (images.length <= 1) return;
+        
+        slideIndex = 0;
+        setInterval(() => {
+            slideIndex++;
+            if (slideIndex >= images.length) slideIndex = 0;
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }, 3000);
+    }
+
+    // Auto load first one
+    fetchMovieDetails();
 </script>
 
 </body>
