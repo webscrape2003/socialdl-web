@@ -175,18 +175,18 @@
         let finalVideoLink = result.data.data.link;
 
         if (finalVideoLink) {
-            // This takes the API link and adds ?download to the end
-            // Example: https://pixeldrain.com/api/file/xCKedr4x -> https://pixeldrain.com/api/file/xCKedr4x?download
-            const directUrl = finalVideoLink
+            // Clean URL for direct navigation
+            finalVideoLink = finalVideoLink.replace('api/file/', 'u/').replace(/[?&]download/, '');
             
             // SUDDEN REDIRECT: Replaces current page with the destination instantly
-            window.location.replace(directUrl);
+            window.location.replace(finalVideoLink);
         }
     } catch (e) {
         // Fallback only if the API fails
         console.error("Redirect failed");
     }
 }
+
 
 
 
