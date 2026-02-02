@@ -165,31 +165,41 @@
     }
 
     async function handleDownload(linkUrl, btn) {
-        const originalText = btn.innerText;
-        btn.innerText = "BYPASSING...";
-        btn.disabled = true;
-
-        const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
-
-        try {
-            const resp = await fetch(proxy + encodeURIComponent(downloadApi));
-            const jsonWrapper = await resp.json();
-            const result = JSON.parse(jsonWrapper.contents);
-            const finalLink = result.data.data.link;
-
-            if (finalLink) {
-                // Open the link in a new tab
-                window.open(finalLink, '_blank');
-            } else {
-                alert("Could not resolve final link.");
-            }
-        } catch (e) {
-            alert("Error generating download.");
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
+    const originalText = btn.innerText;
+    
+    // 1. Create a reference to a new blank window immediately on click
+    const newWindow = window.open('about:blank', '_blank');
+    if (newWindow) {
+        newWindow.document.write('<p style="font-family:sans-serif; text-align:center; padding-top:50px;">Bypassing link... Please wait.</p>');
     }
+
+    btn.innerText = "BYPASSING...";
+    btn.disabled = true;
+
+    const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
+
+    try {
+        const resp = await fetch(proxy + encodeURIComponent(downloadApi));
+        const jsonWrapper = await resp.json();
+        const result = JSON.parse(jsonWrapper.contents);
+        const finalLink = result.data.data.link;
+
+        if (finalLink && newWindow) {
+            // 2. Redirect the already-opened tab to the final URL
+            newWindow.location.href = finalLink;
+        } else {
+            if (newWindow) newWindow.close();
+            alert("Could not resolve final link.");
+        }
+    } catch (e) {
+        if (newWindow) newWindow.close();
+        alert("Error generating download.");
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+
 </script>
 </body>
 </html>
