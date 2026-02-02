@@ -167,7 +167,7 @@
         }
     }
 
-    async function handleDownload(linkUrl, btn) {
+        async function handleDownload(linkUrl, btn) {
         const originalText = btn.innerText;
         btn.innerText = "WAIT...";
         btn.disabled = true;
@@ -178,10 +178,15 @@
             const resp = await fetch(proxy + encodeURIComponent(downloadApi));
             const jsonWrapper = await resp.json();
             const result = JSON.parse(jsonWrapper.contents);
-            const finalVideoLink = result.data.data.link;
+            let finalVideoLink = result.data.data.link;
 
             if (finalVideoLink) {
-                window.location.href = finalVideoLink;
+                
+                finalVideoLink = finalVideoLink
+                    .replace('api/file/', 'u/')
+                    .replace(/[?&]download/, '');
+
+                window.open(finalVideoLink, '_blank'); // Opens the new URL in a new tab
             } else {
                 alert("Download link not found.");
             }
@@ -192,6 +197,7 @@
             btn.disabled = false;
         }
     }
+
 </script>
 </body>
 </html>
