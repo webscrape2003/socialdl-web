@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamFetch | Ultra Premium</title>
+    <title>StreamFetch Pro | One-Click Downloader</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #ff2d55;
-            --accent-glow: rgba(255, 45, 85, 0.6);
-            --bg: #0a0a0c;
+            --accent-glow: rgba(255, 45, 85, 0.4);
+            --bg: #0d0e12;
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
         }
@@ -24,240 +24,199 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        .mesh {
+        .mesh-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(at 0% 0%, rgba(255, 45, 85, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(255, 45, 85, 0.08) 0px, transparent 50%);
+            background: radial-gradient(circle at 10% 20%, rgba(255, 45, 85, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(255, 45, 85, 0.05) 0%, transparent 40%);
             z-index: -1;
         }
 
-        .container { width: 100%; max-width: 480px; padding: 20px; }
-
         .app-card {
+            width: 100%;
+            max-width: 500px;
             background: var(--glass);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--border);
-            border-radius: 35px;
+            border-radius: 40px;
             padding: 35px 25px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.7);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+            text-align: center;
         }
 
-        /* Modern Tabs */
-        .tabs {
+        h1 { font-size: 2rem; margin-bottom: 30px; letter-spacing: -1px; }
+        h1 span { color: var(--accent); }
+
+        /* Input area with button BELOW */
+        .search-section {
             display: flex;
-            background: rgba(0,0,0,0.3);
-            padding: 5px;
-            border-radius: 18px;
-            margin-bottom: 25px;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            background: rgba(0,0,0,0.4);
             border: 1px solid var(--border);
-        }
-
-        .tab {
-            flex: 1; padding: 12px; border: none; background: transparent;
-            color: #777; font-weight: 800; cursor: pointer;
-            border-radius: 14px; font-size: 0.75rem; letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 8px 20px var(--accent-glow);
-        }
-
-        /* Attractive Input & Fetch Button */
-        .input-group {
-            display: flex;
-            background: rgba(0,0,0,0.5);
             border-radius: 20px;
-            border: 1px solid var(--border);
-            padding: 6px;
-            gap: 5px;
+            padding: 15px 20px;
             transition: 0.3s;
         }
 
-        .input-group:focus-within { border-color: var(--accent); }
+        .input-wrapper:focus-within { border-color: var(--accent); }
 
         input {
-            flex: 1; background: transparent; border: none;
-            color: white; padding: 0 15px; outline: none; font-size: 0.9rem;
+            width: 100%; background: transparent; border: none;
+            color: white; outline: none; font-size: 1rem; text-align: center;
         }
 
         #fetchBtn {
             background: var(--accent);
             color: white; border: none;
-            height: 45px; padding: 0 25px;
-            border-radius: 15px; font-weight: 800;
-            cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; font-size: 0.75rem;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px var(--accent-glow);
+            padding: 16px; border-radius: 20px;
+            font-weight: 800; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; transition: 0.4s;
+            box-shadow: 0 10px 25px var(--accent-glow);
         }
 
         #fetchBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px var(--accent);
         }
 
-        /* Loader */
-        .loader {
-            display: none;
-            width: 100%; height: 3px;
-            background: rgba(255,255,255,0.05);
-            margin: 25px 0; border-radius: 10px;
-            position: relative; overflow: hidden;
+        /* Results */
+        #resultArea { display: none; animation: slideUp 0.6s ease; text-align: left; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .thumbnail { width: 100%; border-radius: 25px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .vid-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; line-height: 1.4; }
+
+        .section-title {
+            font-size: 0.7rem; color: var(--accent);
+            font-weight: 800; letter-spacing: 2px;
+            margin: 25px 0 12px 0; border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
         }
 
-        .loader::after {
-            content: ''; position: absolute; width: 40%; height: 100%;
-            background: var(--accent); animation: move 1.2s infinite ease-in-out;
-        }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 
-        @keyframes move { 0% { left: -40%; } 100% { left: 100%; } }
-
-        /* Results Display */
-        #resultArea { display: none; margin-top: 30px; animation: scaleIn 0.5s ease; }
-
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        .thumbnail {
-            width: 100%; border-radius: 20px;
-            margin-bottom: 15px; border: 1px solid var(--border);
-        }
-
-        .title { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; line-height: 1.4; color: #fff; text-align: left;}
-
-        /* Download Buttons Grid */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
-
-        .dl-btn {
+        .dl-card {
             background: rgba(255,255,255,0.05);
             border: 1px solid var(--border);
-            color: white; padding: 15px;
-            border-radius: 18px; text-decoration: none;
-            text-align: center; font-weight: 700;
-            transition: 0.3s; font-size: 0.85rem;
+            padding: 15px 10px; border-radius: 18px;
+            text-decoration: none; color: white;
+            text-align: center; transition: 0.3s;
         }
 
-        .dl-btn:hover {
+        .dl-card:hover {
             background: var(--accent);
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px var(--accent-glow);
+            transform: scale(1.03);
+            box-shadow: 0 8px 15px var(--accent-glow);
         }
 
-        .dl-btn span { display: block; font-size: 0.6rem; opacity: 0.6; margin-top: 3px; }
+        .dl-card strong { display: block; font-size: 0.9rem; }
+        .dl-card span { font-size: 0.6rem; opacity: 0.7; font-weight: 600; }
 
+        /* Simple Loader */
+        #loader { display: none; margin: 20px 0; font-weight: 700; color: var(--accent); }
     </style>
 </head>
 <body>
 
-    <div class="mesh"></div>
+    <div class="mesh-bg"></div>
 
-    <div class="container">
-        <div class="app-card">
-            <div class="tabs">
-                <button class="tab active" id="modeVideo" onclick="switchMode('mp4')">VIDEO MP4</button>
-                <button class="tab" id="modeAudio" onclick="switchMode('mp3')">AUDIO MP3</button>
+    <div class="app-card">
+        <h1>Stream<span>Fetch</span></h1>
+
+        <div class="search-section">
+            <div class="input-wrapper">
+                <input type="text" id="urlInput" placeholder="Paste YouTube Link Here..." spellcheck="false">
             </div>
+            <button id="fetchBtn">Search & Load All</button>
+        </div>
 
-            <div class="input-group">
-                <input type="text" id="urlInput" placeholder="Paste link here..." spellcheck="false">
-                <button id="fetchBtn">Fetch</button>
-            </div>
+        <div id="loader">Fetching Details...</div>
 
-            <div class="loader" id="loader"></div>
+        <div id="resultArea">
+            <img id="vidThumb" class="thumbnail" src="">
+            <h2 id="vidTitle" class="vid-title"></h2>
+            
+            <div class="section-title">VIDEO OPTIONS (MP4)</div>
+            <div class="grid" id="videoGrid"></div>
 
-            <div id="resultArea">
-                <img id="vidThumb" class="thumbnail" src="">
-                <h2 class="title" id="vidTitle">Loading...</h2>
-                
-                <p style="font-size: 0.6rem; color: var(--accent); font-weight: 800; letter-spacing: 2px; margin-top: 20px;">CHOOSE QUALITY</p>
-                <div class="grid" id="qualityGrid">
-                    </div>
-            </div>
+            <div class="section-title">AUDIO OPTIONS (MP3)</div>
+            <div class="grid" id="audioGrid"></div>
         </div>
     </div>
 
     <script>
-        let currentMode = 'mp4'; // Default
         const API_KEY = "vajira-1qg3lqmr60-1768268975394";
-
-        function switchMode(m) {
-            currentMode = m;
-            document.getElementById('modeVideo').classList.toggle('active', m === 'mp4');
-            document.getElementById('modeAudio').classList.toggle('active', m === 'mp3');
-            // Clear current results if mode is changed to avoid confusion
-            document.getElementById('resultArea').style.display = 'none';
-        }
 
         document.getElementById('fetchBtn').addEventListener('click', async () => {
             const url = document.getElementById('urlInput').value.trim();
-            if (!url) return alert("Please paste a link!");
+            if(!url) return alert("Please enter a link!");
 
             const loader = document.getElementById('loader');
             const resultArea = document.getElementById('resultArea');
-            const qualityGrid = document.getElementById('qualityGrid');
-            const fetchBtn = document.getElementById('fetchBtn');
+            const videoGrid = document.getElementById('videoGrid');
+            const audioGrid = document.getElementById('audioGrid');
 
-            // Reset UI for new request
+            // Reset UI
             loader.style.display = "block";
             resultArea.style.display = "none";
-            qualityGrid.innerHTML = ""; // This clears old buttons
-            fetchBtn.disabled = true;
+            videoGrid.innerHTML = "";
+            audioGrid.innerHTML = "";
 
             try {
-                // Select API based on the mode selected by user
-                const apiPath = currentMode === 'mp4' ? 'ytmp4' : 'ytmp3';
-                const apiUrl = `https://vajira-official-apis.vercel.app/api/${apiPath}?apikey=${API_KEY}&url=${url}`;
-                
-                const response = await fetch(apiUrl);
-                const res = await response.json();
+                // Fetch both Video and Audio at the same time
+                const [videoRes, audioRes] = await Promise.all([
+                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp4?apikey=${API_KEY}&url=${url}`).then(r => r.json()),
+                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp3?apikey=${API_KEY}&url=${url}`).then(r => r.json())
+                ]);
 
-                if (res.status) {
-                    // Extract video info (Handling both metadata and data labels)
-                    const data = res.metadata || res.data;
+                if (videoRes.status && audioRes.status) {
+                    const meta = videoRes.metadata;
                     
-                    // Update Metadata UI
-                    document.getElementById('vidThumb').src = data.thumbnails.image || data.thumbnails.default || data.thumbnails.max;
-                    document.getElementById('vidTitle').innerText = data.title;
+                    // Header Info
+                    document.getElementById('vidThumb').src = meta.thumbnails.max || meta.thumbnails.image;
+                    document.getElementById('vidTitle').innerText = meta.title;
 
-                    // Extract download links based on API format
-                    // MP4 API uses res.downloads.video | MP3 API uses res.downloads
-                    const links = currentMode === 'mp4' ? res.downloads.video : res.downloads;
+                    // Generate Video Buttons
+                    videoRes.downloads.video.forEach(item => {
+                        videoGrid.appendChild(createBtn(item.quality, 'MP4', item.url));
+                    });
 
-                    links.forEach(item => {
-                        const dl = document.createElement('a');
-                        dl.href = item.url;
-                        dl.className = 'dl-btn';
-                        dl.target = '_blank';
-                        
-                        // Quality name (mp4 uses .quality, mp3 uses .bitrate)
-                        const label = item.quality || item.bitrate;
-                        dl.innerHTML = `${label} <span>DOWNLOAD ${item.format.toUpperCase()}</span>`;
-                        
-                        qualityGrid.appendChild(dl);
+                    // Generate Audio Buttons
+                    audioRes.data.downloads.forEach(item => {
+                        audioGrid.appendChild(createBtn(item.bitrate, 'MP3', item.url));
                     });
 
                     loader.style.display = "none";
                     resultArea.style.display = "block";
                 } else {
-                    alert("Error: Link not supported or API down.");
+                    alert("Link not found or API error.");
                 }
-            } catch (error) {
-                console.error(error);
-                alert("Connection failed.");
+            } catch (err) {
+                console.error(err);
+                alert("Connection failed. Try a different link.");
             } finally {
                 loader.style.display = "none";
-                fetchBtn.disabled = false;
             }
         });
+
+        function createBtn(label, type, url) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.className = 'dl-card';
+            a.target = '_blank';
+            a.innerHTML = `<strong>${label}</strong><span>${type} DOWNLOAD</span>`;
+            return a;
+        }
     </script>
 </body>
 </html>
