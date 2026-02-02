@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VajiraOfficial | Ultra Hub</title>
+    <title>VajiraOfficial | Max Color Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --yt: #ff0050;
-            --fb: #0084ff;
-            --tt: #00f2ea;
-            --mv: #ffbd00;
-            --accent: #ff2d55;
+            --bg: #030405;
+            /* Vibrant Gradients */
+            --yt-grad: linear-gradient(135deg, #FF0000 0%, #FF4B2B 100%);
+            --fb-grad: linear-gradient(135deg, #0062E6 0%, #33AEFF 100%);
+            --tt-grad: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            --mv-grad: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,190 +36,179 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
+            transition: all 0.8s cubic-bezier(1, 0, 0, 1);
         }
 
         .splash-logo {
             font-size: 3.5rem;
             font-weight: 800;
-            text-transform: uppercase;
-            background: linear-gradient(to right, #ff0050, #0084ff, #00f2ea);
+            background: linear-gradient(to right, #ff0050, #00f2ea);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        /* NEW NEON LOADING BAR */
         .loader-container {
-            width: 250px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.05);
+            width: 220px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .loader-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--yt), var(--fb), var(--tt));
-            border-radius: 20px;
-            box-shadow: 0 0 20px var(--accent);
-            animation: loadProgress 3s forwards cubic-bezier(0.645, 0.045, 0.355, 1);
+            background: linear-gradient(90deg, #ff0050, #00f2ea);
+            box-shadow: 0 0 15px #ff0050;
+            animation: loadProgress 3s forwards ease-in-out;
         }
 
-        @keyframes loadProgress {
-            0% { width: 0%; filter: hue-rotate(0deg); }
-            50% { width: 70%; }
-            100% { width: 100%; filter: hue-rotate(360deg); }
-        }
+        @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
 
-        /* --- DYNAMIC BACKGROUND --- */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
-        }
-
-        /* --- CONTENT --- */
+        /* --- MAIN CONTENT --- */
         #main-content {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease;
-            padding: 60px 20px;
+            transition: 1s ease;
+            padding: 50px 20px;
             max-width: 1200px;
             margin: auto;
             visibility: hidden;
         }
 
-        header { text-align: center; margin-bottom: 80px; }
-        header h1 { font-size: 4rem; font-weight: 800; letter-spacing: -2px; }
-        header h1 span { color: var(--yt); text-shadow: 0 0 20px rgba(255, 0, 80, 0.3); }
+        header { text-align: center; margin-bottom: 60px; }
+        header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
+        header h1 span { color: #ff0050; }
 
         /* --- COLORFUL CARDS --- */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
+            position: relative;
+            padding: 40px 25px;
             border-radius: 35px;
-            padding: 50px 30px;
             text-align: center;
             text-decoration: none;
             color: white;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .card i { font-size: 3.5rem; margin-bottom: 25px; transition: 0.5s; }
+        .card i { font-size: 3.2rem; margin-bottom: 20px; text-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        /* Hover Styles */
-        .yt:hover { border-color: var(--yt); box-shadow: 0 0 30px rgba(255, 0, 80, 0.2); transform: translateY(-15px) rotate(1deg); }
-        .fb:hover { border-color: var(--fb); box-shadow: 0 0 30px rgba(0, 132, 255, 0.2); transform: translateY(-15px) rotate(-1deg); }
-        .tt:hover { border-color: var(--tt); box-shadow: 0 0 30px rgba(0, 242, 234, 0.2); transform: translateY(-15px) rotate(1deg); }
-        .mv:hover { border-color: var(--mv); box-shadow: 0 0 30px rgba(255, 189, 0, 0.2); transform: translateY(-15px) rotate(-1deg); }
+        /* Specific Card Backgrounds */
+        .yt { background: var(--yt-grad); box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3); }
+        .fb { background: var(--fb-grad); box-shadow: 0 10px 30px rgba(0, 98, 230, 0.3); }
+        .tt { background: var(--tt-grad); box-shadow: 0 10px 30px rgba(0, 242, 234, 0.3); }
+        .mv { background: var(--mv-grad); box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3); }
 
-        .card:hover i { transform: scale(1.2); }
+        /* White Glass Shimmer Animation */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(30deg);
+            transition: none;
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -60%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.03);
+            filter: brightness(1.1);
+            box-shadow: 0 20px 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .card h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; }
+        .card p { font-size: 0.9rem; font-weight: 600; opacity: 0.9; line-height: 1.4; }
 
         footer {
-            margin-top: 100px;
+            margin-top: 80px;
             text-align: center;
             font-weight: 800;
-            letter-spacing: 5px;
             color: #444;
             text-transform: uppercase;
+            letter-spacing: 5px;
         }
     </style>
 </head>
 <body>
-
-    <div id="particles-js"></div>
 
     <div id="splash-screen">
         <div class="splash-logo">VajiraOfficial</div>
         <div class="loader-container">
             <div class="loader-fill"></div>
         </div>
-        <p style="color: #444; margin-top: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 3px;">INITIALIZING HUB</p>
     </div>
 
     <div id="main-content">
         <header>
             <h1>Vajira<span>Official</span></h1>
-            <p style="color: #666; font-weight: 600; margin-top: 10px;">Premium Social Media Experience</p>
+            <p style="font-weight: 700; opacity: 0.6;">Maximum Speed • Maximum Quality</p>
         </header>
 
         <div class="grid">
             <a href="ytdl.html" class="card yt">
                 <i class="fa-brands fa-youtube"></i>
                 <h3>YouTube</h3>
-                <p>Rip 4K videos and 320kbps audio in seconds.</p>
+                <p>Rip 4K videos & 320kbps audio instantly.</p>
             </a>
 
             <a href="#" class="card fb">
                 <i class="fa-brands fa-facebook"></i>
                 <h3>Facebook</h3>
-                <p>Grab HD Reels and Stories with one tap.</p>
+                <p>HD Reels and Stories with a single click.</p>
             </a>
 
             <a href="#" class="card tt">
                 <i class="fa-brands fa-tiktok"></i>
                 <h3>TikTok</h3>
-                <p>No watermark, pure HD quality downloads.</p>
+                <p>Watermark-free HD downloads every time.</p>
             </a>
 
             <a href="#" class="card mv">
-                <i class="fa-solid fa-clapperboard"></i>
-                <h3>Movies</h3>
-                <p>Everything about the latest cinema hits.</p>
+                <i class="fa-solid fa-fire"></i>
+                <h3>Trending</h3>
+                <p>Explore the hottest cinema and web hits.</p>
             </a>
         </div>
 
         <footer>VajiraOfficial <span>Social</span></footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Initialize Particles
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80 },
-                "color": { "value": "#ffffff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.2 },
-                "size": { "value": 2 },
-                "line_linked": { "enable": false },
-                "move": { "enable": true, "speed": 1 }
-            }
-        });
-
-        // Splash Transition
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 const content = document.getElementById('main-content');
                 
+                splash.style.transform = 'scale(1.5)';
                 splash.style.opacity = '0';
-                splash.style.transform = 'translateY(-100%)'; // Slides UP
                 
                 setTimeout(() => {
                     splash.style.display = 'none';
                     content.style.visibility = 'visible';
                     content.style.opacity = '1';
-                    content.style.transform = 'translateY(0)';
                     document.body.style.overflow = 'auto';
-                }, 1000);
+                }, 800);
             }, 3000);
         });
     </script>
