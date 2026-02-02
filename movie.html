@@ -3,54 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajira Movie Box - Full Info</title>
+    <title>Vajira Movie Box - Pro Fix</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff1e2a; --bg: #0a0a0a; --card: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
         
-        /* SEARCH HEADER */
         .header { padding: 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
         .search-box { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; background: #1a1a1a; padding: 5px; border-radius: 12px; border: 1px solid #333; }
         input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 1rem; }
         .search-btn { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        /* MOVIE GRID */
         .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
         .movie-card { background: var(--card); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; border: 1px solid #222; position: relative; }
         .movie-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .img-box { position: relative; width: 100%; padding-top: 150%; background: #111; }
         .img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .card-title { padding: 12px; font-size: 0.85rem; font-weight: 600; text-align: center; background: #121212; }
+        .card-title { padding: 12px; font-size: 0.85rem; font-weight: 600; text-align: center; }
 
-        /* DEDICATED DETAIL OVERLAY (THE "ANOTHER PAGE" EFFECT) */
         #detailOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #080808; z-index: 2000; display: none;
-            overflow-y: auto; box-sizing: border-box;
+            background: #080808; z-index: 2000; display: none; overflow-y: auto;
         }
         .detail-nav { padding: 15px 20px; background: #000; display: flex; align-items: center; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #222; }
         .back-btn { background: #222; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .back-btn:hover { background: var(--primary); }
-
-        .detail-body { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
-        .detail-main { display: grid; grid-template-columns: 300px 1fr; gap: 40px; margin-bottom: 40px; }
-        .detail-poster { width: 100%; border-radius: 15px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .imdb { background: #f5c518; color: #000; padding: 4px 10px; border-radius: 5px; font-weight: 800; }
-        .description { color: #aaa; line-height: 1.6; margin: 20px 0; }
         
-        .gallery { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 30px; }
-        .gallery img { height: 150px; border-radius: 8px; border: 1px solid #222; cursor: pointer; }
-
-        .dl-container { background: #111; border-radius: 15px; padding: 25px; border: 1px solid #222; }
+        .detail-body { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .detail-main { display: grid; grid-template-columns: 280px 1fr; gap: 40px; margin-bottom: 40px; }
+        .detail-poster { width: 100%; border-radius: 15px; border: 1px solid #333; }
+        
+        .dl-container { background: #111; border-radius: 15px; padding: 25px; border: 1px solid #222; margin-top: 20px; }
         .dl-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
-        .dl-item:last-child { border: none; }
         .dl-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
         @media (max-width: 700px) {
             .detail-main { grid-template-columns: 1fr; text-align: center; }
-            .detail-poster { max-width: 250px; margin: 0 auto; }
+            .detail-poster { max-width: 220px; margin: 0 auto; }
             .movie-grid { grid-template-columns: repeat(2, 1fr); }
             .dl-item { flex-direction: column; gap: 10px; text-align: center; }
         }
@@ -66,8 +55,8 @@
 </div>
 
 <div class="container">
-    <h2 id="status">Featured Results</h2>
-    <div id="loading" style="display:none; text-align:center; padding: 20px; color: var(--primary);">Processing...</div>
+    <h2 id="status">Search Results</h2>
+    <div id="loading" style="display:none; text-align:center; padding: 20px; color: var(--primary);">Searching...</div>
     <div class="movie-grid" id="grid"></div>
 </div>
 
@@ -82,10 +71,16 @@
     const apikey = "vajiraofficial";
     const proxy = "https://api.allorigins.win/get?url=";
 
+    async function fetchData(url) {
+        const response = await fetch(proxy + encodeURIComponent(url));
+        if (!response.ok) throw new Error('Network error');
+        const json = await response.json();
+        return JSON.parse(json.contents);
+    }
+
     async function searchMovies() {
         const query = document.getElementById('searchInput').value;
         if (!query) return;
-
         const grid = document.getElementById('grid');
         const loader = document.getElementById('loading');
         
@@ -95,87 +90,73 @@
         const url = `https://vajira-mv-apikeys.netlify.app/api/pirate/search?q=${encodeURIComponent(query)}&apikey=${apikey}`;
         
         try {
-            const resp = await fetch(proxy + encodeURIComponent(url));
-            const json = await resp.json();
-            const data = JSON.parse(json.contents);
-            const movies = data?.data?.data?.data || data?.data?.data || [];
-
+            const data = await fetchData(url);
+            const movies = data?.data?.data?.data || data?.data?.data || data?.data || [];
             loader.style.display = 'none';
 
             movies.forEach(m => {
-                // Fixed Image source logic
-                const imgUrl = m.image || m.imageSrc || 'https://via.placeholder.com/300x450?text=No+Poster';
-                
+                const imgUrl = m.image || m.imageSrc || m.img || 'https://via.placeholder.com/300x450';
                 const card = document.createElement('div');
                 card.className = 'movie-card';
                 card.onclick = () => openDetails(m.link);
-                card.innerHTML = `
-                    <div class="img-box">
-                        <img src="${imgUrl}" loading="lazy">
-                    </div>
-                    <div class="card-title">${m.title}</div>
-                `;
+                card.innerHTML = `<div class="img-box"><img src="${imgUrl}"></div><div class="card-title">${m.title}</div>`;
                 grid.appendChild(card);
             });
         } catch(e) {
             loader.style.display = 'none';
-            grid.innerHTML = '<p>Search failed. Try again.</p>';
+            grid.innerHTML = '<p>Search failed. Check your connection.</p>';
         }
     }
 
     async function openDetails(movieUrl) {
         const overlay = document.getElementById('detailOverlay');
         const content = document.getElementById('fullDetailContent');
-        
         overlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
-        content.innerHTML = '<h2 style="text-align:center; margin-top:100px;">Loading full details...</h2>';
+        content.innerHTML = '<div style="text-align:center; padding-top:100px;"><h3>Loading Movie Details...</h3><p>Please wait, bypassing links...</p></div>';
 
         const apiUrl = `https://vajira-mv-apikeys.netlify.app/api/pirate/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
 
         try {
-            const resp = await fetch(proxy + encodeURIComponent(apiUrl));
-            const json = await resp.json();
-            const res = JSON.parse(json.contents).data.data;
+            const data = await fetchData(apiUrl);
+            // Robust data extraction
+            const res = data?.data?.data || data?.data;
+            if (!res) throw new Error('No data');
+
             const main = res.mainDetails;
             const meta = res.moviedata;
-            const links = res.dllinks.directDownloadLinks;
+            const links = res.dllinks?.directDownloadLinks || [];
 
             content.innerHTML = `
                 <div class="detail-main">
                     <img src="${main.imageUrl}" class="detail-poster">
                     <div>
-                        <h1 style="margin-top:0;">${main.maintitle}</h1>
-                        <div style="margin:15px 0;">
-                            <span class="imdb">IMDb ${meta.imdbRating}</span>
-                            <span style="margin-left:15px; color:#888;">${main.dateCreated} • ${main.runtime}</span>
-                        </div>
-                        <p class="description">${meta.description}</p>
-                        <p><strong>Director:</strong> ${meta.director}</p>
-                        <p><strong>Cast:</strong> ${res.cast.map(c => c.name).slice(0, 5).join(', ')}</p>
+                        <h1 style="margin:0;">${main.maintitle}</h1>
+                        <p style="color:#f5c518; font-weight:800; margin:10px 0;">IMDb: ${meta.imdbRating || 'N/A'}</p>
+                        <p style="color:#aaa; line-height:1.6;">${meta.description || 'No description available.'}</p>
+                        <p><strong>Genres:</strong> ${main.genres?.join(', ') || 'N/A'}</p>
+                        <p><strong>Runtime:</strong> ${main.runtime || 'N/A'}</p>
                     </div>
                 </div>
-
-                <h3>Media Gallery</h3>
-                <div class="gallery">
-                    ${meta.imageUrls.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('')}
-                </div>
-
                 <div class="dl-container">
-                    <h3 style="margin-top:0;">Available Downloads</h3>
-                    ${links.map(l => `
+                    <h3 style="margin-top:0; border-bottom:1px solid #333; padding-bottom:10px;">Download Options</h3>
+                    ${links.length > 0 ? links.map(l => `
                         <div class="dl-item">
                             <div>
-                                <strong style="color:var(--primary); font-size:1.1rem;">${l.quality}</strong><br>
-                                <small style="color:#777;">${l.size} • ${l.platform}</small>
+                                <b style="color:var(--primary)">${l.quality}</b><br>
+                                <small style="color:#888;">${l.size} | ${l.platform}</small>
                             </div>
-                            <button class="dl-btn" onclick="handleDl('${l.link}', this)">DOWNLOAD</button>
+                            <button class="dl-btn" onclick="handleDl('${l.link}', this)">GET FILE</button>
                         </div>
-                    `).join('')}
+                    `).join('') : '<p>No download links found.</p>'}
                 </div>
             `;
         } catch(e) {
-            content.innerHTML = '<p>Error loading movie data.</p>';
+            content.innerHTML = `
+                <div style="text-align:center; padding-top:100px;">
+                    <p style="color:var(--primary); font-weight:bold;">Error loading movie data.</p>
+                    <button onclick="openDetails('${movieUrl}')" style="background:#333; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">RETRY</button>
+                </div>`;
         }
     }
 
@@ -183,21 +164,15 @@
         const originalText = btn.innerText;
         btn.innerText = "BYPASSING...";
         btn.disabled = true;
-
         const dlUrl = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(url)}&apikey=${apikey}`;
         
         try {
-            const resp = await fetch(proxy + encodeURIComponent(dlUrl));
-            const json = await resp.json();
-            const result = JSON.parse(json.contents);
-            const finalLink = result.data.data.link;
-            
+            const data = await fetchData(dlUrl);
+            const finalLink = data?.data?.data?.link || data?.data?.link;
             if(finalLink) {
-                const fixed = finalLink.replace('api/file/', 'u/');
-                window.location.href = fixed;
-            }
-        } catch(e) { alert("Download failed"); }
-        
+                window.location.href = finalLink.replace('api/file/', 'u/');
+            } else { alert("Could not generate link."); }
+        } catch(e) { alert("Download failed."); }
         btn.innerText = originalText;
         btn.disabled = false;
     }
@@ -206,9 +181,6 @@
         document.getElementById('detailOverlay').style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-
-    document.getElementById('searchInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') searchMovies(); });
 </script>
-
 </body>
 </html>
