@@ -1,121 +1,208 @@
-const API_KEY = "vajiraofficial";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VajiraOfficial | Movie Engine</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020205;
+            --mv-grad: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: white; padding: 20px; overflow-x: hidden; }
+        .container { max-width: 900px; margin: auto; }
 
-async function performSearch() {
-    const query = document.getElementById('searchInput').value;
-    const list = document.getElementById('results-list');
-    const loader = document.getElementById('searchLoader');
+        /* SEARCH BOX */
+        .search-wrap { text-align: center; margin-bottom: 50px; padding-top: 40px; }
+        .search-wrap h1 { font-size: 3rem; font-weight: 800; margin-bottom: 20px; }
+        .search-wrap span { color: #f5576c; }
+        .input-group { display: flex; gap: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 25px; border: 1px solid var(--border); }
+        input { flex: 1; background: transparent; border: none; padding: 15px; color: white; font-size: 1rem; outline: none; }
+        button#searchBtn { background: var(--mv-grad); border: none; padding: 0 30px; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        button#searchBtn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(245, 87, 108, 0.4); }
 
-    if (!query) return;
+        /* RESULTS LIST */
+        #results-list { display: grid; gap: 12px; }
+        .movie-row { background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
+        .movie-row:hover { background: rgba(255,255,255,0.1); border-color: #f5576c; transform: translateX(10px); }
+        .movie-row b { font-size: 0.95rem; flex: 1; padding-right: 20px; }
 
-    list.innerHTML = "";
-    loader.style.display = "block";
+        /* MOVIE PROFILE PAGE */
+        #view-profile { display: none; }
+        #movie-profile-box { background: #08080a; border-radius: 40px; padding: 30px; border: 1px solid var(--border); animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    try {
-        const res = await fetch(`https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/search?q=${encodeURIComponent(query)}&apikey=${API_KEY}`);
-        
-        if (!res.ok) throw new Error("Server response was not OK");
+        .back-btn { display: inline-block; margin-bottom: 25px; color: #f093fb; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
+        .profile-flex { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 40px; }
+        .poster-img { width: 250px; border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 2px solid var(--border); object-fit: cover; }
+        .details-info { flex: 1; min-width: 300px; }
+        .details-info h2 { font-size: 2rem; margin-bottom: 15px; line-height: 1.2; }
+        .description { font-size: 0.95rem; opacity: 0.7; line-height: 1.6; margin-bottom: 20px; }
+        .meta-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .tag { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; color: #f5576c; }
 
-        const result = await res.json();
-        
-        // Safety Check: Navigate through the object safely
-        const movies = result?.data?.data?.data || result?.data?.data || [];
+        /* DOWNLOAD SECTION */
+        .dl-section h3 { margin-bottom: 20px; font-weight: 800; }
+        .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .dl-card { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); padding: 25px; border-radius: 25px; border: 1px solid var(--border); text-align: center; cursor: pointer; transition: 0.3s; }
+        .dl-card:hover { background: #fff; color: #000; border-color: #fff; transform: translateY(-5px); }
+        .dl-card b { font-size: 1.2rem; display: block; margin-bottom: 5px; }
+        .dl-card span { font-size: 0.75rem; opacity: 0.8; font-weight: 800; }
 
-        if (movies.length === 0) {
-            list.innerHTML = "<p style='text-align:center; opacity:0.6;'>No movies found.</p>";
+        .loader { display: none; text-align: center; padding: 40px; font-weight: 800; color: #f093fb; letter-spacing: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="view-search">
+        <div class="search-wrap">
+            <h1>Vajira<span>Movies</span></h1>
+            <div class="input-group">
+                <input type="text" id="searchInput" placeholder="Search Movie (e.g. Rajasaab)">
+                <button id="searchBtn" onclick="performSearch()">SEARCH</button>
+            </div>
+        </div>
+        <div id="searchLoader" class="loader">FETCHING MOVIES...</div>
+        <div id="results-list"></div>
+    </div>
+
+    <div id="view-profile">
+        <div class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> BACK TO RESULTS</div>
+        <div id="movie-profile-box">
+            <div id="profile-content"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_KEY = "vajiraofficial";
+
+    async function performSearch() {
+        const query = document.getElementById('searchInput').value.trim();
+        const list = document.getElementById('results-list');
+        const loader = document.getElementById('searchLoader');
+
+        if (!query) {
+            alert("Please enter a movie name.");
             return;
         }
 
-        // The Loop
-        movies.forEach(mv => {
-            // Check if title exists before creating the element
-            if (mv.title) {
-                const row = document.createElement('div');
-                row.className = 'movie-row';
-                row.innerHTML = `
-                    <b>${mv.title}</b> 
-                    <i class="fa-solid fa-circle-play" style="color:#f5576c"></i>
-                `;
-                row.onclick = () => showMovieProfile(mv.link);
-                list.appendChild(row);
+        list.innerHTML = "";
+        loader.style.display = "block";
+
+        try {
+            // Using encodeURIComponent to handle spaces and special chars
+            const res = await fetch(`https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/search?q=${encodeURIComponent(query)}&apikey=${API_KEY}`);
+            const result = await res.json();
+            
+            // Safe access to the data array
+            const movies = result?.data?.data?.data || [];
+
+            if (movies.length === 0) {
+                list.innerHTML = "<p style='text-align:center; opacity:0.5; margin-top:20px;'>No movies found. Try another title.</p>";
+            } else {
+                // The Loop: Creating movie rows dynamically
+                movies.forEach(mv => {
+                    if (mv.title && mv.link) {
+                        const row = document.createElement('div');
+                        row.className = 'movie-row';
+                        row.innerHTML = `
+                            <b>${mv.title}</b> 
+                            <i class="fa-solid fa-circle-play" style="color:#f5576c"></i>
+                        `;
+                        row.onclick = () => showMovieProfile(mv.link);
+                        list.appendChild(row);
+                    }
+                });
             }
-        });
-
-    } catch (e) {
-        console.error("Search Error:", e);
-        alert("Search failed. The API might be down or the key is invalid.");
-    } finally {
-        loader.style.display = "none";
-    }
-}
-
-async function showMovieProfile(movieUrl) {
-    document.getElementById('view-search').style.display = "none";
-    document.getElementById('view-profile').style.display = "block";
-    const container = document.getElementById('profile-content');
-    container.innerHTML = "<div class='loader' style='display:block'>LOADING DETAILS...</div>";
-
-    try {
-        const res = await fetch(`https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/details?url=${movieUrl}&apikey=${API_KEY}`);
-        const result = await res.json();
-        
-        // Deep access to the data
-        const info = result.data.data.mainDetails;
-        const downloads = result.data.data.dllinks.DownloadLinks;
-
-        let downloadButtons = "";
-        if (downloads && downloads.length > 0) {
-            downloads.forEach(dl => {
-                downloadButtons += `
-                    <div class="dl-card" onclick="finalDownload('${dl.link}')">
-                        <b>${dl.quality || 'HD'}</b>
-                        <span>${dl.size || 'Unknown Size'} • ${dl.type || 'Direct'}</span>
-                    </div>`;
-            });
+        } catch (e) {
+            console.error(e);
+            alert("Search failed. Please check your internet connection.");
+        } finally {
+            loader.style.display = "none";
         }
+    }
 
-        container.innerHTML = `
-            <div class="profile-flex">
-                <img src="${info.imageUrl}" class="poster-img" onerror="this.src='https://via.placeholder.com/250x375?text=No+Image'">
-                <div class="details-info">
-                    <h2>${info.maintitle}</h2>
-                    <div class="meta-tags">
-                        <span class="tag">${info.dateCreated || ''}</span>
-                        <span class="tag">⭐ ${info.imdbRating || 'N/A'}</span>
-                        <span class="tag">${info.country || ''}</span>
+    async function showMovieProfile(movieUrl) {
+        document.getElementById('view-search').style.display = "none";
+        document.getElementById('view-profile').style.display = "block";
+        const container = document.getElementById('profile-content');
+        container.innerHTML = "<div class='loader' style='display:block'>LOADING DETAILS...</div>";
+
+        try {
+            const res = await fetch(`https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/details?url=${movieUrl}&apikey=${API_KEY}`);
+            const result = await res.json();
+            
+            const info = result.data.data.mainDetails;
+            const downloads = result.data.data.dllinks.DownloadLinks;
+
+            let downloadButtons = "";
+            if (downloads && downloads.length > 0) {
+                downloads.forEach(dl => {
+                    downloadButtons += `
+                        <div class="dl-card" onclick="finalDownload('${dl.link}')">
+                            <b>${dl.quality}</b>
+                            <span>${dl.size} • ${dl.type}</span>
+                        </div>`;
+                });
+            } else {
+                downloadButtons = "<p>No download links available for this title.</p>";
+            }
+
+            container.innerHTML = `
+                <div class="profile-flex">
+                    <img src="${info.imageUrl}" class="poster-img" onerror="this.src='https://via.placeholder.com/250x375?text=No+Image'">
+                    <div class="details-info">
+                        <h2>${info.maintitle}</h2>
+                        <div class="meta-tags">
+                            <span class="tag">${info.dateCreated || 'N/A'}</span>
+                            <span class="tag">⭐ ${info.imdbRating || 'N/A'}</span>
+                            <span class="tag">${info.country || 'N/A'}</span>
+                        </div>
+                        <p class="description">${info.description || 'No description available.'}</p>
+                        <p style="margin-bottom:8px"><b>🎬 Director:</b> ${info.director || 'Unknown'}</p>
+                        <p><b>🎭 Genres:</b> ${info.genres ? info.genres.join(', ') : 'N/A'}</p>
                     </div>
-                    <p class="description">${info.description || 'No description available.'}</p>
-                    <p style="margin-bottom:8px"><b>🎬 Director:</b> ${info.director || 'Unknown'}</p>
-                    <p><b>🎭 Genres:</b> ${info.genres ? info.genres.join(', ') : 'N/A'}</p>
                 </div>
-            </div>
-            <div class="dl-section">
-                <h3>Download Subtitled Movie</h3>
-                <div class="dl-grid">${downloadButtons || '<p>No links available</p>'}</div>
-            </div>
-        `;
-    } catch (e) {
-        container.innerHTML = "<div style='padding:20px;'>Error loading movie info. Please try again.</div>";
-    }
-}
-
-async function finalDownload(shortLink) {
-    alert("Generating direct link...");
-    try {
-        const res = await fetch(`https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/download?url=${shortLink}&apikey=${API_KEY}`);
-        const result = await res.json();
-        const finalLink = result.data?.data?.link;
-
-        if (finalLink) {
-            window.open(finalLink, '_blank'); // Opens in new tab
-        } else {
-            alert("Could not extract link.");
+                <div class="dl-section">
+                    <h3>Download Subtitled Movie</h3>
+                    <div class="dl-grid">${downloadButtons}</div>
+                </div>
+            `;
+        } catch (e) {
+            console.error(e);
+            container.innerHTML = "<div style='text-align:center; padding:20px;'>Error loading movie info.</div>";
         }
-    } catch (e) {
-        alert("Error in direct download API.");
     }
-}
 
-function goBack() {
-    document.getElementById('view-search').style.display = "block";
-    document.getElementById('view-profile').style.display = "none";
-}
+    async function finalDownload(shortLink) {
+        alert("Processing direct link... please wait.");
+        try {
+            const res = await fetch(`https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/download?url=${shortLink}&apikey=${API_KEY}`);
+            const result = await res.json();
+            const finalLink = result.data?.data?.link;
+
+            if (finalLink) {
+                window.location.href = finalLink;
+            } else {
+                alert("Could not extract direct link. Please try again later.");
+            }
+        } catch (e) {
+            alert("Error in direct download API.");
+        }
+    }
+
+    function goBack() {
+        document.getElementById('view-search').style.display = "block";
+        document.getElementById('view-profile').style.display = "none";
+    }
+</script>
+
+</body>
+</html>
