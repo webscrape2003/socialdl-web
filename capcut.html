@@ -3,109 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapCut Template Downloader</title>
+    <title>Vajira | CapCut Pro Downloader</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --primary: #00f2ea; --secondary: #ff0050; --bg: #0a0a0a; --card: #121212; --text: #ffffff; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
-        .header { padding: 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
-        .search-box { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; background: #1a1a1a; padding: 5px; border-radius: 12px; border: 1px solid #333; }
-        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 1rem; }
-        button { background: var(--primary); color: #000; border: none; padding: 0 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        button:hover { opacity: 0.8; }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
-        .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; color: #fff; border-left: 5px solid var(--secondary); padding-left: 15px; }
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .movie-card { background: var(--card); border-radius: 12px; overflow: hidden; transition: 0.3s; border: 1px solid #222; position: relative; }
-        .movie-card:hover { transform: translateY(-8px); border-color: var(--primary); }
-        .badge-container { position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 5px; z-index: 10; }
-        .badge { font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; color: white; }
-        .badge.quality { background: var(--secondary); }
-        .image-container { position: relative; width: 100%; padding-top: 56.25%; background: #1a1a1a; }
-        .movie-card img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .card-info { padding: 15px; }
-        .card-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .download-btn { display: block; width: 100%; padding: 10px; background: #333; color: white; text-align: center; text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-top: 8px; transition: 0.3s; }
-        .download-btn:hover { background: var(--primary); color: #000; }
-        #loader { display: none; text-align: center; padding: 40px; color: var(--primary); font-weight: 800; }
+        :root { 
+            --accent: #00f2ea; 
+            --secondary: #ff0050;
+            --glow: rgba(0, 242, 234, 0.4);
+            --bg: #050505; 
+            --card-bg: rgba(18, 18, 18, 0.8); 
+        }
+        
+        body { 
+            background: radial-gradient(circle at top left, #1a1a1a, #000);
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-wrapper { width: 100%; max-width: 420px; }
+
+        /* --- ATTRACTIVE GLASS BOX --- */
+        .glass-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+
+        .logo h2 { font-weight: 800; font-size: 1.8rem; margin-bottom: 20px; letter-spacing: -1.5px; }
+        .logo span { color: var(--accent); text-shadow: 0 0 20px var(--glow); }
+
+        /* --- VERTICAL SEARCH LAYOUT --- */
+        .search-stack { display: flex; flex-direction: column; gap: 12px; }
+
+        .input-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        input {
+            width: 100%; background: transparent; border: none; color: white;
+            padding: 15px; outline: none; font-size: 0.95rem; text-align: center;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent), #2272ff);
+            color: #000; border: none; padding: 15px; border-radius: 12px;
+            font-weight: 800; cursor: pointer; transition: 0.4s;
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;
+        }
+
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow); }
+
+        /* --- COMPACT PLAYER SECTION --- */
+        #result-area { display: none; margin-top: 25px; animation: slideUp 0.5s ease; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .player-wrapper {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 20px var(--glow);
+            background: #000;
+        }
+
+        video { width: 100%; height: 100%; object-fit: cover; }
+
+        .meta-data { text-align: center; margin-bottom: 20px; }
+        .meta-data h4 { margin: 0; font-size: 0.95rem; color: #eee; line-height: 1.4; font-weight: 600; }
+        .meta-data p { color: var(--secondary); margin: 4px 0 0; font-weight: 700; font-size: 0.8rem; }
+
+        /* --- DOWNLOAD BUTTONS --- */
+        .dl-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+        .dl-btn {
+            text-decoration: none; padding: 14px; border-radius: 10px;
+            font-size: 0.8rem; font-weight: 800; display: flex; align-items: center;
+            justify-content: center; gap: 8px; transition: 0.3s;
+            background: var(--accent); color: #000;
+        }
+
+        .dl-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+        #loading { display: none; margin: 15px 0; font-weight: 800; color: var(--accent); font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Paste CapCut URL here...">
-        <button id="searchBtn" onclick="fetchCapcut()">FETCH</button>
-    </div>
-</div>
+<div class="main-wrapper">
+    <div class="glass-box">
+        <div class="logo">
+            <h2>CapCut<span>PRO</span></h2>
+        </div>
 
-<div class="container">
-    <div class="section-title" id="statusText">Template Results</div>
-    <div id="loader">EXTRACTING MEDIA...</div>
-    <div class="movie-grid" id="movieGrid"></div>
+        <div class="search-stack">
+            <div class="input-box">
+                <input type="text" id="capcutUrl" placeholder="Paste Template Link...">
+            </div>
+            <button class="action-btn" onclick="fetchCapcut()">Fetch Template</button>
+        </div>
+
+        <div id="loading">✨ EXTRACTING MEDIA...</div>
+
+        <div id="result-area">
+            <div class="player-wrapper">
+                <video id="cpPlayer" controls></video>
+            </div>
+            
+            <div class="meta-data">
+                <h4 id="cpTitle"></h4>
+                <p id="cpAuthor"></p>
+            </div>
+
+            <div id="downloadGrid" class="dl-grid"></div>
+        </div>
+    </div>
 </div>
 
 <script>
     const API_KEY = "vajira-1qg3lqmr60-1768268975394";
 
     async function fetchCapcut() {
-        const urlInput = document.getElementById('searchInput').value.trim();
-        const grid = document.getElementById('movieGrid');
-        const loader = document.getElementById('loader');
-        const status = document.getElementById('statusText');
+        const url = document.getElementById('capcutUrl').value.trim();
+        const loader = document.getElementById('loading');
+        const resArea = document.getElementById('result-area');
+        const dlGrid = document.getElementById('downloadGrid');
 
-        if (!urlInput) return;
+        if(!url) return;
 
-        grid.innerHTML = '';
-        loader.style.display = 'block';
-        status.innerText = `Processing CapCut Link...`;
+        loader.style.display = "block";
+        resArea.style.display = "none";
+        dlGrid.innerHTML = '';
 
         try {
-            const apiUrl = `https://vajira-official-apis.vercel.app/api/capcut?apikey=${API_KEY}&url=${encodeURIComponent(urlInput)}`;
-            const response = await fetch(apiUrl);
-            const res = await response.json();
+            const api = `https://vajira-official-apis.vercel.app/api/capcut?apikey=${API_KEY}&url=${encodeURIComponent(url)}`;
+            const response = await fetch(api);
+            const data = await response.json();
 
-            loader.style.display = 'none';
+            if(data.status && data.data) {
+                const item = data.data;
+                
+                // Set Player & Info
+                // Using the first media URL for the preview player
+                document.getElementById('cpPlayer').src = item.medias[0].url;
+                document.getElementById('cpTitle').innerText = item.title;
+                document.getElementById('cpAuthor').innerText = "By " + item.author;
 
-            if (res.status && res.data) {
-                const item = res.data;
-                const author = item.author || "Unknown Creator";
-                const title = item.title || "CapCut Template";
-                const thumb = item.thumbnail;
-                
-                let html = '';
-                
-                // We map through the 'medias' array to show different quality versions
+                // Create Download Buttons for each quality
                 item.medias.forEach(media => {
-                    html += `
-                        <div class="movie-card">
-                            <div class="badge-container">
-                                <span class="badge quality">${media.quality}</span>
-                            </div>
-                            <div class="image-container">
-                                <img src="${thumb}" alt="thumbnail">
-                            </div>
-                            <div class="card-info">
-                                <div class="card-title">${title}</div>
-                                <div style="color: #888; font-size: 0.75rem; margin-bottom: 10px;">By ${author}</div>
-                                <a href="${media.url}" class="download-btn" target="_blank">DOWNLOAD ${media.extension.toUpperCase()}</a>
-                            </div>
-                        </div>`;
+                    const btn = document.createElement('a');
+                    btn.href = media.url;
+                    btn.className = 'dl-btn';
+                    btn.target = '_blank';
+                    btn.innerHTML = `<i class="fa-solid fa-download"></i> DOWNLOAD ${media.quality}`;
+                    dlGrid.appendChild(btn);
                 });
-                
-                grid.innerHTML = html;
-                status.innerText = `Result for: ${title}`;
+
+                loader.style.display = "none";
+                resArea.style.display = "block";
             } else {
-                status.innerText = "Failed to fetch template. Check URL.";
+                alert("Could not fetch data.");
+                loader.style.display = "none";
             }
         } catch (err) {
-            loader.style.display = 'none';
-            status.innerText = "API Connection Error";
             console.error(err);
+            loader.style.display = "none";
         }
     }
-
-    document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key === 'Enter') fetchCapcut(); });
 </script>
+
 </body>
 </html>
