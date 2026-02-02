@@ -16,13 +16,49 @@
         
         body { background-color: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; }
 
-        .container { max-width: 600px; margin: 40px auto; text-align: center; }
+        .container { max-width: 500px; margin: 40px auto; text-align: center; }
 
-        /* --- RESULT CARD --- */
+        /* --- SEARCH BOX --- */
+        .search-area { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
+        
+        .input-wrapper {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 5px;
+            display: flex;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 15px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-btn:hover { filter: brightness(1.2); transform: scale(1.05); }
+
+        /* --- RESULT CARD (Hidden by default) --- */
+        #result-container { display: none; }
+
         .result-card {
             background: var(--card);
             border-radius: 25px;
-            padding: 25px;
+            padding: 20px;
             border: 1px solid #222;
             box-shadow: 0 15px 40px rgba(0,0,0,0.5);
             animation: fadeIn 0.5s ease;
@@ -30,63 +66,103 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        video {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            background: #000;
-        }
+        video { width: 100%; border-radius: 15px; background: #000; margin-bottom: 15px; }
 
-        h3 { font-size: 1.1rem; margin: 10px 0; color: #fff; line-height: 1.4; }
-        p { color: var(--primary); font-weight: 600; margin-bottom: 25px; }
+        .info h3 { font-size: 1rem; margin: 10px 0; line-height: 1.4; color: #fff; }
+        .info p { color: var(--primary); font-size: 0.9rem; margin-bottom: 20px; }
 
-        /* --- DOWNLOAD BUTTONS --- */
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
 
         .dl-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 15px;
+            padding: 14px;
             border-radius: 12px;
             text-decoration: none;
             color: white;
             font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
             transition: 0.3s;
         }
 
-        .video-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 5px 15px rgba(42, 245, 255, 0.3); }
+        .video-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
         .audio-btn { background: #222; border: 1px solid #444; }
 
-        .dl-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
-
+        #loader { display: none; color: var(--primary); font-weight: 800; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="result-card">
-        <video controls>
-            <source src="https://www.tikwm.com/video/media/hdplay/7602154083704638727.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <div class="search-area">
+        <div class="input-wrapper">
+            <input type="text" id="tiktokUrl" placeholder="Paste TikTok Link Here...">
+        </div>
+        <button class="search-btn" onclick="downloadTikTok()">FETCH DETAILS</button>
+    </div>
 
-        <h3 id="title">Helloo buddys 🍓🌙 #CloudyMood #SoftVibes</h3>
-        <p id="author"><i class="fa-solid fa-user-ninja"></i> Cloudy Mood 🍓🌙</p>
+    <div id="loader">⚡ SEARCHING...</div>
 
-        <div class="btn-group">
-            <a href="https://www.tikwm.com/video/media/hdplay/7602154083704638727.mp4" class="dl-btn video-btn" download>
-                <i class="fa-solid fa-video"></i> Download Video HD
-            </a>
-            <a href="https://www.tikwm.com/video/music/7602154083704638727.mp3" class="dl-btn audio-btn" download>
-                <i class="fa-solid fa-music"></i> Download Audio MP3
-            </a>
+    <div id="result-container">
+        <div class="result-card">
+            <video id="v-player" controls></video>
+            <div class="info">
+                <h3 id="v-title"></h3>
+                <p id="v-author"></p>
+            </div>
+            <div class="btn-group">
+                <a id="dl-video" href="#" class="dl-btn video-btn" target="_blank">
+                    <i class="fa-solid fa-video"></i> Download Video
+                </a>
+                <a id="dl-audio" href="#" class="dl-btn audio-btn" target="_blank">
+                    <i class="fa-solid fa-music"></i> Download MP3
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    async function downloadTikTok() {
+        const url = document.getElementById('tiktokUrl').value.trim();
+        const loader = document.getElementById('loader');
+        const resultBox = document.getElementById('result-container');
+
+        if (!url) { alert("Please paste a link!"); return; }
+
+        loader.style.display = "block";
+        resultBox.style.display = "none";
+
+        try {
+            const api = `https://vajira-official-apis.vercel.app/api/ttdl?apikey=vajira-1qg3lqmr60-1768268975394&url=${encodeURIComponent(url)}`;
+            const response = await fetch(api);
+            const data = await response.json();
+
+            if (data.status) {
+                const res = data.result;
+                
+                // Update UI
+                document.getElementById('v-player').src = res.video;
+                document.getElementById('v-title').innerText = res.title;
+                document.getElementById('v-author').innerHTML = `<i class="fa-solid fa-user"></i> ${res.author}`;
+                document.getElementById('dl-video').href = res.video;
+                document.getElementById('dl-audio').href = res.audio;
+
+                loader.style.display = "none";
+                resultBox.style.display = "block";
+            } else {
+                alert("Error fetching video. Check link.");
+                loader.style.display = "none";
+            }
+        } catch (error) {
+            console.error(error);
+            alert("API Error");
+            loader.style.display = "none";
+        }
+    }
+</script>
 
 </body>
 </html>
