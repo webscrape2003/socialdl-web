@@ -175,14 +175,17 @@
         const resp = await fetch(proxy + encodeURIComponent(downloadApi));
         const jsonWrapper = await resp.json();
         const result = JSON.parse(jsonWrapper.contents);
-        const finalLink = result.data.data.link;
+        let finalLink = result.data.data.link;
 
         if (finalLink) {
-            // FIX: Create a hidden anchor tag to strip the Referer header
+            // STEP 1: Replace 'api/file' with 'u' to avoid the hotlink error
+            const fixedLink = finalLink.replace('api/file/', 'u/');
+
+            // STEP 2: Open the link using a hidden anchor to strip the Referer header
             const hiddenAnchor = document.createElement('a');
-            hiddenAnchor.href = finalLink;
+            hiddenAnchor.href = fixedLink;
             hiddenAnchor.target = '_blank';
-            hiddenAnchor.rel = 'noreferrer noopener'; // This hides your site from Pixeldrain
+            hiddenAnchor.rel = 'noreferrer noopener'; 
             
             document.body.appendChild(hiddenAnchor);
             hiddenAnchor.click();
