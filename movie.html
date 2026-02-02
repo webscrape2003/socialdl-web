@@ -175,14 +175,9 @@
         // This is the raw link: https://pixeldrain.com/api/file/xCKedr4x
         let finalVideoLink = result.data.data.link;
 
-        if (finalVideoLink) {
-            // Add the ?download suffix manually to the end
-            // Result: https://pixeldrain.com/api/file/xCKedr4x?download
-            const forcedDownloadLink = finalVideoLink + "?download";
-            
-            // Redirect immediately in the same tab
-            window.location.replace(forcedDownloadLink);
-        }
+        
+            window.location.replace(finalVideoLink);
+        
     } catch (e) {
         console.error("Redirect failed");
     }
