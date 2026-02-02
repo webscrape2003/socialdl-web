@@ -6,44 +6,40 @@
     <title>Vajira Movie Box Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #ff1e2a; 
-            --bg: #080808; 
-            --card: #121212; 
-            --text: #ffffff; 
-        }
+        :root { --primary: #ff1e2a; --bg: #080808; --card: #121212; --text: #ffffff; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; }
 
-        .header { padding: 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .header { padding: 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
         .search-box { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; background: #1a1a1a; padding: 5px; border-radius: 12px; border: 1px solid #333; }
         input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 1rem; }
         .btn-main { background: var(--primary); color: white; border: none; padding: 0 25px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
         .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
-
-        .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; color: #fff; border-left: 5px solid var(--primary); padding-left: 15px; }
+        .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; border-left: 5px solid var(--primary); padding-left: 15px; }
+        
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .movie-card { background: var(--card); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; border: 1px solid #222; position: relative; }
         .movie-card:hover { transform: translateY(-8px); border-color: var(--primary); }
         .image-container { position: relative; width: 100%; padding-top: 145%; }
         .movie-card img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .card-info { padding: 15px; background: linear-gradient(to top, #000 85%, transparent); margin-top: -70px; position: relative; }
-        .card-title { font-size: 0.85rem; font-weight: 600; text-align: center; color: #fff; }
+        .card-title { font-size: 0.85rem; font-weight: 600; text-align: center; }
 
         #detailView { display: none; }
         .movie-main { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
         .poster-detail { width: 100%; border-radius: 15px; border: 1px solid #333; }
-        .gallery-wrapper { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin: 20px 0; }
-        .gallery-wrapper img { height: 140px; border-radius: 10px; cursor: pointer; }
+        .description { color: #aaa; line-height: 1.6; margin: 20px 0; }
+        .gallery-wrapper { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin: 30px 0; }
+        .gallery-wrapper img { height: 140px; border-radius: 10px; cursor: pointer; border: 1px solid #333; }
 
-        .download-card { background: #151515; border-radius: 20px; padding: 30px; border: 1px solid #222; }
-        .dl-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 10px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; }
-        .dl-action-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+        .download-card { background: #111; border-radius: 20px; padding: 25px; border: 1px solid #222; }
+        .dl-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 10px; background: #1a1a1a; border-radius: 10px; border: 1px solid #333; }
+        .dl-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
         @media (max-width: 800px) {
             .movie-main { grid-template-columns: 1fr; }
             .movie-grid { grid-template-columns: repeat(2, 1fr); }
-            .poster-detail { max-width: 250px; margin: 0 auto; display: block; }
+            .poster-detail { max-width: 240px; margin: 0 auto; display: block; }
         }
     </style>
 </head>
@@ -51,26 +47,25 @@
 
 <div class="header">
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Enter Movie Name...">
+        <input type="text" id="searchInput" placeholder="Search Movie...">
         <button class="btn-main" onclick="searchMovies()">SEARCH</button>
     </div>
 </div>
 
 <div class="container">
     <div id="searchView">
-        <div class="section-title" id="statusText">Latest Movies</div>
+        <div class="section-title">Discovery</div>
         <div class="movie-grid" id="movieGrid"></div>
     </div>
 
     <div id="detailView">
-        <button onclick="backToSearch()" style="background:transparent; border:1px solid #444; color:#888; padding:8px 15px; border-radius:6px; cursor:pointer; margin-bottom:20px;">← Back</button>
+        <button onclick="backToSearch()" style="background:transparent; border:1px solid #444; color:#fff; padding:8px 15px; border-radius:6px; cursor:pointer; margin-bottom:20px;">← BACK</button>
         <div id="detailContent"></div>
     </div>
 </div>
 
 <script>
     const apikey = "vajiraofficial";
-    const proxy = "https://api.allorigins.win/get?url=";
 
     async function searchMovies() {
         const query = document.getElementById('searchInput').value.trim();
@@ -78,9 +73,8 @@
 
         const url = `https://vajira-mv-apikeys.netlify.app/api/pirate/search?q=${encodeURIComponent(query)}&apikey=${apikey}`;
         try {
-            const resp = await fetch(proxy + encodeURIComponent(url));
-            const json = await resp.json();
-            const result = JSON.parse(json.contents);
+            const resp = await fetch(url);
+            const result = await resp.json();
             const movies = result?.data?.data?.data || result?.data?.data || [];
 
             document.getElementById('movieGrid').innerHTML = movies.map(m => `
@@ -90,55 +84,58 @@
                 </div>
             `).join('');
             showView('search');
-        } catch (e) { console.error("Search failed"); }
+        } catch (e) { console.error("Search error"); }
     }
 
     async function loadMovieDetails(movieUrl) {
-        const apiUrl = `https://vajira-mv-apikeys.netlify.app/api/pirate/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
+        const url = `https://vajira-mv-apikeys.netlify.app/api/pirate/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
         try {
-            const resp = await fetch(apiUrl);
+            const resp = await fetch(url);
             const result = await resp.json();
-            const movie = result.data.data.mainDetails;
-            const extra = result.data.data.moviedata;
-            const links = result.data.data.dllinks.directDownloadLinks;
+            const data = result.data.data;
+            const movie = data.mainDetails;
+            const extra = data.moviedata;
+            const links = data.dllinks.directDownloadLinks;
 
             document.getElementById('detailContent').innerHTML = `
                 <div class="movie-main">
                     <img src="${movie.imageUrl}" class="poster-detail">
                     <div class="info">
-                        <h1 style="font-size:2.5rem; margin:0;">${movie.maintitle}</h1>
-                        <p style="color:#aaa;">${extra.description}</p>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid #222; padding-top:20px;">
-                            <div><b style="color:var(--primary)">Director:</b> ${extra.director}</div>
-                            <div><b style="color:var(--primary)">Country:</b> ${movie.country}</div>
+                        <h1 style="margin:0;">${movie.maintitle}</h1>
+                        <p class="description">${extra.description}</p>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid #222; padding-top:15px;">
+                            <div><b>Director:</b> ${extra.director}</div>
+                            <div><b>Country:</b> ${movie.country}</div>
                         </div>
                     </div>
                 </div>
-                <div class="gallery-wrapper">${extra.imageUrls.map(url => `<img src="${url}">`).join('')}</div>
+                <div class="gallery-wrapper">${extra.imageUrls.map(u => `<img src="${u}">`).join('')}</div>
                 <div class="download-card">
+                    <div style="margin-bottom:15px; font-weight:800; color:var(--primary);">AVAILABLE LINKS</div>
                     ${links.map(l => `
                         <div class="dl-row">
                             <div><b>${l.quality}</b><br><small>${l.size}</small></div>
-                            <button onclick="handleDownload('${l.link}')" class="dl-action-btn">DOWNLOAD</button>
+                            <button class="dl-btn" onclick="handleDownload('${l.link}')">DOWNLOAD</button>
                         </div>
                     `).join('')}
                 </div>
             `;
             showView('detail');
-        } catch (e) { console.error("Detail load failed"); }
+        } catch (e) { console.error("Detail error"); }
     }
 
     async function handleDownload(linkUrl) {
-        const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
+        const url = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
         try {
-            const resp = await fetch(downloadApi);
+            const resp = await fetch(url);
             const result = await resp.json();
-            let finalLink = result.data.data.link;
-            if (finalLink) {
-                const userLink = finalLink.replace('api/file/', 'u/').split('?')[0];
-                window.location.replace(userLink);
+            let link = result.data.data.link;
+            if (link) {
+                // Change api/file/ to u/ and jump
+                const final = link.replace('api/file/', 'u/').split('?')[0];
+                window.location.replace(final);
             }
-        } catch (e) { alert("Download failed"); }
+        } catch (e) { console.error("Download error"); }
     }
 
     function showView(view) {
