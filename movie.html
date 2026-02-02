@@ -176,42 +176,30 @@
         }
     }
 
-    // Direct Redirect Download Logic
-    async function handleDownload(linkUrl, btn) {
-        const originalContent = btn.innerHTML;
-        btn.innerHTML = "<span>Bypassing...</span>";
-        btn.disabled = true;
+    
+async function handleDownload(linkUrl) {
+    const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
+    
+    try {
+        const resp = await fetch(proxy + encodeURIComponent(downloadApi));
+        const json = await resp.json();
+        const result = JSON.parse(json.contents);
+        let finalLink = result.data.data.link;
 
-        const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
+        if (finalLink) {
+            // 1. Replace 'api/file/' with 'u/'
+            // 2. Remove any existing '?download' if it exists to ensure clean navigation
+            let cleanLink = finalLink.replace('api/file/', 'u/').split('?')[0];
 
-        try {
-            const resp = await fetch(proxy + encodeURIComponent(downloadApi));
-            const jsonWrapper = await resp.json();
-            const result = JSON.parse(jsonWrapper.contents);
-            let finalLink = result.data.data.link;
-
-            if (finalLink) {
-                // REPLACE logic for Pixeldrain
-                const fixedLink = finalLink.replace('api/file/', 'u/');
-
-                const hiddenAnchor = document.createElement('a');
-                hiddenAnchor.href = fixedLink;
-                hiddenAnchor.target = '_blank';
-                hiddenAnchor.rel = 'noreferrer noopener'; 
-                
-                document.body.appendChild(hiddenAnchor);
-                hiddenAnchor.click();
-                document.body.removeChild(hiddenAnchor);
-            } else {
-                alert("Could not resolve final link.");
-            }
-        } catch (e) {
-            alert("Error generating download.");
-        } finally {
-            btn.innerHTML = originalContent;
-            btn.disabled = false;
+            // SUDDEN REDIRECT to the new 'u/' formatted URL
+            // Result: https://pixeldrain.com/u/pvxHxVty
+            window.location.replace(cleanLink);
         }
+    } catch (e) { 
+        console.error("Download redirection failed"); 
     }
+}
+
     // SPA View Switcher
     function showView(view) {
         document.getElementById('searchView').style.display = view === 'search' ? 'block' : 'none';
