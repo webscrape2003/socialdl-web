@@ -3,215 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamFetch Pro | All-in-One Downloader</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>StreamFetch | Ultra Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff3e3e;
-            --bg-dark: #07080a;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #ff2d55;
+            --accent-glow: rgba(255, 45, 85, 0.5);
+            --bg: #0a0a0c;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
             overflow-x: hidden;
         }
 
-        /* Dynamic Dynamic Background */
-        .bg-blur {
+        /* Animated Mesh Gradient Background */
+        .mesh {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            filter: blur(60px) brightness(0.3);
-            z-index: -2;
-            transition: background-image 1s ease;
+            background: 
+                radial-gradient(at 0% 0%, rgba(255, 45, 85, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 45, 85, 0.1) 0px, transparent 50%);
+            z-index: -1;
         }
 
-        .glow {
-            position: fixed;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-            filter: blur(100px); opacity: 0.1; z-index: -1;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        .container { width: 100%; max-width: 500px; padding: 20px; position: relative; }
+
+        .app-card {
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
         }
 
-        .container { width: 100%; max-width: 550px; text-align: center; }
-
-        .converter-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            padding: 35px;
-            border-radius: 32px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Format Toggle Switch */
-        .mode-selector {
+        /* Mode Selector */
+        .tabs {
             display: flex;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 5px;
-            border-radius: 16px;
-            margin-bottom: 25px;
-            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.4);
+            padding: 6px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
         }
 
-        .mode-btn {
-            flex: 1; padding: 10px; border: none; background: transparent;
-            color: var(--text-dim); font-weight: 700; cursor: pointer;
-            border-radius: 12px; transition: 0.3s;
+        .tab {
+            flex: 1; padding: 12px; border: none; background: transparent;
+            color: #666; font-weight: 800; cursor: pointer;
+            border-radius: 15px; font-size: 0.75rem; letter-spacing: 1px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .mode-btn.active {
-            background: var(--primary); color: white;
-            box-shadow: 0 4px 15px rgba(255, 62, 62, 0.3);
+        .tab.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 20px var(--accent-glow);
+            transform: translateY(-2px);
         }
 
-        .input-group {
-            display: flex;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
+        /* Input Group with Floating Fetch */
+        .input-box {
+            position: relative;
+            background: rgba(0,0,0,0.5);
+            border-radius: 24px;
+            border: 1px solid var(--border);
             padding: 8px;
-            border-radius: 18px;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .input-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 0 20px rgba(255, 45, 85, 0.2);
         }
 
         input {
             flex: 1; background: transparent; border: none;
-            color: white; padding: 12px; outline: none; font-size: 1rem;
+            color: white; padding: 15px; outline: none; font-size: 0.95rem;
         }
 
-        button#fetchBtn {
-            background: var(--primary); color: white; border: none;
-            padding: 0 25px; border-radius: 14px; font-weight: 800;
-            cursor: pointer; transition: 0.3s;
-        }
-
-        button#fetchBtn:hover { transform: scale(1.05); filter: brightness(1.1); }
-
-        /* Results Area */
-        #resultArea { display: none; margin-top: 30px; text-align: left; animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        .thumb-wrapper { position: relative; width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--glass-border); }
-        .thumb { width: 100%; display: block; }
-        .duration-tag { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
-
-        .vid-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; line-height: 1.4; }
-        .vid-stats { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .vid-stats span { background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 5px; }
-
-        /* Quality List */
-        .section-label { font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
-        
-        .quality-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 12px;
-        }
-
-        .dl-item {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid var(--glass-border);
+        #fetchBtn {
+            background: var(--accent);
             color: white;
-            padding: 15px 10px;
-            border-radius: 16px;
+            border: none;
+            height: 48px;
+            padding: 0 25px;
+            border-radius: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 8px 15px var(--accent-glow);
+        }
+
+        #fetchBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 25px var(--accent-glow);
+        }
+
+        #fetchBtn:active { transform: scale(0.95); }
+
+        /* Loader */
+        .loader {
+            display: none;
+            width: 40px; height: 4px;
+            background: rgba(255,255,255,0.1);
+            margin: 30px auto;
+            position: relative; overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .loader::after {
+            content: '';
+            position: absolute; width: 40%; height: 100%;
+            background: var(--accent);
+            animation: loading 1.5s infinite ease-in-out;
+        }
+
+        @keyframes loading {
+            0% { left: -40%; }
+            100% { left: 100%; }
+        }
+
+        /* Content Display */
+        #resultArea { display: none; margin-top: 35px; animation: fadeIn 0.8s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; filter: blur(10px); } to { opacity: 1; filter: blur(0); } }
+
+        .thumbnail {
+            width: 100%; border-radius: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .title { font-size: 1.2rem; font-weight: 800; margin-bottom: 10px; line-height: 1.3; color: #fff; }
+
+        .meta-tags { display: flex; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tag { background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 10px; font-size: 0.7rem; color: #aaa; font-weight: 600; }
+
+        /* Quality Buttons */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+        .dl-link {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border: 1px solid var(--border);
+            color: white;
+            padding: 18px;
+            border-radius: 20px;
             text-decoration: none;
             text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
             transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
         }
 
-        .dl-item:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-3px); }
-        .dl-item strong { font-size: 1.05rem; }
-        .dl-item small { font-size: 0.65rem; opacity: 0.8; font-weight: 700; text-transform: uppercase; }
-
-        .loader {
-            display: none; width: 40px; height: 40px;
-            border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--primary);
-            border-radius: 50%; margin: 30px auto; animation: spin 1s linear infinite;
+        .dl-link:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 10px 20px var(--accent-glow);
+            transform: translateY(-3px);
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .dl-link span { display: block; font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px; }
+
     </style>
 </head>
 <body>
 
-    <div class="bg-blur" id="bgBlur"></div>
-    <div class="glow"></div>
+    <div class="mesh"></div>
 
     <div class="container">
-        <header style="margin-bottom: 40px;">
-            <h1 style="font-size: 2.5rem; letter-spacing: -1.5px;">Stream<span style="color:var(--primary)">Fetch</span></h1>
-            <p style="color:var(--text-dim); font-weight: 500;">High-speed Video & Audio Downloader</p>
-        </header>
-
-        <div class="converter-card">
-            <div class="mode-selector">
-                <button class="mode-btn active" onclick="setMode('mp4', this)">VIDEO (MP4)</button>
-                <button class="mode-btn" onclick="setMode('mp3', this)">AUDIO (MP3)</button>
+        <div class="app-card">
+            <div class="tabs">
+                <button class="tab active" onclick="setMode('mp4', this)">VIDEO</button>
+                <button class="tab" onclick="setMode('mp3', this)">AUDIO</button>
             </div>
 
-            <div class="input-group">
-                <input type="text" id="urlInput" placeholder="Paste YouTube link here..." spellcheck="false">
+            <div class="input-box">
+                <input type="text" id="urlInput" placeholder="Paste link here...">
                 <button id="fetchBtn">Fetch</button>
             </div>
 
             <div class="loader" id="loader"></div>
 
             <div id="resultArea">
-                <div class="thumb-wrapper">
-                    <img id="vidThumb" class="thumb" src="" alt="">
-                    <span class="duration-tag" id="vidTime">0:00</span>
+                <img id="vidThumb" class="thumbnail" src="" alt="">
+                <h2 class="title" id="vidTitle">Video Title</h2>
+                
+                <div class="meta-tags">
+                    <span class="tag" id="tagAuthor">Author</span>
+                    <span class="tag" id="tagTime">00:00</span>
+                    <span class="tag" id="tagViews">0 Views</span>
                 </div>
-                
-                <div class="vid-title" id="vidTitle">Video Title</div>
-                
-                <div class="vid-stats">
-                    <span id="vidAuthor">Channel</span>
-                    <span id="vidViews">0 Views</span>
-                    <span id="vidAgo">Date</span>
-                </div>
-                
-                <div class="section-label" id="qualityLabel">Select Video Quality</div>
-                <div class="quality-grid" id="qualityGrid"></div>
+
+                <p style="font-size: 0.65rem; color: var(--accent); font-weight: 800; margin-bottom: 12px; letter-spacing: 2px;">SELECT QUALITY</p>
+                <div class="grid" id="qualityGrid"></div>
             </div>
         </div>
         
-        <p style="margin-top: 25px; font-size: 0.7rem; color: var(--text-dim); opacity: 0.5;">Powered by Vajira Official API</p>
+        <p style="text-align: center; margin-top: 30px; font-size: 0.6rem; color: #444; font-weight: 700; letter-spacing: 1px;">POWERED BY VAJIRA APIS</p>
     </div>
 
     <script>
-        let currentMode = 'mp4';
+        let mode = 'mp4';
         const apiKey = "vajira-1qg3lqmr60-1768268975394";
 
-        function setMode(mode, btn) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        function setMode(m, btn) {
+            mode = m;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById('qualityLabel').innerText = mode === 'mp4' ? 'Select Video Quality' : 'Select Audio Bitrate';
         }
 
         document.getElementById('fetchBtn').addEventListener('click', async () => {
             const url = document.getElementById('urlInput').value.trim();
-            if (!url) return alert("Please enter a URL");
+            if (!url) return;
 
             const loader = document.getElementById('loader');
             const resultArea = document.getElementById('resultArea');
@@ -220,55 +238,43 @@
 
             loader.style.display = "block";
             resultArea.style.display = "none";
-            qualityGrid.innerHTML = "";
+            fetchBtn.innerText = "Processing...";
             fetchBtn.disabled = true;
 
             try {
-                // Determine which endpoint to use
-                const apiType = currentMode === 'mp4' ? 'ytmp4' : 'ytmp3';
-                const apiUrl = `https://vajira-official-apis.vercel.app/api/${apiType}?apikey=${apiKey}&url=${url}`;
-                
-                const res = await fetch(apiUrl);
-                const json = await res.json();
+                const apiPath = mode === 'mp4' ? 'ytmp4' : 'ytmp3';
+                const response = await fetch(`https://vajira-official-apis.vercel.app/api/${apiPath}?apikey=${apiKey}&url=${url}`);
+                const res = await response.json();
 
-                if (json.status) {
-                    // Extract data (handling slightly different object names in your MP3 vs MP4 JSON)
-                    const meta = json.metadata || json.data;
-                    const dls = json.downloads.video || json.downloads; // MP4 has .video array, MP3 is direct array
+                if (res.status) {
+                    const data = res.metadata || res.data;
+                    const links = res.downloads.video || res.downloads;
 
-                    // Update UI
-                    const thumbImg = meta.thumbnails.max || meta.thumbnails.high || meta.thumbnails.image || meta.thumbnails.default;
-                    document.getElementById('vidThumb').src = thumbImg;
-                    document.getElementById('bgBlur').style.backgroundImage = `url('${thumbImg}')`;
-                    document.getElementById('vidTitle').innerText = meta.title;
-                    document.getElementById('vidTime').innerText = meta.timestamp || meta.duration.timestamp;
-                    document.getElementById('vidAuthor').innerText = meta.author.name;
-                    document.getElementById('vidViews').innerText = meta.viewsFormatted + " views";
-                    document.getElementById('vidAgo').innerText = meta.ago;
+                    document.getElementById('vidThumb').src = data.thumbnails.max || data.thumbnails.high || data.thumbnails.image || data.thumbnails.default;
+                    document.getElementById('vidTitle').innerText = data.title;
+                    document.getElementById('tagAuthor').innerText = data.author.name;
+                    document.getElementById('tagTime').innerText = data.timestamp || data.duration.timestamp;
+                    document.getElementById('tagViews').innerText = (data.viewsFormatted || data.views) + " Views";
 
-                    // Render Download Buttons
-                    dls.forEach(dl => {
-                        const item = document.createElement('a');
-                        item.href = dl.url;
-                        item.className = 'dl-item';
-                        item.target = '_blank';
-                        
-                        // Quality is labeled "quality" in MP4 and "bitrate" in MP3
-                        const label = dl.quality || dl.bitrate;
-                        item.innerHTML = `<strong>${label}</strong><small>${dl.format}</small>`;
-                        qualityGrid.appendChild(item);
+                    qualityGrid.innerHTML = "";
+                    links.forEach(item => {
+                        const qualityLabel = item.quality || item.bitrate;
+                        const dl = document.createElement('a');
+                        dl.href = item.url;
+                        dl.className = 'dl-link';
+                        dl.target = '_blank';
+                        dl.innerHTML = `${qualityLabel} <span>DOWNLOAD ${item.format}</span>`;
+                        qualityGrid.appendChild(dl);
                     });
 
                     loader.style.display = "none";
                     resultArea.style.display = "block";
-                } else {
-                    alert("API Error: Unable to fetch video.");
                 }
-            } catch (err) {
-                console.error(err);
-                alert("Connection failed. Check console.");
+            } catch (e) {
+                alert("Error fetching data.");
             } finally {
                 loader.style.display = "none";
+                fetchBtn.innerText = "Fetch";
                 fetchBtn.disabled = false;
             }
         });
