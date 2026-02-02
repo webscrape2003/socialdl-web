@@ -43,19 +43,17 @@
         
         .description { color: #bbb; font-size: 1.1rem; line-height: 1.7; margin: 25px 0; }
 
-        .screenshot-section, .cast-section { margin: 40px 0; }
         .section-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); font-weight: 800; margin-bottom: 15px; display: block; }
         
         .gallery-wrapper {
             display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px;
         }
         .gallery-wrapper img {
-            height: 180px; border-radius: 12px; object-fit: cover;
-            border: 1px solid #333; transition: 0.3s; cursor: pointer;
+            height: 180px; border-radius: 12px; border: 1px solid #333; transition: 0.3s; cursor: pointer;
         }
 
-        .cast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .cast-card { background: #1a1a1a; padding: 10px; border-radius: 10px; border: 1px solid #333; font-size: 0.85rem; }
+        .cast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .cast-card { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #222; }
 
         .download-card {
             background: var(--card); border-radius: 20px; padding: 30px;
@@ -73,87 +71,77 @@
             font-size: 0.85rem; transition: 0.3s; cursor: pointer;
         }
         .dl-action-btn:hover { background: var(--primary); border-color: var(--primary); }
-
-        @media (max-width: 850px) {
-            .movie-main { grid-template-columns: 1fr; }
-            .poster { max-width: 280px; margin: 0 auto; display: block; }
-        }
     </style>
 </head>
 <body>
 
 <div class="url-header">
     <div class="input-group">
-        <input type="text" id="urlInput" placeholder="Paste Pirate.lk movie link here...">
+        <input type="text" id="urlInput" placeholder="Paste Pirate.lk movie URL here...">
         <button id="fetchBtn" onclick="fetchMovieDetails()">GET DETAILS</button>
     </div>
 </div>
 
 <div class="container" id="mainDisplay">
-    <div style="text-align:center; padding:100px; color:#555">Enter a Pirate.lk URL to load movie details.</div>
+    <div style="text-align:center; padding:100px; color:#555">Ready to fetch movie data.</div>
 </div>
 
 <script>
     const apikey = "vajiraofficial";
-    const proxy = "https://api.allorigins.win/get?url=";
 
     async function fetchMovieDetails() {
         const movieUrl = document.getElementById('urlInput').value.trim();
         if (!movieUrl) return;
 
         const container = document.getElementById('mainDisplay');
-        container.innerHTML = '<div style="text-align:center; padding:100px;">Fetching Cinematic Data...</div>';
+        container.innerHTML = '<div style="text-align:center; padding:100px;">Fetching from Pirate.lk...</div>';
 
-        // Updated API Endpoint for Pirate.lk
+        // Direct API call without proxy
         const apiUrl = `https://vajira-mv-apikeys.netlify.app/api/pirate/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
 
         try {
-            const resp = await fetch(proxy + encodeURIComponent(apiUrl));
-            const jsonWrapper = await resp.json();
-            const result = JSON.parse(jsonWrapper.contents);
+            const resp = await fetch(apiUrl);
+            const result = await resp.json();
             
-            const data = result.data.data;
-            const main = data.mainDetails;
-            const detail = data.moviedata;
-            const links = data.dllinks.directDownloadLinks;
+            const movieData = result.data.data;
+            const main = movieData.mainDetails;
+            const meta = movieData.moviedata;
+            const dlLinks = movieData.dllinks.directDownloadLinks;
 
             container.innerHTML = `
                 <div class="movie-main">
-                    <img src="${main.imageUrl}" class="poster" onerror="this.src='https://via.placeholder.com/320x450?text=No+Poster'">
+                    <img src="${main.imageUrl}" class="poster">
                     <div class="info">
                         <h1 style="font-size:2.5rem; margin:0;">${main.maintitle}</h1>
                         <div class="badge-row">
-                            <span class="imdb-badge">IMDB ${detail.imdbRating}</span>
+                            <span class="imdb-badge">IMDB ${meta.imdbRating}</span>
                             <span class="meta-tag">${main.dateCreated}</span>
                             <span class="meta-tag">•</span>
                             <span class="meta-tag">${main.runtime}</span>
                         </div>
-                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
                             ${main.genres.map(g => `<span style="background:rgba(255,255,255,0.05); border:1px solid #333; padding:4px 14px; border-radius:30px; font-size:0.75rem; font-weight:700;">${g}</span>`).join('')}
                         </div>
-                        <p class="description">${detail.description}</p>
-                        
-                        <div style="font-size:0.9rem; border-top:1px solid #222; padding-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                            <div><b style="color:var(--primary)">Director:</b> <br>${detail.director || 'N/A'}</div>
-                            <div><b style="color:var(--primary)">Country:</b> <br>${main.country}</div>
+                        <p class="description">${meta.description}</p>
+                        <div style="font-size:0.9rem; border-top:1px solid #222; padding-top:20px;">
+                            <b style="color:var(--primary)">Director:</b> ${meta.director}
                         </div>
                     </div>
                 </div>
 
-                ${detail.imageUrls && detail.imageUrls.length > 0 ? `
                 <div class="screenshot-section">
-                    <span class="section-label">Screenshots & Stills</span>
+                    <span class="section-label">Gallery</span>
                     <div class="gallery-wrapper">
-                        ${detail.imageUrls.map(url => `<img src="${url.trim()}" onclick="window.open(this.src)">`).join('')}
+                        ${meta.imageUrls.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('')}
                     </div>
-                </div>` : ''}
+                </div>
 
                 <div class="cast-section">
-                    <span class="section-label">Top Cast</span>
+                    <span class="section-label">Cast & Characters</span>
                     <div class="cast-grid">
-                        ${detail.cast.slice(0, 8).map(c => `
+                        ${meta.cast.map(c => `
                             <div class="cast-card">
-                                <b>${c.name}</b><br>
+                                <strong>${c.name}</strong><br>
                                 <span style="color:#777; font-size:0.8rem">${c.character}</span>
                             </div>
                         `).join('')}
@@ -161,26 +149,20 @@
                 </div>
 
                 <div class="download-card">
-                    <span class="section-label" style="margin-bottom:20px;">Available Downloads</span>
-                    ${links.map(l => `
+                    <span class="section-label" style="margin-bottom:20px;">Direct Download Links</span>
+                    ${dlLinks.map(l => `
                         <div class="dl-row">
                             <div class="dl-info">
                                 <b>${l.quality}</b><br>
                                 <span style="color:#666; font-size:0.9rem;">${l.size} • ${l.platform}</span>
                             </div>
-                            <button onclick="handleDownload('${l.link}', this)" class="dl-action-btn">DOWNLOAD</button>
+                            <button onclick="handleDownload('${l.link}', this)" class="dl-action-btn">GET LINK</button>
                         </div>
                     `).join('')}
                 </div>
-                
-                <div style="padding: 50px 0; text-align:center; opacity:0.3; font-size:0.8rem;">
-                    Powered by VajiraTech Pirate API
-                </div>
             `;
-
         } catch (e) {
-            console.error(e);
-            container.innerHTML = '<div style="text-align:center; color:var(--primary); padding:100px;">Error: API failed to return movie data.</div>';
+            container.innerHTML = '<div style="text-align:center; color:var(--primary); padding:100px;">Connection failed. Ensure API is accessible directly.</div>';
         }
     }
 
@@ -189,25 +171,20 @@
         btn.innerText = "WAIT...";
         btn.disabled = true;
 
-        // Updated Download Endpoint for Pirate.lk
         const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
 
         try {
-            const resp = await fetch(proxy + encodeURIComponent(downloadApi));
-            const jsonWrapper = await resp.json();
-            const result = JSON.parse(jsonWrapper.contents);
-            
-            // Targeted link from your JSON example: data.data.link
-            let finalVideoLink = result.data?.data?.link;
+            const resp = await fetch(downloadApi);
+            const result = await resp.json();
+            const finalLink = result.data.data.link;
 
-            if (finalVideoLink) {
-                window.open(finalVideoLink, '_blank');
+            if (finalLink) {
+                window.open(finalLink, '_blank');
             } else {
-                alert("Download link not found in response.");
+                alert("Download link not available.");
             }
         } catch (e) {
-            console.error(e);
-            alert("Error generating download link.");
+            alert("Error: Download server busy.");
         } finally {
             btn.innerText = originalText;
             btn.disabled = false;
