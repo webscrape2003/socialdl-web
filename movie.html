@@ -108,19 +108,20 @@
 
     async function fetchMovieDetails() {
         const movieUrl = document.getElementById('urlInput').value.trim();
+        const container = document.getElementById('mainDisplay');
         if (!movieUrl) return;
 
-        const container = document.getElementById('mainDisplay');
-        container.innerHTML = '<div style="text-align:center; padding:100px;">Loading beautiful details...</div>';
+        container.innerHTML = '<div style="text-align:center; padding:100px;">Loading details...</div>';
 
         const apiUrl = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
 
         try {
             const resp = await fetch(proxy + encodeURIComponent(apiUrl));
-            const json = JSON.parse((await resp.json()).contents);
-            const data = json.data.data;
-            const movie = data.mainDetails;
-            const links = data.dllinks.DownloadLinks;
+            const jsonWrapper = await resp.json();
+            const result = JSON.parse(jsonWrapper.contents);
+            
+            const movie = result.data.data.mainDetails;
+            const links = result.data.data.dllinks.DownloadLinks;
 
             container.innerHTML = `
                 <div class="movie-main">
@@ -158,9 +159,9 @@
                         <div class="dl-row">
                             <div class="dl-info">
                                 <b>${l.quality}</b>
-                                <span>${l.size} • ${l.type}</span>
+                                <span style="margin-left:10px; color:#666; font-size:0.9rem;">${l.size} • ${l.type}</span>
                             </div>
-                            <a href="${l.link}" target="_blank" class="dl-action-btn">DOWNLOAD</a>
+                            <button onclick="handleDownload('${l.link}', this)" class="dl-action-btn">DOWNLOAD</button>
                         </div>
                     `).join('')}
                 </div>
@@ -175,9 +176,36 @@
         }
     }
 
-    // Auto-fetch the initial URL
+    // New Resolved Download Function
+    async function handleDownload(linkUrl, btn) {
+        const originalText = btn.innerText;
+        btn.innerText = "WAIT...";
+        btn.style.opacity = "0.5";
+
+        const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
+        
+        try {
+            const resp = await fetch(proxy + encodeURIComponent(downloadApi));
+            const jsonWrapper = await resp.json();
+            const result = JSON.parse(jsonWrapper.contents);
+            const finalVideoLink = result.data.data.link;
+
+            if (finalVideoLink) {
+                window.location.href = finalVideoLink;
+            } else {
+                alert("Download link not found.");
+            }
+        } catch (e) {
+            alert("Download Error!");
+        } finally {
+            btn.innerText = originalText;
+            btn.style.opacity = "1";
+        }
+    }
+
     fetchMovieDetails();
 </script>
+
 
 </body>
 </html>
