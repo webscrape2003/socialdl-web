@@ -3,188 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajira Cinema</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>The Rajasaab (2026) - Sinhala Subtitles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff1e2a;
-            --bg-dark: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text-light: #ffffff;
-            --text-gray: #aaaaaa;
+            --bg: #050505;
+            --surface: #121212;
+            --text: #ffffff;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
+            line-height: 1.6;
         }
 
-        .header {
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 30px;
-        }
-
-        .logo span { color: var(--primary); }
-
-        .search-area {
-            max-width: 500px;
-            margin: 0 auto;
-            display: flex;
-            background: #222;
-            border-radius: 50px;
-            padding: 5px;
-            border: 1px solid #333;
-        }
-
-        #movie-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 15px 25px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        #search-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            text-transform: uppercase;
+        /* Hero Background */
+        .hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.7), var(--bg)), 
+                        url('https://image.tmdb.org/t/p/original/5a9xbImnFttv7HuWgud7E23OFvv.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            filter: blur(5px);
+            opacity: 0.4;
         }
 
         .container {
-            padding: 20px 5%;
-        }
-
-        #movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .movie-card {
-            background: var(--card-bg);
+            max-width: 1100px;
+            margin: 60px auto;
             padding: 20px;
-            border-radius: 15px;
-            text-decoration: none;
+        }
+
+        .movie-header {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .poster-wrapper img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+        }
+
+        .meta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .imdb-tag {
+            background: #f5c518;
+            color: #000;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .genre-pill {
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        /* Download Section */
+        .download-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .dl-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .dl-row:last-child { border: none; }
+
+        .quality-info { font-weight: 600; font-size: 1.1rem; }
+        .size-info { color: #888; font-size: 0.9rem; }
+
+        .btn-download {
+            background: var(--primary);
             color: white;
-            border: 1px solid #222;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
             transition: 0.3s;
         }
 
-        .movie-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 30, 42, 0.4);
         }
 
-        .movie-title {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        .btn-sub {
-            font-size: 0.8rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .status {
-            text-align: center;
-            margin: 40px;
-            color: var(--text-gray);
+        @media (max-width: 800px) {
+            .movie-header { grid-template-columns: 1fr; text-align: center; }
+            .meta { justify-content: center; }
+            .poster-wrapper { max-width: 250px; margin: 0 auto; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo"><span>Vajira</span>Cinema</div>
-        <div class="search-area">
-            <input type="text" id="movie-input" placeholder="Search movie name..." value="2026">
-            <button id="search-btn">Search</button>
-        </div>
-    </div>
+<div class="hero-bg"></div>
 
-    <div class="container">
-        <div id="status" class="status"></div>
-        <div id="movie-grid"></div>
-    </div>
+<div class="container" id="movie-content">
+    <div style="text-align:center; padding: 100px;">Loading Movie Details...</div>
+</div>
 
-    <script>
-        const movieInput = document.getElementById('movie-input');
-        const searchBtn = document.getElementById('search-btn');
-        const movieGrid = document.getElementById('movie-grid');
-        const statusDiv = document.getElementById('status');
+<script>
+    const apikey = "vajiraofficial";
+    const movieUrl = "https://sinhalasub.lk/movies/the-rajasaab-2026-sinhala-subtitles/";
+    const proxy = "https://api.allorigins.win/get?url=";
 
-        async function fetchMovies() {
-            const query = movieInput.value.trim();
-            if (!query) return;
+    async function loadDetails() {
+        const fullUrl = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/movie?url=${encodeURIComponent(movieUrl)}&apikey=${apikey}`;
+        
+        try {
+            const resp = await fetch(proxy + encodeURIComponent(fullUrl));
+            const json = JSON.parse((await resp.json()).contents);
+            const movie = json.data.data.mainDetails;
+            const links = json.data.data.dllinks.DownloadLinks;
 
-            movieGrid.innerHTML = '';
-            statusDiv.innerHTML = "Loading results...";
-
-            // Added a proxy to bypass potential CORS issues
-            const proxy = "https://api.allorigins.win/get?url=";
-            const targetUrl = `https://vajira-mv-apikeys.netlify.app/api/sinhalasubs/search?q=${encodeURIComponent(query)}&apikey=vajiraofficial`;
-            
-            try {
-                const response = await fetch(proxy + encodeURIComponent(targetUrl));
-                const jsonWrapper = await response.json();
-                
-                // Parse the string data returned by the proxy
-                const result = JSON.parse(jsonWrapper.contents);
-                
-                // Mapping the specific nested path: data -> data -> data
-                const movies = result.data.data.data;
-
-                statusDiv.innerHTML = "";
-
-                if (!movies || movies.length === 0) {
-                    statusDiv.innerHTML = "No movies found.";
-                    return;
-                }
-
-                movies.forEach(movie => {
-                    if (movie.title && movie.link) {
-                        const card = document.createElement('a');
-                        card.className = 'movie-card';
-                        card.href = movie.link;
-                        card.target = '_blank';
-                        card.innerHTML = `
-                            <div class="movie-title">${movie.title}</div>
-                            <div class="btn-sub">GET SUBTITLES →</div>
-                        `;
-                        movieGrid.appendChild(card);
-                    }
-                });
-
-            } catch (error) {
-                console.error(error);
-                statusDiv.innerHTML = "Error fetching data. Check your API or internet connection.";
-            }
+            document.getElementById('movie-content').innerHTML = `
+                <div class="movie-header">
+                    <div class="poster-wrapper">
+                        <img src="${movie.imageUrl}" alt="Poster">
+                    </div>
+                    <div class="info-wrapper">
+                        <h1>${movie.maintitle}</h1>
+                        <div class="meta">
+                            <span class="imdb-tag">${movie.imdbRating}</span>
+                            <span>${movie.dateCreated}</span>
+                            <span>${movie.country}</span>
+                        </div>
+                        <div class="meta">
+                            ${movie.genres.map(g => `<span class="genre-pill">${g}</span>`).join('')}
+                        </div>
+                        <p class="description">${movie.description}</p>
+                        
+                        <div class="download-card">
+                            <h3 style="margin-top:0">Direct Download Links</h3>
+                            ${links.map(l => `
+                                <div class="dl-row">
+                                    <div>
+                                        <div class="quality-info">${l.quality}</div>
+                                        <div class="size-info">${l.size} (${l.type})</div>
+                                    </div>
+                                    <a href="${l.link}" target="_blank" class="btn-download">Download</a>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="margin-top:20px; font-size: 0.8rem; color: #666;">
+                            Director: ${movie.director}<br>
+                            Subtitles by: ${movie.subtitlesBy}
+                        </div>
+                    </div>
+                </div>
+            `;
+        } catch (e) {
+            document.getElementById('movie-content').innerHTML = "Failed to load movie data.";
         }
+    }
 
-        searchBtn.addEventListener('click', fetchMovies);
-        movieInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') fetchMovies(); });
+    loadDetails();
+</script>
 
-        // Initial fetch
-        fetchMovies();
-    </script>
 </body>
 </html>
