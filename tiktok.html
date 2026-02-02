@@ -7,39 +7,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff1e2a; --bg: #0a0a0a; --card: #121212; --text: #ffffff; }
+        
         body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
-        .header { padding: 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
-        .search-box { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; background: #1a1a1a; padding: 5px; border-radius: 12px; border: 1px solid #333; }
-        input { flex: 1; background: transparent; border: none; color: white; padding: 12px; outline: none; font-size: 1rem; }
-        button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        
+        .header { padding: 25px 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
+
+        /* --- BEAUTIFUL VERTICAL SEARCH BOX --- */
+        .search-box { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: column; /* Stacks input and button */
+            gap: 15px; 
+        }
+
+        input { 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            color: white; 
+            padding: 16px; 
+            outline: none; 
+            font-size: 1rem; 
+            border-radius: 15px;
+            width: 100%;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: #222;
+            box-shadow: 0 0 15px rgba(255, 30, 42, 0.2);
+        }
+
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 15px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(255, 30, 42, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 30, 42, 0.5);
+            filter: brightness(1.1);
+        }
+
+        button:active { transform: translateY(0); }
+
+        /* --- GRID & CARDS --- */
         .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
         .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; color: #fff; border-left: 5px solid var(--primary); padding-left: 15px; }
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .movie-card { background: var(--card); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; border: 1px solid #222; position: relative; display: flex; flex-direction: column; height: 100%; }
+        
+        .movie-card { 
+            background: var(--card); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            border: 1px solid #222; 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+        }
+
         .movie-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+        
         .badge-container { position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 5px; z-index: 10; }
         .badge { font-size: 0.65rem; font-weight: 800; padding: 3px 7px; border-radius: 4px; text-transform: uppercase; color: white; }
         .badge.year { background: #3b82f6; }
+        
         .image-container { position: relative; width: 100%; padding-top: 145%; background: #1a1a1a; }
         .movie-card img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        
         .card-info { padding: 15px; background: linear-gradient(to top, #000 85%, transparent); margin-top: -70px; position: relative; flex-grow: 1; display: flex; align-items: flex-end; }
         .card-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; color: #fff; text-align: center; width: 100%; text-shadow: 2px 2px 4px #000; }
-        #loader { display: none; text-align: center; padding: 40px; color: var(--primary); font-weight: 800; }
-        @media (max-width: 600px) { .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+        
+        #loader { display: none; text-align: center; padding: 40px; color: var(--primary); font-weight: 800; letter-spacing: 2px; }
+
+        @media (max-width: 600px) { 
+            .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            header h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search Movie Title or Year...">
-        <button id="searchBtn" onclick="searchMovies()">SEARCH</button>
+        <input type="text" id="searchInput" placeholder="Enter Movie Title or Year...">
+        <button id="searchBtn" onclick="searchMovies()">SEARCH MOVIES</button>
     </div>
 </div>
 
 <div class="container">
     <div class="section-title" id="statusText">Latest Movies</div>
-    <div id="loader">FETCHING DATA...</div>
+    <div id="loader">⚡ FETCHING DATA...</div>
     <div class="movie-grid" id="movieGrid"></div>
 </div>
 
@@ -59,11 +131,9 @@
         status.innerText = `Searching for: ${query}`;
 
         try {
-            // Direct fetch - no proxy - much faster
             const response = await fetch(`https://vajira-mv-apikeys.netlify.app/api/pirate/search?q=${encodeURIComponent(query)}&apikey=${API_KEY}`);
             const json = await response.json();
 
-            // FLEXIBLE PATH: This finds the movie list no matter where it is
             let movies = [];
             if (json.data?.data?.data) movies = json.data.data.data;
             else if (json.data?.data) movies = json.data.data;
@@ -105,11 +175,12 @@
         }
     }
 
-    // Enter key support
     document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key === 'Enter') searchMovies(); });
     
-    // Initial Load
-    window.onload = () => { document.getElementById('searchInput').value = '2024'; searchMovies(); };
+    window.onload = () => { 
+        document.getElementById('searchInput').value = '2025'; 
+        searchMovies(); 
+    };
 </script>
 </body>
 </html>
