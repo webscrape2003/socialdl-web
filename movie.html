@@ -166,13 +166,6 @@
 
     async function handleDownload(linkUrl, btn) {
     const originalText = btn.innerText;
-    
-    // 1. Create a reference to a new blank window immediately on click
-    const newWindow = window.open('about:blank', '_blank');
-    if (newWindow) {
-        newWindow.document.write('<p style="font-family:sans-serif; text-align:center; padding-top:50px;">Bypassing link... Please wait.</p>');
-    }
-
     btn.innerText = "BYPASSING...";
     btn.disabled = true;
 
@@ -184,15 +177,20 @@
         const result = JSON.parse(jsonWrapper.contents);
         const finalLink = result.data.data.link;
 
-        if (finalLink && newWindow) {
-            // 2. Redirect the already-opened tab to the final URL
-            newWindow.location.href = finalLink;
+        if (finalLink) {
+            // FIX: Create a hidden anchor tag to strip the Referer header
+            const hiddenAnchor = document.createElement('a');
+            hiddenAnchor.href = finalLink;
+            hiddenAnchor.target = '_blank';
+            hiddenAnchor.rel = 'noreferrer noopener'; // This hides your site from Pixeldrain
+            
+            document.body.appendChild(hiddenAnchor);
+            hiddenAnchor.click();
+            document.body.removeChild(hiddenAnchor);
         } else {
-            if (newWindow) newWindow.close();
             alert("Could not resolve final link.");
         }
     } catch (e) {
-        if (newWindow) newWindow.close();
         alert("Error generating download.");
     } finally {
         btn.innerText = originalText;
