@@ -176,7 +176,7 @@
 
         if (finalVideoLink) {
             // Clean URL for direct navigation
-            finalVideoLink = finalVideoLink.replace('api/file/', 'u/').replace(/[?&]download/, '');
+            finalVideoLink = finalVideoLink
             
             // SUDDEN REDIRECT: Replaces current page with the destination instantly
             window.location.replace(finalVideoLink);
