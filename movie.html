@@ -6,10 +6,16 @@
     <title>Vajira Movie Detailer Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff1e2a; --bg: #080808; --card: #151515; --text: #ffffff; --accent: #38bdf8; }
+        :root { 
+            --primary: #ff1e2a; 
+            --primary-glow: rgba(255, 30, 42, 0.4);
+            --bg: #080808; 
+            --card: #121212; 
+            --text: #ffffff; 
+            --accent: #38bdf8; 
+        }
         body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; scroll-behavior: smooth; }
 
-        /* Header Styling */
         .url-header {
             padding: 20px;
             background: rgba(13, 13, 13, 0.8);
@@ -28,14 +34,13 @@
         }
         #fetchBtn {
             background: var(--primary); color: white; border: none;
-            padding: 0 20px; border-radius: 8px; font-weight: 700;
-            cursor: pointer; transition: 0.2s;
+            padding: 0 25px; border-radius: 8px; font-weight: 800;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
         }
-        #fetchBtn:hover { opacity: 0.9; transform: translateY(-1px); }
+        #fetchBtn:hover { box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-1px); }
 
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
 
-        /* Movie Layout */
         .movie-main { display: grid; grid-template-columns: 300px 1fr; gap: 40px; margin-bottom: 50px; }
         .poster { width: 100%; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #333; }
         
@@ -47,32 +52,70 @@
         .description::-webkit-scrollbar { width: 4px; }
         .description::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--primary); font-weight: 800; margin-bottom: 15px; display: block; }
+        .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); font-weight: 800; margin-bottom: 20px; display: block; }
         
-        /* Gallery */
-        .gallery-wrapper { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; }
+        .gallery-wrapper { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 40px; }
         .gallery-wrapper img { height: 140px; border-radius: 10px; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
         .gallery-wrapper img:hover { border-color: var(--primary); transform: scale(1.05); }
 
-        /* Downloads */
-        .download-card { background: var(--card); border-radius: 15px; padding: 25px; border: 1px solid #222; }
+        /* Modernized Download Section */
+        .download-card { 
+            background: linear-gradient(145deg, #151515, #0a0a0a); 
+            border-radius: 20px; padding: 30px; 
+            border: 1px solid #222;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
         .dl-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 0; border-bottom: 1px solid #222;
+            padding: 18px; margin-bottom: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s ease;
         }
-        .dl-row:last-child { border: none; }
-        .dl-info b { font-size: 1rem; color: #eee; }
+        .dl-row:hover { background: rgba(255,255,255,0.06); border-color: #333; transform: translateX(5px); }
         
+        .dl-info b { font-size: 1.1rem; color: #fff; letter-spacing: 0.5px; }
+        .dl-meta { color: #666; font-size: 0.85rem; margin-top: 4px; display: block; }
+        
+        /* The Beautiful Button */
         .dl-action-btn {
-            background: #1a1a1a; color: #fff; border: 1px solid #333;
-            padding: 8px 20px; border-radius: 6px; font-weight: 700;
-            font-size: 0.8rem; cursor: pointer; transition: 0.3s;
+            position: relative;
+            background: linear-gradient(90deg, #1a1a1a, #252525);
+            color: #fff; border: 1px solid #333;
+            padding: 12px 24px; border-radius: 10px; 
+            font-weight: 800; font-size: 0.8rem; 
+            cursor: pointer; transition: 0.4s all;
+            display: flex; align-items: center; gap: 10px;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .dl-action-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+        .dl-action-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .dl-action-btn:hover {
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 0 15px var(--primary-glow);
+            transform: scale(1.05);
+        }
+
+        .dl-action-btn:hover::before { left: 100%; }
+
+        .dl-action-btn:disabled { opacity: 0.6; cursor: not-allowed; border-color: #222; }
+
+        .icon-dl { width: 16px; height: 16px; fill: currentColor; }
 
         @media (max-width: 800px) {
             .movie-main { grid-template-columns: 1fr; }
             .poster { max-width: 250px; margin: 0 auto; display: block; }
+            .dl-row { flex-direction: column; gap: 15px; text-align: center; }
+            .dl-action-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -80,20 +123,19 @@
 
 <div class="url-header">
     <div class="input-group">
-        <input type="text" id="urlInput" placeholder="Paste movie link (e.g., https://pirate.lk/movies/...)">
+        <input type="text" id="urlInput" placeholder="Paste movie link here...">
         <button id="fetchBtn" onclick="fetchMovieDetails()">GET MOVIE</button>
     </div>
 </div>
 
 <div class="container" id="mainDisplay">
-    <div style="text-align:center; padding:100px; color:#444; font-weight:600;">
-        Ready to process your movie link.
+    <div style="text-align:center; padding:100px; color:#444; font-weight:600; letter-spacing: 1px;">
+        PASTE A LINK TO START GENERATING
     </div>
 </div>
 
 <script>
     const apikey = "vajiraofficial";
-    // Using a more stable CORS proxy
     const proxy = "https://api.allorigins.win/get?url=";
 
     async function fetchMovieDetails() {
@@ -118,89 +160,87 @@
                 <div class="movie-main">
                     <img src="${movie.imageUrl}" class="poster">
                     <div class="info">
-                        <h1 style="font-size:2.2rem; margin:0; line-height:1.2;">${movie.maintitle}</h1>
+                        <h1 style="font-size:2.5rem; margin:0; line-height:1.1; font-weight:800;">${movie.maintitle}</h1>
                         <div class="badge-row">
                             <span class="imdb-badge">IMDb ${extra.imdbRating}</span>
                             <span class="meta-tag">${movie.dateCreated}</span>
                             <span class="meta-tag">•</span>
                             <span class="meta-tag">${movie.runtime}</span>
                         </div>
-                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
-                            ${movie.genres.map(g => `<span style="background:rgba(255,255,255,0.05); border:1px solid #333; padding:4px 12px; border-radius:5px; font-size:0.7rem; font-weight:700; color:#ccc;">${g}</span>`).join('')}
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:25px;">
+                            ${movie.genres.map(g => `<span style="background:rgba(255,255,255,0.05); border:1px solid #333; padding:5px 14px; border-radius:6px; font-size:0.75rem; font-weight:700; color:#ddd;">${g}</span>`).join('')}
                         </div>
                         <span class="section-label">Synopsis</span>
                         <p class="description">${extra.description}</p>
                         
                         <div style="font-size:0.85rem; border-top:1px solid #222; padding-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                            <div><b style="color:var(--primary)">Director</b><br><span style="color:#eee">${extra.director}</span></div>
-                            <div><b style="color:var(--primary)">Country</b><br><span style="color:#eee">${movie.country}</span></div>
+                            <div><b style="color:var(--primary); text-transform:uppercase; font-size:0.7rem;">Director</b><br><span style="color:#eee; font-size:1rem;">${extra.director}</span></div>
+                            <div><b style="color:var(--primary); text-transform:uppercase; font-size:0.7rem;">Country</b><br><span style="color:#eee; font-size:1rem;">${movie.country}</span></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="screenshot-section">
-                    <span class="section-label">Media Gallery</span>
-                    <div class="gallery-wrapper">
-                        ${extra.imageUrls.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('')}
-                    </div>
+                <span class="section-label">Media Gallery</span>
+                <div class="gallery-wrapper">
+                    ${extra.imageUrls.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('')}
                 </div>
 
                 <div class="download-card">
-                    <span class="section-label" style="margin-bottom:20px;">Download Options</span>
+                    <span class="section-label">Download Options</span>
                     ${links.map(l => `
                         <div class="dl-row">
                             <div class="dl-info">
-                                <b style="color:var(--primary)">${l.quality}</b><br>
-                                <span style="color:#666; font-size:0.85rem;">${l.size} • ${l.platform}</span>
+                                <b style="color:var(--primary)">${l.quality}</b>
+                                <span class="dl-meta">${l.size} • ${l.platform}</span>
                             </div>
-                            <button onclick="handleDownload('${l.link}', this)" class="dl-action-btn">GET LINK</button>
+                            <button onclick="handleDownload('${l.link}', this)" class="dl-action-btn">
+                                <svg class="icon-dl" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                <span>Get File</span>
+                            </button>
                         </div>
                     `).join('')}
                 </div>
             `;
-
         } catch (e) {
             container.innerHTML = '<div style="text-align:center; color:var(--primary); padding:100px;">Failed to fetch data. Check the URL and try again.</div>';
         }
     }
 
     async function handleDownload(linkUrl, btn) {
-    const originalText = btn.innerText;
-    btn.innerText = "BYPASSING...";
-    btn.disabled = true;
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = "<span>Bypassing...</span>";
+        btn.disabled = true;
 
-    const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
+        const downloadApi = `https://vajira-mv-apikeys.netlify.app/api/pirate/download?url=${encodeURIComponent(linkUrl)}&apikey=${apikey}`;
 
-    try {
-        const resp = await fetch(proxy + encodeURIComponent(downloadApi));
-        const jsonWrapper = await resp.json();
-        const result = JSON.parse(jsonWrapper.contents);
-        let finalLink = result.data.data.link;
+        try {
+            const resp = await fetch(proxy + encodeURIComponent(downloadApi));
+            const jsonWrapper = await resp.json();
+            const result = JSON.parse(jsonWrapper.contents);
+            let finalLink = result.data.data.link;
 
-        if (finalLink) {
-            // STEP 1: Replace 'api/file' with 'u' to avoid the hotlink error
-            const fixedLink = finalLink.replace('api/file/', 'u/');
+            if (finalLink) {
+                // REPLACE logic for Pixeldrain
+                const fixedLink = finalLink.replace('api/file/', 'u/');
 
-            // STEP 2: Open the link using a hidden anchor to strip the Referer header
-            const hiddenAnchor = document.createElement('a');
-            hiddenAnchor.href = fixedLink;
-            hiddenAnchor.target = '_blank';
-            hiddenAnchor.rel = 'noreferrer noopener'; 
-            
-            document.body.appendChild(hiddenAnchor);
-            hiddenAnchor.click();
-            document.body.removeChild(hiddenAnchor);
-        } else {
-            alert("Could not resolve final link.");
+                const hiddenAnchor = document.createElement('a');
+                hiddenAnchor.href = fixedLink;
+                hiddenAnchor.target = '_blank';
+                hiddenAnchor.rel = 'noreferrer noopener'; 
+                
+                document.body.appendChild(hiddenAnchor);
+                hiddenAnchor.click();
+                document.body.removeChild(hiddenAnchor);
+            } else {
+                alert("Could not resolve final link.");
+            }
+        } catch (e) {
+            alert("Error generating download.");
+        } finally {
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
         }
-    } catch (e) {
-        alert("Error generating download.");
-    } finally {
-        btn.innerText = originalText;
-        btn.disabled = false;
     }
-}
-
 </script>
 </body>
 </html>
