@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vajira | FB Pro Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --accent: #1877F2; /* Facebook Blue */
+            --accent-glow: rgba(24, 119, 242, 0.4);
+            --bg: #0d0e12;
+            --card: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at top right, #1a1a1a, #000);
+            color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+        }
+
+        .app-container {
+            width: 100%; max-width: 460px;
+            background: var(--card); backdrop-filter: blur(25px);
+            border: 1px solid var(--border); border-radius: 35px;
+            padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        .logo { text-align: center; margin-bottom: 25px; }
+        .logo h2 { font-weight: 800; font-size: 1.6rem; letter-spacing: -1px; }
+
+        .input-section { margin-bottom: 25px; display: flex; flex-direction: column; gap: 12px; }
+        input {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+            padding: 16px; border-radius: 18px; color: white; text-align: center; outline: none;
+        }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+
+        .fetch-btn {
+            width: 100%; background: var(--accent); color: white; border: none;
+            padding: 16px; border-radius: 18px; font-weight: 800; cursor: pointer;
+            text-transform: uppercase; transition: 0.3s;
+        }
+        .fetch-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px var(--accent-glow); }
+
+        /* --- PLAYER FRAME --- */
+        #resultArea { display: none; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .player-frame {
+            width: 100%; aspect-ratio: 16/9; background: #000;
+            border-radius: 20px; overflow: hidden; border: 2px solid var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow); margin-bottom: 15px;
+        }
+        video { width: 100%; height: 100%; object-fit: contain; }
+
+        .title { font-size: 1rem; font-weight: 700; margin-bottom: 20px; line-height: 1.4; text-align: left; }
+
+        /* --- DOWNLOAD BUTTONS --- */
+        .dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .dl-card {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 18px;
+            text-decoration: none; color: white; text-align: center;
+            border: 1px solid var(--border); transition: 0.3s;
+        }
+        .dl-card:hover { border-color: var(--accent); background: rgba(24, 119, 242, 0.1); transform: translateY(-2px); }
+        .dl-card b { display: block; font-size: 0.9rem; }
+        .dl-card span { font-size: 0.65rem; opacity: 0.6; text-transform: uppercase; }
+
+        #loader { display: none; color: var(--accent); font-weight: 800; text-align: center; margin: 15px 0; }
+
+        footer { text-align: center; margin-top: 25px; font-size: 0.8rem; font-weight: 700; color: #64748b; }
+        footer span { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="logo">
+            <h2>Vajira<span>FACEBOOK</span></h2>
+        </div>
+        
+        <div class="input-section">
+            <input type="text" id="fbUrl" placeholder="Paste Facebook Video/Reel URL...">
+            <button class="fetch-btn" onclick="fetchFB()">GET VIDEO</button>
+        </div>
+
+        <div id="loader">⚡ EXTRACTING VIDEO...</div>
+
+        <div id="resultArea">
+            <div class="player-frame">
+                <video id="fbPlayer" controls></video>
+            </div>
+            
+            <div id="vTitle" class="title"></div>
+
+            <div class="dl-grid">
+                <a id="hdLink" href="#" class="dl-card" target="_blank">
+                    <b>HD QUALITY</b>
+                    <span>High Definition</span>
+                </a>
+                <a id="sdLink" href="#" class="dl-card" target="_blank">
+                    <b>SD QUALITY</b>
+                    <span>Standard</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Powered by: Vajira <span>Rathnayaka</span>
+    </footer>
+
+    <script>
+        const API_KEY = "vajira-1qg3lqmr60-1768268975394";
+
+        async function fetchFB() {
+            const url = document.getElementById('fbUrl').value.trim();
+            const loader = document.getElementById('loader');
+            const resArea = document.getElementById('resultArea');
+
+            if(!url) return;
+
+            loader.style.display = "block";
+            resArea.style.display = "none";
+
+            try {
+                const api = `https://vajira-official-apis.vercel.app/api/fbdl?apikey=${API_KEY}&url=${encodeURIComponent(url)}`;
+                const response = await fetch(api);
+                const data = await response.json();
+
+                if(data.status) {
+                    // Set Player (Default to HD link for preview)
+                    document.getElementById('fbPlayer').src = data.links.hd || data.links.sd;
+                    document.getElementById('vTitle').innerText = data.title;
+                    
+                    // Set Download Links
+                    document.getElementById('hdLink').href = data.links.hd;
+                    document.getElementById('sdLink').href = data.links.sd;
+
+                    loader.style.display = "none";
+                    resArea.style.display = "block";
+                } else {
+                    alert("Failed to fetch video. Check link privacy.");
+                    loader.style.display = "none";
+                }
+            } catch (err) {
+                loader.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
