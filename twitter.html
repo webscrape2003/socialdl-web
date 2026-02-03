@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vajira | X Video Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --accent: #ffffff; 
+            --accent-glow: rgba(255, 255, 255, 0.2);
+            --bg: #000000;
+            --card: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+        }
+
+        .app-container {
+            width: 100%; max-width: 450px;
+            background: var(--card); backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 30px;
+            padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+        }
+
+        .logo { text-align: center; margin-bottom: 25px; }
+        .logo h2 { font-weight: 800; font-size: 1.8rem; letter-spacing: -1.5px; }
+        .logo span { color: #1DA1F2; } /* Classic Twitter Blue accent for the dot */
+
+        .input-section { margin-bottom: 25px; display: flex; flex-direction: column; gap: 12px; }
+        input {
+            width: 100%; background: #111; border: 1px solid var(--border);
+            padding: 16px; border-radius: 15px; color: white; text-align: center; outline: none;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--accent); }
+
+        .fetch-btn {
+            width: 100%; background: var(--accent); color: #000; border: none;
+            padding: 16px; border-radius: 15px; font-weight: 800; cursor: pointer;
+            text-transform: uppercase; transition: 0.3s;
+        }
+        .fetch-btn:hover { background: #eee; transform: translateY(-2px); }
+
+        /* --- PLAYER FRAME --- */
+        #resultArea { display: none; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .player-frame {
+            width: 100%; aspect-ratio: 16/9; background: #000;
+            border-radius: 18px; overflow: hidden; border: 1px solid var(--border);
+            box-shadow: 0 0 20px var(--accent-glow); margin-bottom: 20px;
+        }
+        video { width: 100%; height: 100%; object-fit: contain; }
+
+        .title { font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: #ccc; text-align: center; }
+
+        /* --- DYNAMIC QUALITY LIST --- */
+        .dl-list { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .dl-item {
+            background: rgba(255,255,255,0.05); padding: 14px; border-radius: 12px;
+            text-decoration: none; color: white; text-align: center;
+            border: 1px solid var(--border); transition: 0.2s;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px;
+        }
+        .dl-item:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
+        .dl-item b { font-size: 0.85rem; }
+        .dl-item i { font-size: 1rem; }
+
+        #loader { display: none; font-weight: 800; text-align: center; margin: 15px 0; letter-spacing: 1px; }
+
+        footer { text-align: center; margin-top: 30px; font-size: 0.8rem; font-weight: 700; color: #555; }
+        footer span { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="logo">
+            <h2>Vajira<span>X</span>dl</h2>
+        </div>
+        
+        <div class="input-section">
+            <input type="text" id="xUrl" placeholder="Paste X/Twitter Video URL...">
+            <button class="fetch-btn" onclick="fetchX()">Download Video</button>
+        </div>
+
+        <div id="loader">POLLING MEDIA...</div>
+
+        <div id="resultArea">
+            <div class="player-frame">
+                <video id="xPlayer" controls></video>
+            </div>
+            
+            <div id="vTitle" class="title"></div>
+
+            <div id="dlList" class="dl-list">
+                </div>
+        </div>
+    </div>
+
+    <footer>
+        Powered by: Vajira <span>Rathnayaka</span>
+    </footer>
+
+    <script>
+        const API_KEY = "vajira-1qg3lqmr60-1768268975394";
+
+        async function fetchX() {
+            const url = document.getElementById('xUrl').value.trim();
+            const loader = document.getElementById('loader');
+            const resArea = document.getElementById('resultArea');
+            const dlList = document.getElementById('dlList');
+
+            if(!url) return;
+
+            loader.style.display = "block";
+            resArea.style.display = "none";
+            dlList.innerHTML = "";
+
+            try {
+                const api = `https://vajira-official-apis.vercel.app/api/twitterdl?apikey=${API_KEY}&url=${encodeURIComponent(url)}`;
+                const response = await fetch(api);
+                const data = await response.json();
+
+                if(data.status && data.result.media.length > 0) {
+                    const media = data.result.media;
+                    
+                    // Set Player (Highest quality available)
+                    document.getElementById('xPlayer').src = media[0].url;
+                    document.getElementById('vTitle').innerText = data.result.title || "Twitter Video";
+
+                    // Build dynamic list
+                    media.forEach(item => {
+                        // Cleanup quality text (remove \n and extra spaces)
+                        const cleanQuality = item.quality.replace(/\n/g, '').replace(/\s+/g, ' ').trim();
+                        
+                        const btn = document.createElement('a');
+                        btn.href = item.url;
+                        btn.className = 'dl-item';
+                        btn.target = '_blank';
+                        btn.innerHTML = `<b>${cleanQuality}</b> <i class="fa-solid fa-circle-down"></i>`;
+                        dlList.appendChild(btn);
+                    });
+
+                    loader.style.display = "none";
+                    resArea.style.display = "block";
+                } else {
+                    alert("No media found!");
+                    loader.style.display = "none";
+                }
+            } catch (err) {
+                console.error(err);
+                loader.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
