@@ -3,223 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamFetch | VajiraOfficial Ytdl</title>
+    <title>Vajira | Ultra Pro Player</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --accent: #ff2d55;
-            --bg: #0d0e12;
-            --card: rgba(255, 255, 255, 0.04);
-            --border: rgba(255, 255, 255, 0.1);
-            --text-dim: #94a3b8;
+            --accent-glow: rgba(255, 45, 85, 0.5);
+            --bg: #050505;
+            --card: rgba(25, 25, 25, 0.9);
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
+            background-image: radial-gradient(circle at 2% 10%, rgba(255, 45, 85, 0.1) 0%, transparent 40%),
+                              radial-gradient(circle at 98% 90%, rgba(34, 114, 255, 0.1) 0%, transparent 40%);
             color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
         }
 
         .app-container {
-            width: 100%;
-            max-width: 480px;
+            width: 100%; max-width: 460px;
             background: var(--card);
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 35px;
             padding: 30px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-        }
-
-        .input-section { margin-bottom: 25px; text-align: center; }
-        
-        input {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border);
-            padding: 16px;
-            border-radius: 18px;
-            color: white;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.9);
             text-align: center;
-            margin-bottom: 15px;
-            outline: none;
-            font-size: 0.95rem;
         }
-        input:focus { border-color: var(--accent); }
 
-        #fetchBtn {
-            width: 100%;
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 18px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
+        .logo h2 { font-weight: 800; font-size: 1.8rem; margin-bottom: 25px; letter-spacing: -1.5px; }
+        .logo span { color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+
+        /* --- VERTICAL SEARCH --- */
+        .search-area { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        .input-wrapper {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
             transition: 0.3s;
         }
+        .input-wrapper:focus-within { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        input { width: 100%; background: transparent; border: none; color: white; padding: 18px; outline: none; text-align: center; font-size: 1rem; }
 
-        #fetchBtn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-        #resultArea { display: none; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .thumb { width: 100%; border-radius: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
-        .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
-        
-        .stats { 
-            display: flex; gap: 8px; font-size: 0.7rem; color: var(--text-dim); 
-            margin-bottom: 25px; flex-wrap: wrap; 
-        }
-        .stats span { background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 8px; font-weight: 600; }
-
-        .format-selection { display: flex; gap: 10px; margin-bottom: 20px; }
-        
-        .sel-btn {
-            flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border);
-            background: rgba(255,255,255,0.05); color: white; font-weight: 700;
-            cursor: pointer; transition: 0.3s; font-size: 0.8rem;
-        }
-        .sel-btn.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 5px 15px var(--accent-glow); }
-
-        .dl-list { display: none; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .dl-list.active { display: grid; }
-
-        .dl-item {
-            background: rgba(255,255,255,0.07); padding: 15px; border-radius: 18px;
-            text-decoration: none; color: white; text-align: center; font-size: 0.85rem;
-            font-weight: 700; border: 1px solid transparent; transition: 0.2s;
-        }
-        .dl-item:hover { border-color: var(--accent); background: rgba(255, 45, 85, 0.15); transform: scale(1.02); }
-        .dl-item span { display: block; font-size: 0.65rem; opacity: 0.6; margin-top: 4px; text-transform: uppercase; }
-
-        #loader { display: none; color: var(--accent); font-weight: 700; margin: 15px 0; text-align: center; }
-
-        /* Footer Styling */
-        footer {
-            text-align: center;
-            padding: 10px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-dim);
+        .fetch-btn {
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            color: white; border: none; padding: 18px; border-radius: 20px;
+            font-weight: 800; text-transform: uppercase; cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             letter-spacing: 1px;
-            opacity: 0.8;
         }
-        footer span { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+        .fetch-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
+
+        /* --- BEAUTIFUL PLAYER --- */
+        #resultArea { display: none; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .player-frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.05);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5), 0 0 10px var(--accent-glow);
+            margin-bottom: 20px;
+        }
+        video { width: 100%; height: 100%; object-fit: contain; }
+
+        .video-info { text-align: left; margin-bottom: 25px; }
+        .video-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; color: #fff; }
+        .video-info p { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+
+        /* --- DOWNLOAD OPTIONS --- */
+        .type-switcher { display: flex; background: var(--glass); border-radius: 15px; padding: 6px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .switch-btn { flex: 1; padding: 12px; border: none; background: transparent; color: white; font-weight: 800; cursor: pointer; border-radius: 10px; font-size: 0.75rem; transition: 0.3s; }
+        .switch-btn.active { background: var(--accent); box-shadow: 0 5px 15px var(--accent-glow); }
+
+        .grid-list { display: none; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-list.active { display: grid; }
+        .dl-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 15px; border-radius: 18px; text-decoration: none; color: white;
+            transition: 0.3s; text-align: center;
+        }
+        .dl-card:hover { background: rgba(255, 45, 85, 0.1); border-color: var(--accent); transform: scale(1.03); }
+        .dl-card b { display: block; font-size: 0.9rem; }
+        .dl-card span { font-size: 0.65rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+
+        #loader { display: none; color: var(--accent); font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">VajiraOfficial <span style="color:var(--accent)">Ytdl</span></h2>
-        
-        <div class="input-section">
-            <input type="text" id="urlInput" placeholder="YouTube url or song name...">
-            <button id="fetchBtn">Seach Song Details</button>
+<div class="app-container">
+    <div class="logo"><h2>Vajira<span>CINEMA</span></h2></div>
+    
+    <div class="search-area">
+        <div class="input-wrapper">
+            <input type="text" id="targetUrl" placeholder="Enter Video URL...">
         </div>
-
-        <div id="loader">Gathering Data...</div>
-
-        <div id="resultArea">
-            <img id="vidThumb" class="thumb" src="">
-            <div id="vidTitle" class="title"></div>
-            
-            <div class="stats">
-                <span id="vidAuthor"></span>
-                <span id="vidViews"></span>
-                <span id="vidAgo"></span>
-                <span id="vidTime"></span>
-            </div>
-
-            <div class="format-selection">
-                <button class="sel-btn active" id="btnVid" onclick="toggleDisplay('video')">VIDEO (MP4)</button>
-                <button class="sel-btn" id="btnAud" onclick="toggleDisplay('audio')">AUDIO (MP3)</button>
-            </div>
-
-            <div id="videoList" class="dl-list active"></div>
-            <div id="audioList" class="dl-list"></div>
-        </div>
+        <button class="fetch-btn" onclick="startFetch()">Analyze Video</button>
     </div>
 
-    <footer>
-        Powered by: Vajira <span>Rathnayaka</span>
-    </footer>
+    <div id="loader">⚡ BOOTING PLAYER...</div>
 
-    <script>
-        const API_KEY = "vajira-1qg3lqmr60-1768268975394";
+    <div id="resultArea">
+        <div class="player-frame">
+            <video id="mainPlayer" controls></video>
+        </div>
+        
+        <div class="video-info">
+            <h3 id="metaTitle"></h3>
+            <p id="metaAuthor"></p>
+        </div>
 
-        function toggleDisplay(type) {
-            document.getElementById('videoList').classList.toggle('active', type === 'video');
-            document.getElementById('audioList').classList.toggle('active', type === 'audio');
-            document.getElementById('btnVid').classList.toggle('active', type === 'video');
-            document.getElementById('btnAud').classList.toggle('active', type === 'audio');
-        }
+        <div class="type-switcher">
+            <button class="switch-btn active" id="vTab" onclick="switchTab('v')">VIDEO HQ</button>
+            <button class="switch-btn" id="aTab" onclick="switchTab('a')">AUDIO MP3</button>
+        </div>
 
-        document.getElementById('fetchBtn').addEventListener('click', async () => {
-            const url = document.getElementById('urlInput').value.trim();
-            if(!url) return alert("Please paste a link first!");
+        <div id="vGrid" class="grid-list active"></div>
+        <div id="aGrid" class="grid-list"></div>
+    </div>
+</div>
 
-            const loader = document.getElementById('loader');
-            const resultArea = document.getElementById('resultArea');
-            loader.style.display = "block";
-            resultArea.style.display = "none";
+<script>
+    const API_KEY = "vajira-1qg3lqmr60-1768268975394";
 
-            try {
-                // Fetch both endpoints
-                const [vRes, aRes] = await Promise.all([
-                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp4?apikey=${API_KEY}&url=${url}`).then(r => r.json()),
-                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp3?apikey=${API_KEY}&url=${url}`).then(r => r.json())
-                ]);
+    function switchTab(type) {
+        document.getElementById('vGrid').classList.toggle('active', type === 'v');
+        document.getElementById('aGrid').classList.toggle('active', type === 'a');
+        document.getElementById('vTab').classList.toggle('active', type === 'v');
+        document.getElementById('aTab').classList.toggle('active', type === 'a');
+    }
 
-                if (vRes.status && aRes.status) {
-                    const meta = vRes.metadata;
-                    
-                    // Display Header Meta
-                    document.getElementById('vidThumb').src = meta.thumbnails.max || meta.thumbnails.image || meta.thumbnails.high;
-                    document.getElementById('vidTitle').innerText = meta.title;
-                    document.getElementById('vidAuthor').innerText = meta.author.name;
-                    document.getElementById('vidViews').innerText = meta.viewsFormatted + " views";
-                    document.getElementById('vidAgo').innerText = meta.ago;
-                    document.getElementById('vidTime').innerText = meta.duration.timestamp;
+    async function startFetch() {
+        const url = document.getElementById('targetUrl').value.trim();
+        const loader = document.getElementById('loader');
+        const res = document.getElementById('resultArea');
+        if(!url) return;
 
-                    // Build Video Buttons
-                    const vList = document.getElementById('videoList');
-                    vList.innerHTML = "";
-                    vRes.downloads.video.forEach(dl => {
-                        vList.innerHTML += `<a href="${dl.url}" class="dl-item" target="_blank">${dl.quality}<span>${dl.format}</span></a>`;
-                    });
+        loader.style.display = "block";
+        res.style.display = "none";
 
-                    // Build Audio Buttons
-                    const aList = document.getElementById('audioList');
-                    aList.innerHTML = "";
-                    aRes.data.downloads.forEach(dl => {
-                        aList.innerHTML += `<a href="${dl.url}" class="dl-item" target="_blank">${dl.bitrate}<span>${dl.format}</span></a>`;
-                    });
+        try {
+            const [vData, aData] = await Promise.all([
+                fetch(`https://vajira-official-apis.vercel.app/api/ytmp4?apikey=${API_KEY}&url=${encodeURIComponent(url)}`).then(r => r.json()),
+                fetch(`https://vajira-official-apis.vercel.app/api/ytmp3?apikey=${API_KEY}&url=${encodeURIComponent(url)}`).then(r => r.json())
+            ]);
 
-                    loader.style.display = "none";
-                    resultArea.style.display = "block";
-                } else {
-                    alert("Error: Link invalid or API failed.");
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Connection Failed. Make sure your internet and API are active.");
-            } finally {
+            if (vData.status) {
+                const meta = vData.metadata;
+                
+                // Inject Player Source
+                const player = document.getElementById('mainPlayer');
+                player.src = vData.downloads.video[0].url; 
+                player.poster = meta.thumbnails.high || meta.thumbnails.image;
+                
+                document.getElementById('metaTitle').innerText = meta.title;
+                document.getElementById('metaAuthor').innerText = "@" + meta.author.name;
+
+                // Build Grids
+                const vG = document.getElementById('vGrid'); vG.innerHTML = "";
+                vData.downloads.video.forEach(d => {
+                    vG.innerHTML += `<a href="${d.url}" class="dl-card" target="_blank"><b>${d.quality}</b><span>${d.format}</span></a>`;
+                });
+
+                const aG = document.getElementById('aGrid'); aG.innerHTML = "";
+                aData.data.downloads.forEach(d => {
+                    aG.innerHTML += `<a href="${d.url}" class="dl-card" target="_blank"><b>${d.bitrate}</b><span>${d.format}</span></a>`;
+                });
+
                 loader.style.display = "none";
+                res.style.display = "block";
+                player.pause(); // Let user press play manually
             }
-        });
-    </script>
+        } catch (e) {
+            alert("Error analyzing content.");
+            loader.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>
