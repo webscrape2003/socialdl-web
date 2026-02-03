@@ -3,259 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VajiraOfficial | Creative Hub</title>
+    <title>VajiraOfficial | Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --primary: #ff0055;
-            --secondary: #00f2ea;
-            --card-glass: rgba(255, 255, 255, 0.05);
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --bg: #030303;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
             color: white;
             overflow-x: hidden;
-            min-height: 100vh;
         }
 
-        /* --- ANIMATED MESH BACKGROUND --- */
-        .mesh-container {
+        /* --- STUNNING BACKGROUND --- */
+        .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(244, 63, 94, 0.15) 0%, transparent 40%);
             z-index: -1;
-            filter: blur(100px);
-            opacity: 0.6;
-            overflow: hidden;
         }
 
-        .mesh-ball {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            animation: move 20s infinite alternate;
-        }
-
-        .ball1 { background: #ff0055; top: -10%; left: -10%; }
-        .ball2 { background: #00f2ea; bottom: -10%; right: -10%; animation-delay: -5s; }
-        .ball3 { background: #7000ff; top: 40%; left: 30%; animation-delay: -10s; }
-
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(200px, 100px) scale(1.2); }
-        }
-
-        /* --- SPLASH SCREEN --- */
-        #splash {
+        /* --- PRELOADER --- */
+        #loader {
             position: fixed;
             inset: 0;
             background: #000;
+            z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+            transition: 1s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        .splash-text {
-            font-family: 'Syncopate', sans-serif;
-            font-size: clamp(2rem, 8vw, 5rem);
-            font-weight: 700;
-            background: linear-gradient(90deg, #ff0055, #00f2ea, #ff0055);
-            background-size: 200%;
+        .loader-text {
+            font-size: 3rem;
+            font-weight: 900;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(to right, #fff 20%, #444 80%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: flow 3s linear infinite;
+            animation: shine 2s linear infinite;
         }
 
-        @keyframes flow { 
-            0% { background-position: 0%; } 
-            100% { background-position: 200%; } 
-        }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        /* --- CONTENT --- */
-        .container {
-            max-width: 1200px;
+        /* --- LAYOUT --- */
+        .wrapper {
+            max-width: 1300px;
             margin: 0 auto;
-            padding: 100px 20px;
+            padding: 80px 24px;
             opacity: 0;
-            transform: translateY(30px);
-            transition: 1s ease 0.5s;
+            transform: translateY(40px);
+            transition: 1.2s ease-out;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
+        .wrapper.active { opacity: 1; transform: translateY(0); }
 
-        .hero-title {
-            font-family: 'Syncopate', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            text-transform: uppercase;
-            line-height: 0.9;
+        header { margin-bottom: 100px; text-align: center; }
+
+        .title-main {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 0.8;
             margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
-        .hero-title span {
-            display: block;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+        .title-accent {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--primary);
+            font-size: 0.9em;
+            letter-spacing: 0px;
         }
 
-        /* --- PORTFOLIO CARDS --- */
-        .portfolio-grid {
+        /* --- BENTO GRID CARDS --- */
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: 280px;
+            gap: 20px;
         }
 
-        .p-card {
+        .item {
             position: relative;
-            height: 400px;
-            background: var(--card-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 40px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
             text-decoration: none;
             color: white;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .p-card i {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            font-size: 3rem;
-            opacity: 0.2;
+        .item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(0.98);
+        }
+
+        .item i {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
             transition: 0.5s;
         }
 
-        .p-card h3 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            z-index: 2;
+        .item h3 { font-size: 1.8rem; font-weight: 600; margin-bottom: 8px; }
+        .item p { font-size: 0.9rem; opacity: 0.5; line-height: 1.4; }
+
+        /* Grid Assignments */
+        .wide { grid-column: span 3; }
+        .tall { grid-column: span 2; grid-row: span 1; }
+        
+        .yt:hover i { color: #FF0000; text-shadow: 0 0 30px #FF0000; }
+        .fb:hover i { color: #1877F2; text-shadow: 0 0 30px #1877F2; }
+        .tt:hover i { color: #00f2ea; text-shadow: 0 0 30px #00f2ea; }
+
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+            .wide, .tall { grid-column: span 1; }
+            .title-main { font-size: 4rem; }
         }
-
-        .p-card p {
-            font-size: 1rem;
-            opacity: 0.6;
-            z-index: 2;
-        }
-
-        /* Hover States */
-        .p-card:hover {
-            transform: scale(0.95);
-            background: white;
-            color: black;
-            border-color: white;
-        }
-
-        .p-card:hover i {
-            opacity: 1;
-            transform: scale(1.2) rotate(-10deg);
-            color: inherit;
-        }
-
-        .p-card:hover p { color: #333; }
-
-        /* Color Variations on Hover */
-        .yt:hover { box-shadow: 0 30px 60px rgba(255, 0, 85, 0.4); }
-        .fb:hover { box-shadow: 0 30px 60px rgba(0, 98, 230, 0.4); }
-        .tt:hover { box-shadow: 0 30px 60px rgba(0, 242, 234, 0.4); }
 
         footer {
+            margin-top: 100px;
             text-align: center;
-            padding: 100px 0 50px;
-            font-family: 'Syncopate';
-            font-size: 0.8rem;
-            letter-spacing: 5px;
-            opacity: 0.3;
+            font-size: 0.7rem;
+            letter-spacing: 10px;
+            opacity: 0.2;
+            padding-bottom: 40px;
         }
-
-        /* --- FLOATING ANIMATION --- */
-        .floating { animation: float 6s ease-in-out infinite; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="mesh-container">
-        <div class="mesh-ball ball1"></div>
-        <div class="mesh-ball ball2"></div>
-        <div class="mesh-ball ball3"></div>
+    <div id="loader">
+        <div class="loader-text">Vajira.</div>
     </div>
 
-    <div id="splash">
-        <div class="splash-text">VAJIRA</div>
-    </div>
+    <div class="bg-glow"></div>
 
-    <div class="container" id="main">
+    <div class="wrapper" id="content">
         <header>
-            <h1 class="hero-title">Creative <span>Social Hub</span></h1>
-            <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 0.7rem; opacity: 0.5;">Digital Solutions 2026</p>
+            <h1 class="title-main">Social<br><span class="title-accent">Downloader.</span></h1>
+            <p style="opacity: 0.4; letter-spacing: 3px; font-weight: 600;">PREMIUM ACCESS • 2026</p>
         </header>
 
-        <div class="portfolio-grid">
-            <a href="ytdl.html" class="p-card yt">
+        <div class="bento-grid">
+            <a href="ytdl.html" class="item wide yt">
                 <i class="fa-brands fa-youtube"></i>
-                <h3>Youtube</h3>
-                <p>High-end video extraction for creators.</p>
+                <div>
+                    <h3>YouTube 4K</h3>
+                    <p>Experience ultra-high definition video and audio rips with zero compression loss.</p>
+                </div>
             </a>
 
-            <a href="fb.html" class="p-card fb">
-                <i class="fa-brands fa-facebook"></i>
-                <h3>Facebook</h3>
-                <p>Save high-definition reels instantly.</p>
-            </a>
-
-            <a href="tiktok.html" class="p-card tt">
+            <a href="tiktok.html" class="item tall tt">
                 <i class="fa-brands fa-tiktok"></i>
-                <h3>TikTok</h3>
-                <p>Clean downloads without watermarks.</p>
+                <div>
+                    <h3>TikTok</h3>
+                    <p>Clean watermarks removed instantly.</p>
+                </div>
             </a>
 
-            <a href="capcut.html" class="p-card">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <h3>CapCut</h3>
-                <p>Direct templates & asset tools.</p>
+            <a href="fb.html" class="item tall fb">
+                <i class="fa-brands fa-facebook"></i>
+                <div>
+                    <h3>Facebook</h3>
+                    <p>HD Reels & Stories.</p>
+                </div>
             </a>
 
-            <a href="apk.html" class="p-card">
+            <a href="capcut.html" class="item wide">
+                <i class="fa-solid fa-bolt"></i>
+                <div>
+                    <h3>CapCut Assets</h3>
+                    <p>Unlock premium project assets and high-quality template exports.</p>
+                </div>
+            </a>
+
+            <a href="apk.html" class="item wide">
                 <i class="fa-brands fa-android"></i>
-                <h3>Android</h3>
-                <p>Curated premium application builds.</p>
+                <div>
+                    <h3>Pro APKs</h3>
+                    <p>Secure, scanned, and optimized application packages for power users.</p>
+                </div>
             </a>
         </div>
 
-        <footer>VAJIRA OFFICIAL — ALL RIGHTS RESERVED</footer>
+        <footer>VAJIRA OFFICIAL — EXPERIENCE THE BEST</footer>
     </div>
 
     <script>
         window.addEventListener('load', () => {
-            const splash = document.getElementById('splash');
-            const main = document.getElementById('main');
+            const loader = document.getElementById('loader');
+            const content = document.getElementById('content');
 
             setTimeout(() => {
-                splash.style.opacity = '0';
-                splash.style.pointerEvents = 'none';
-                main.style.opacity = '1';
-                main.style.transform = 'translateY(0)';
-            }, 2000);
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    content.classList.add('active');
+                }, 1000);
+            }, 1500);
         });
     </script>
 </body>
