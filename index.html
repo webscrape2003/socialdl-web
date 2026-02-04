@@ -219,33 +219,30 @@
         
                 /* Fix for API Sub-menu buttons */
         .submenu-container {
-            display: flex;
-            flex-direction: column; /* Forces items to stack vertically */
-            gap: 5px;
-            background: rgba(0, 242, 255, 0.02);
-            border-left: 1px solid rgba(0, 242, 255, 0.1);
-            margin-left: 25px; /* Indents them under the parent */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .submenu-container.show {
+            max-height: 200px;
         }
 
         .sub-item {
-            display: block; /* Important: makes the link fill the row */
-            text-decoration: none !important; /* Removes the underline */
-            padding: 10px 15px;
-            color: rgba(255, 255, 255, 0.5);
-            font-family: 'JetBrains Mono', monospace;
+            padding: 12px 12px 12px 35px;
+            font-family: 'JetBrains Mono';
             font-size: 0.75rem;
-            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
             transition: 0.3s;
         }
 
-        .sub-item:hover {
-            color: var(--cyan);
-            background: rgba(0, 242, 255, 0.08);
-            padding-left: 20px; /* Slight slide effect */
-            text-shadow: 0 0 8px var(--cyan);
+   .sub-item:hover {
+            color: var(--pink);
+            padding-left: 40px;
         }
-
-
         
 
         .arrow {
@@ -415,14 +412,15 @@
         <span><i class="fas fa-share-nodes"></i> SOCIAL_HUB</span>
     </div>
     
-    <div class="menu-item link-item" onclick="toggleSubMenu()">
-        <span><i class="fas fa-gears"></i> VAJIRA_API_HUB</span>
-        <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
-    </div>
-    <div class="submenu-container" id="api-submenu">
-        <a href="https://vajira-official-apis.vercel.app/" class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</a>
-        <a href="https://vajira-mv-apikeys.netlify.app/" class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</a>
-    </div>
+    <div class="menu-item" onclick="toggleSubMenu()">
+            <span><i class="fas fa-gears"></i> VAJIRA_API_HUB</span>
+            <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
+        </div>
+        <div class="submenu-container" id="api-submenu">
+            <div class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</div>
+            <div class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</div>
+        </div>
+
 
 <div class="submenu-container" id="api-submenu">
             <div class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</div>
