@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAJIRA | TECH OS</title>
+    <title>Vajira | Tech Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
@@ -13,21 +14,23 @@
             --bg: #02040a;
             --glass: rgba(10, 15, 30, 0.85);
             --border: rgba(0, 242, 255, 0.2);
+            --sidebar-width: 280px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--bg);
-            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
             color: white;
             overflow-x: hidden;
         }
 
-        /* --- 1. OLD TYPE LOADER --- */
+        /* --- TECH LOADING ANIMATION --- */
         #loader {
             position: fixed;
             inset: 0;
@@ -37,98 +40,141 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'JetBrains Mono';
+            font-family: 'JetBrains Mono', monospace;
+            transition: opacity 0.8s;
         }
 
         .scanner {
-            width: 200px;
+            width: 250px;
             height: 2px;
             background: var(--cyan);
             box-shadow: 0 0 15px var(--cyan);
+            position: relative;
             animation: scan 2s infinite ease-in-out;
         }
 
-        @keyframes scan {
-            0%, 100% { transform: translateY(-30px); opacity: 0; }
-            50% { transform: translateY(30px); opacity: 1; }
-        }
-
-        /* --- 2. MENU TOGGLE (2 LINES) --- */
-        .menu-toggle {
-            position: fixed;
-            top: 25px;
-            left: 25px;
-            width: 30px;
-            height: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 2000;
-            cursor: pointer;
-        }
-
-        .menu-toggle span {
-            width: 100%;
-            height: 2px;
-            background: var(--cyan);
-            transition: 0.3s;
-            box-shadow: 0 0 10px var(--cyan);
-        }
-
-        /* --- 3. SIDEBAR MENU --- */
-        #sidebar {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 300px;
-            height: 100vh;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border);
-            z-index: 1500;
-            padding: 80px 30px;
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        #sidebar.open { left: 0; }
-
-        .nav-link {
-            display: block;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-family: 'JetBrains Mono';
-            font-size: 0.9rem;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
-            transition: 0.3s;
-        }
-
-        .nav-link:hover { color: var(--cyan); padding-left: 10px; }
-
-        /* --- 4. DASHBOARD CONTENT --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 25px;
-            transition: 0.5s;
-        }
-
-        .container.blur { filter: blur(10px); opacity: 0.3; }
-
-        .tech-header {
-            margin-bottom: 60px;
-            border-left: 3px solid var(--cyan);
-            padding-left: 20px;
-        }
-
-        .tech-text {
-            font-family: 'JetBrains Mono';
-            font-size: 0.7rem;
+        .status-text {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
             color: var(--cyan);
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
         }
+
+        @keyframes scan {
+            0%, 100% { transform: translateY(-50px); opacity: 0; }
+            50% { transform: translateY(50px); opacity: 1; }
+        }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            font-size: 1.5rem;
+            color: var(--cyan);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .menu-btn:hover { background: rgba(0, 242, 255, 0.1); }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Hidden state */
+            width: var(--sidebar-width);
+            height: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid var(--cyan);
+            z-index: 1000;
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            padding: 80px 20px 20px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar h2 {
+            font-family: 'JetBrains Mono';
+            font-size: 0.9rem;
+            color: var(--cyan);
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .nav-item {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            color: white;
+            text-align: left;
+            text-decoration: none;
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            border-color: var(--cyan);
+            background: rgba(0, 242, 255, 0.1);
+            padding-left: 25px;
+        }
+
+        /* --- CONTENT CONTAINERS --- */
+        .tech-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+            display: none; /* Hidden until loaded */
+            opacity: 0;
+            transition: 1s ease;
+        }
+
+        .tech-container.active { display: block; opacity: 1; }
+
+        header {
+            border-left: 4px solid var(--cyan);
+            padding-left: 20px;
+            margin-bottom: 50px;
+        }
+
+        .glitch-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        /* --- DASHBOARD HOME --- */
+        #dashboard-home {
+            animation: fadeIn 1s forwards;
+        }
+
+        .info-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 40px;
+            line-height: 1.8;
+            border-left: 5px solid var(--pink);
+        }
+
+        .info-card h2 { color: var(--cyan); margin-bottom: 20px; }
+        .info-card p { opacity: 0.8; font-size: 1.1rem; }
+
+        /* --- SOCIAL DOWNLOADER HUB (Your original grid) --- */
+        #social-hub { display: none; } /* Hidden by default */
 
         .grid {
             display: grid;
@@ -137,13 +183,24 @@
         }
 
         .card {
-            background: rgba(10, 15, 30, 0.5);
+            background: var(--glass);
             border: 1px solid var(--border);
             padding: 30px;
+            position: relative;
             text-decoration: none;
             color: white;
             transition: 0.4s;
-            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0;
+            border-style: solid;
+            border-width: 0 20px 20px 0;
+            border-color: transparent var(--border) transparent transparent;
         }
 
         .card:hover {
@@ -152,127 +209,113 @@
             transform: translateY(-5px);
         }
 
-        .card i { font-size: 2rem; color: var(--cyan); margin-bottom: 20px; display: block; }
-        .card h3 { font-family: 'JetBrains Mono'; font-size: 1rem; margin-bottom: 10px; }
-        .card p { font-size: 0.8rem; opacity: 0.5; line-height: 1.6; }
+        .card i { font-size: 2.5rem; margin-bottom: 25px; color: var(--cyan); }
+        .card h3 { font-family: 'JetBrains Mono'; font-size: 1.1rem; margin-bottom: 10px; color: var(--cyan); }
+        .card p { font-size: 0.85rem; opacity: 0.7; }
+        .btn-label { display: inline-block; margin-top: 20px; font-size: 0.7rem; border-bottom: 1px solid var(--cyan); }
 
-        /* Icon Colors */
-        .yt:hover i { color: #ff0000; }
-        .fb:hover i { color: #1877f2; }
-        .tt:hover i { color: #ff00c8; }
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 60px;
+            font-family: 'JetBrains Mono';
+            font-size: 0.6rem;
+            text-align: center;
+            opacity: 0.4;
+        }
 
-        footer { text-align: center; padding: 60px; font-size: 0.6rem; font-family: 'JetBrains Mono'; opacity: 0.4; letter-spacing: 2px; }
-
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="loader">
         <div class="scanner"></div>
-        <div id="load-msg" style="margin-top:20px; font-size:0.6rem; letter-spacing:3px; color:var(--cyan);">LOADING_SYSTEM...</div>
+        <div class="status-text" id="load-msg">Initializing Core...</div>
     </div>
 
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-    </div>
+    <button class="menu-btn" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
 
-    <nav id="sidebar">
-        <div style="color:var(--cyan); font-weight:700; margin-bottom:40px; letter-spacing:5px;">MENU_CORE</div>
-        <a href="#" class="nav-link">SOCIAL DL HUB</a>
-        <a href="#" class="nav-link">VAJIRA AI CENTER</a>
-        <a href="#" class="nav-link">FLEXA LITE BOT</a>
-        <a href="#" class="nav-link">VAJIRA MOVIE HUB</a>
-        <a href="#" class="nav-link">OFFICIAL API</a>
-        <a href="#" class="nav-link">WHATSAPP BOT</a>
+    <nav class="sidebar" id="sidebar">
+        <h2>SYSTEM_MENU</h2>
+        <button class="nav-item" onclick="showSection('dashboard-home')"><i class="fa-solid fa-house"></i> 00. DASHBOARD</button>
+        <button class="nav-item" onclick="showSection('social-hub')"><i class="fa-solid fa-share-nodes"></i> 01. SOCIAL DL HUB</button>
+        <button class="nav-item"><i class="fa-solid fa-code"></i> 02. VAJIRA API HUB</button>
+        <button class="nav-item"><i class="fa-solid fa-film"></i> 03. VAJIRA MOVIE API</button>
+        <button class="nav-item"><i class="fa-solid fa-server"></i> 04. VAJIRA OFFICIAL API</button>
+        <button class="nav-item"><i class="fa-solid fa-brain"></i> 05. VAJIRA AI CENTER</button>
+        <button class="nav-item"><i class="fa-solid fa-robot"></i> 06. FLEXA LITE BOT</button>
     </nav>
 
-    <div class="container" id="main-content">
-        <header class="tech-header">
-            <div class="tech-text">// SYSTEM_STATUS: OPERATIONAL</div>
-            <h1 style="font-size: 3rem; text-transform: uppercase;">VAJIRA_OS</h1>
-            <p style="opacity:0.5; font-size:0.8rem; margin-top:10px;">Integrated Social Media Media Extraction & AI Core Interface</p>
-        </header>
+    <div class="tech-container" id="main-container">
+        
+        <section id="dashboard-home">
+            <header>
+                <h1 class="glitch-title">TECH_INFORMATION<br>DASHBOARD</h1>
+            </header>
+            <div class="info-card">
+                <h2>Welcome to Vajira Technology Hub</h2>
+                <p>Welcome to the central command node. This platform is designed to provide seamless access to various technology modules, API integrations, and automation tools.</p>
+                <br>
+                <p>Use the side menu to navigate between the Social Downloader Hub, Movie APIs, and our advanced AI Center. All systems are currently operating at peak efficiency.</p>
+            </div>
+        </section>
 
-        <div class="grid">
-            <a href="pc-game.html" class="card">
-                <i class="fa-solid fa-gamepad"></i>
-                <h3>PC_GAME_DL</h3>
-                <p>Direct access to high-performance game binary assets.</p>
-            </a>
+        <section id="social-hub">
+            <header>
+                <h1 class="glitch-title">SOCIAL_DL<br>COMMAND_CENTER</h1>
+            </header>
+            <div class="grid">
+                <a href="ytdl.html" class="card"><i class="fa-brands fa-youtube"></i><h3>01. YOUTUBE_DL</h3><p>Extract 4K streams.</p><span class="btn-label">INITIATE</span></a>
+                <a href="tiktok.html" class="card"><i class="fa-brands fa-tiktok"></i><h3>02. TIKTOK_DL</h3><p>Remove watermarks.</p><span class="btn-label">INITIATE</span></a>
+                <a href="fb.html" class="card"><i class="fa-brands fa-facebook"></i><h3>03. FB_DL</h3><p>Decrypt Reels.</p><span class="btn-label">INITIATE</span></a>
+                <a href="twitter.html" class="card"><i class="fa-brands fa-x-twitter"></i><h3>04. TWITTER_DL</h3><p>High-quality media.</p><span class="btn-label">INITIATE</span></a>
+                <a href="capcut.html" class="card"><i class="fa-solid fa-microchip"></i><h3>05. CAPCUT_DL</h3><p>Cloud assets.</p><span class="btn-label">INITIATE</span></a>
+                <a href="pinterest.html" class="card"><i class="fa-solid fa-palette"></i><h3>06. PINTEREST_PRO</h3><p>HD Visuals.</p><span class="btn-label">INITIATE</span></a>
+            </div>
+        </section>
 
-            <a href="ytdl.html" class="card yt">
-                <i class="fa-brands fa-youtube"></i>
-                <h3>YOUTUBE_DL</h3>
-                <p>Decoding for 4K video streams and audio packets.</p>
-            </a>
-
-            <a href="tiktok.html" class="card tt">
-                <i class="fa-brands fa-tiktok"></i>
-                <h3>TIKTOK_DL</h3>
-                <p>Watermark-free extraction from global TikTok nodes.</p>
-            </a>
-
-            <a href="fb.html" class="card fb">
-                <i class="fa-brands fa-facebook"></i>
-                <h3>FB_DOWNLOADER</h3>
-                <p>Secure retrieval of Facebook Reels and video data.</p>
-            </a>
-
-            <a href="twitter.html" class="card">
-                <i class="fa-brands fa-x-twitter"></i>
-                <h3>X_EXTRACTOR</h3>
-                <p>Fetch media from X threads and video posts instantly.</p>
-            </a>
-
-            <a href="capcut.html" class="card">
-                <i class="fa-solid fa-film"></i>
-                <h3>CAPCUT_DL</h3>
-                <p>Access project assets and premium template buffers.</p>
-            </a>
-
-            <a href="pinterest.html" class="card">
-                <i class="fa-solid fa-palette"></i>
-                <h3>PINTEREST_PRO</h3>
-                <p>HD visual asset and 4K video pin extraction.</p>
-            </a>
-
-            <a href="apk.html" class="card">
-                <i class="fa-solid fa-terminal"></i>
-                <h3>APK_MANAGER</h3>
-                <p>Verified software packages and modded binaries.</p>
-            </a>
-        </div>
-
-        <footer>[ VAJIRA_OS_V.2.6.0 ] — ENCRYPTED_CONNECTION</footer>
+        <footer>[ VAJIRA_OS v.2.6.0 ] — ENCRYPTED CONNECTION</footer>
     </div>
 
     <script>
-        // Loader Logic
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Section Switcher
+        function showSection(sectionId) {
+            document.getElementById('dashboard-home').style.display = 'none';
+            document.getElementById('social-hub').style.display = 'none';
+            
+            document.getElementById(sectionId).style.display = 'block';
+            toggleSidebar(); // Close sidebar after clicking
+        }
+
+        // Loader Script
+        const msgs = ["Bypassing Firewall...", "Syncing Data...", "Loading UI Elements...", "Ready."];
+        let i = 0;
+        const msgEl = document.getElementById('load-msg');
+
+        const interval = setInterval(() => {
+            if(i < msgs.length) {
+                msgEl.innerText = msgs[i];
+                i++;
+            }
+        }, 400);
+
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('loader').style.display = 'none';
+                    document.getElementById('main-container').classList.add('active');
+                    // Show home by default
+                    document.getElementById('dashboard-home').style.display = 'block';
                 }, 800);
             }, 2000);
-        });
-
-        // Menu Toggle Logic
-        function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const main = document.getElementById('main-content');
-            sidebar.classList.toggle('open');
-            main.classList.toggle('blur');
-        }
-
-        // Close menu if clicking outside
-        document.addEventListener('click', (e) => {
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.querySelector('.menu-toggle');
-            if (!sidebar.contains(e.target) && !toggle.contains(e.target) && sidebar.classList.contains('open')) {
-                toggleMenu();
-            }
         });
     </script>
 </body>
