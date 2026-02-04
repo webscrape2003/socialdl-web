@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vajira | PC Game Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root { 
+            --accent: #00d4ff; 
+            --secondary: #ff0050;
+            --glow: rgba(0, 212, 255, 0.4);
+            --bg: #050505; 
+            --card-bg: rgba(18, 18, 18, 0.9); 
+            --border: rgba(255, 255, 255, 0.1);
+            --text-dim: #a0a0a0;
+        }
+        
+        body { 
+            background: radial-gradient(circle at top left, #111, #000);
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-wrapper { width: 100%; max-width: 420px; }
+
+        .glass-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+        }
+
+        .logo { text-align: center; }
+        .logo h2 { font-weight: 800; font-size: 1.8rem; margin-bottom: 20px; letter-spacing: -1.5px; }
+        .logo span { color: var(--accent); text-shadow: 0 0 20px var(--glow); }
+
+        /* --- SEARCH SECTION --- */
+        .search-stack { display: flex; flex-direction: column; gap: 12px; }
+        .input-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        input {
+            width: 100%; background: transparent; border: none; color: white;
+            padding: 15px; outline: none; font-size: 0.95rem; text-align: center;
+        }
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent), #2272ff);
+            color: #000; border: none; padding: 15px; border-radius: 12px;
+            font-weight: 800; cursor: pointer; transition: 0.4s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow); }
+
+        /* --- BANK CARD STYLE --- */
+        #result-area { display: none; margin-top: 25px; animation: slideUp 0.5s ease forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bank-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
+        .bank-header { color: var(--accent); font-weight: 800; font-size: 0.9rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; }
+        .detail-label { color: var(--text-dim); }
+        .detail-value { font-weight: 600; color: #fff; }
+
+        .acc-number-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px dashed var(--accent);
+            padding: 12px; border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; margin: 15px 0;
+        }
+
+        #loading { display: none; text-align: center; margin: 15px 0; font-weight: 800; color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="glass-box">
+        <div class="logo">
+            <h2>GAME<span>VAULT</span></h2>
+        </div>
+
+        <div class="search-stack">
+            <div class="input-box">
+                <input type="text" id="gameSearch" placeholder="Enter Game Title (e.g. GTA V)">
+            </div>
+            <button class="action-btn" onclick="searchGame()">Search Game Database</button>
+        </div>
+
+        <div id="loading">📡 SCANNING SERVERS...</div>
+
+        <div id="result-area">
+            <div class="bank-card">
+                <div class="bank-header">
+                    <i class="fa-solid fa-crown"></i> GET PREMIUM ACCESS
+                </div>
+                
+                <div style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                    <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;">
+                        To download high-compressed PC games and unlock the <strong>Vajira Game API</strong>, please upgrade to Premium.
+                    </p>
+                    <div style="margin-top: 8px; font-weight: 800; color: var(--accent); font-size: 0.9rem;">
+                        PRICE: LKR 500.00 (LIFETIME)
+                    </div>
+                </div>
+
+                <div class="bank-details">
+                    <div class="bank-header" style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 8px;">
+                        <i class="fa-solid fa-building-columns"></i> PAYMENT DETAILS
+                    </div>
+                    
+                    <div class="detail-row"><span class="detail-label">Bank</span><span class="detail-value">Bank of Ceylon</span></div>
+                    <div class="detail-row"><span class="detail-label">Branch</span><span class="detail-value">Balangoda (688)</span></div>
+                    <div class="detail-row"><span class="detail-label">Holder</span><span class="detail-value">MR W M V RATHNAYAKA</span></div>
+                    
+                    <div class="acc-number-box" onclick="copyAccountNumber()" title="Click to copy">
+                        <div>
+                            <span class="detail-label" style="display:block; font-size:0.6rem;">ACCOUNT NUMBER</span>
+                            <span id="accNum" style="letter-spacing: 1px; font-weight: 800;">0089860809</span>
+                        </div>
+                        <i class="fa-regular fa-copy" style="color:var(--accent)"></i>
+                    </div>
+
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="copyApi('game')" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 6px; font-size: 0.65rem; cursor: pointer;">
+                            <i class="fa-solid fa-code"></i> GAME API
+                        </button>
+                        <a href="https://wa.me/94719199757" target="_blank" style="flex: 1; text-decoration: none;">
+                            <button style="width: 100%; background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); color: #25D366; padding: 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; cursor: pointer;">
+                                <i class="fa-brands fa-whatsapp"></i> ADMIN
+                            </button>
+                        </a>
+                    </div>
+
+                    <div id="copyStatus" style="display:none; text-align:center; font-size:0.7rem; color:var(--accent); margin-top:10px;">✅ Copied to clipboard!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchGame() {
+        const query = document.getElementById('gameSearch').value;
+        if(!query) return alert("Please enter a game name!");
+
+        document.getElementById('loading').style.display = "block";
+        document.getElementById('result-area').style.display = "none";
+
+        setTimeout(() => {
+            document.getElementById('loading').style.display = "none";
+            document.getElementById('result-area').style.display = "block";
+        }, 1500); // Simulated loading time
+    }
+
+    function copyAccountNumber() {
+        showStatus(document.getElementById('accNum').innerText);
+    }
+
+    function copyApi(type) {
+        showStatus("https://vajira-official-apis.vercel.app/api/pcgames?apikey=PREMIUM_ONLY");
+    }
+
+    function showStatus(text) {
+        navigator.clipboard.writeText(text);
+        const status = document.getElementById('copyStatus');
+        status.style.display = 'block';
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+    }
+</script>
+
+</body>
+</html>
