@@ -131,6 +131,34 @@
 
 
 
+    
+        /* Hover State with Glow */
+        .menu-item:hover {
+            color: var(--cyan);
+            letter-spacing: 2.5px; /* Slight expansion effect on hover */
+            text-shadow: 0 0 12px rgba(0, 242, 255, 0.8);
+            background: linear-gradient(90deg, rgba(0, 242, 255, 0.1) 0%, transparent 100%);
+        }
+
+        /* Active state for the current page */
+        .menu-item.active {
+            color: var(--cyan);
+            font-weight: 700;
+            text-shadow: 0 0 15px var(--cyan);
+        }
+
+        /* Section Labels (The smaller text) */
+        .menu-section-label {
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-left: 2px solid var(--pink);
+            padding-left: 10px;
+        }
 
 
 
@@ -354,46 +382,38 @@
 </head>
 <body>
 
-            <nav id="sidebar">
-                <div class="menu-header">
-            <span>
-                <i class="fas fa-terminal" style="font-size: 0.6rem; margin-right: 5px;"></i>
-                VAJIRA_CORE_v2.6
-            </span>
-            <i class="fas fa-xmark close-btn" onclick="toggleMenu()" style="cursor:pointer; font-size: 1.2rem;"></i>
-        </div>
+<nav id="sidebar">
+    <div class="menu-header">
+        <span><i class="fas fa-microchip"></i> VAJIRA_CORE_v2.6</span>
+        <i class="fas fa-xmark close-btn" onclick="toggleMenu()"></i>
+    </div>
+    
+    <div class="menu-section-label">0x00_CORE</div>
+    <div class="menu-item active" onclick="switchView('dashboard')">
+        <span><i class="fas fa-chart-line"></i> DASHBOARD</span>
+    </div>
 
-        
-        <div class="menu-section-label">CORE_SYSTEM</div>
-        <div class="menu-item active" onclick="switchView('dashboard')">
-            <span><i class="fas fa-chart-line"></i> DASHBOARD</span>
-        </div>
+    <div class="menu-divider"></div>
 
-        <div class="menu-divider"></div>
+    <div class="menu-section-label">0x01_MODULES</div>
+    
+    <div class="menu-item" onclick="switchView('social-dl')">
+        <span><i class="fas fa-share-nodes"></i> SOCIAL_HUB</span>
+    </div>
+    
+    <div class="menu-item" onclick="toggleSubMenu()">
+        <span><i class="fas fa-gears"></i> API_INTERFACE</span>
+        <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
+    </div>
 
-        <div class="menu-section-label">OPERATIONAL_HUBS</div>
-        
-        <div class="menu-item" onclick="switchView('social-dl')">
-            <span><i class="fas fa-share-nodes"></i> SOCIAL_DL_HUB</span>
-        </div>
-        
-        <div class="menu-item" onclick="toggleSubMenu()">
-            <span><i class="fas fa-gears"></i> VAJIRA_API_HUB</span>
-            <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
-        </div>
-        <div class="submenu-container" id="api-submenu">
-            <div class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</div>
-            <div class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</div>
-        </div>
+    <div class="menu-item" onclick="switchView('ai-hub')">
+        <span><i class="fas fa-brain"></i> NEURAL_HUB</span>
+    </div>
 
-        <div class="menu-item" onclick="switchView('ai-hub')">
-            <span><i class="fas fa-brain"></i> VAJIRA_AI_HUB</span>
-        </div>
-
-        <div class="menu-item" onclick="switchView('flexa')">
-            <span><i class="fas fa-bolt-lightning"></i> FLEXA_LITE</span>
-        </div>
-    </nav>
+    <div class="menu-item" onclick="switchView('flexa')">
+        <span><i class="fas fa-bolt-lightning"></i> FLEXA_LITE</span>
+    </div>
+</nav>
 
 
 
