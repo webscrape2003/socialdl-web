@@ -30,6 +30,8 @@
         }
 
 
+        
+
         /* Section Divider */
         .menu-divider {
             height: 1px;
@@ -85,9 +87,10 @@
             font-size: 0.85rem;
             border-left: 2px solid transparent;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            align-items: center; /* Ensures icons and text align perfectly */
+            gap: 5px; /* Adds space between icon and text */
         }
+
 
         .menu-item:hover, .menu-item.active {
             color: var(--cyan);
@@ -276,8 +279,11 @@
             <i class="fas fa-xmark" onclick="toggleMenu()" style="cursor:pointer; font-size: 1.2rem;"></i>
         </div>
         
-        <div class="menu-section-label">CORE_SYSTEM</div>
-        <div class="menu-item active" onclick="switchView('dashboard')">00. SYSTEM_INFO</div>
+                <div class="menu-section-label">CORE_SYSTEM</div>
+        <div class="menu-item active" onclick="switchView('dashboard')">
+            <span><i class="fas fa-chart-line" style="margin-right: 10px; width: 20px;"></i>00. SYSTEM_INFO</span>
+        </div>
+
 
         <div class="menu-divider"></div>
 
