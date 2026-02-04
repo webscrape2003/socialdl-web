@@ -216,23 +216,37 @@
             margin-bottom: 10px;
         }
 
-        .submenu-container.show {
-            max-height: 200px;
+        
+                /* Fix for API Sub-menu buttons */
+        .submenu-container {
+            display: flex;
+            flex-direction: column; /* Forces items to stack vertically */
+            gap: 5px;
+            background: rgba(0, 242, 255, 0.02);
+            border-left: 1px solid rgba(0, 242, 255, 0.1);
+            margin-left: 25px; /* Indents them under the parent */
         }
 
         .sub-item {
-            padding: 12px 12px 12px 35px;
-            font-family: 'JetBrains Mono';
+            display: block; /* Important: makes the link fill the row */
+            text-decoration: none !important; /* Removes the underline */
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
-            color: rgba(255,255,255,0.4);
-            cursor: pointer;
+            letter-spacing: 1px;
             transition: 0.3s;
         }
 
         .sub-item:hover {
-            color: var(--pink);
-            padding-left: 40px;
+            color: var(--cyan);
+            background: rgba(0, 242, 255, 0.08);
+            padding-left: 20px; /* Slight slide effect */
+            text-shadow: 0 0 8px var(--cyan);
         }
+
+
+        
 
         .arrow {
             transition: transform 0.3s;
@@ -410,6 +424,12 @@
         <a href="https://vajira-mv-apikeys.netlify.app/" class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</a>
     </div>
 
+<div class="submenu-container" id="api-submenu">
+            <div class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</div>
+            <div class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</div>
+        </div>
+
+    
     <a href="https://vajira-gpt.vercel.app/" class="menu-item link-item" style="text-decoration: none;" onclick="switchView('ai-hub')">
         <span><i class="fas fa-brain"></i> VAJIRA_AI_HUB</span>
     </a>
