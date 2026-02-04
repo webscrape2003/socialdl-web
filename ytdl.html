@@ -78,14 +78,10 @@
         }
         #fetchBtn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-
-
-
-
 /* --- BANK PAYMENT SECTION --- */
 .bank-card {
     position: relative;
-    overflow: hidden; /* Fixes the ribbon overlap */
+    overflow: hidden; 
     margin-top: 20px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
@@ -94,25 +90,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    display: none; /* Keeps it clean while allowing swipe */
+    display: none; 
 }
 
 .custom-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-
-.bank-card::before {
-    content: 'PREMIUM SUPPORT';
-    position: absolute;
-    top: 10px;
-    right: -20px;
-    background: var(--accent);
-    font-size: 0.6rem;
-    font-weight: 800;
-    padding: 2px 30px;
-    transform: rotate(45deg);
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
 }
 
 .bank-header {
@@ -162,46 +145,11 @@
     font-size: 0.7rem;
     color: var(--accent);
     display: none;
-    margin-top: 5px;
+    margin-top: 8px;
     text-align: center;
+    font-weight: 700;
 }
 
-/* --- API PRICING BADGE --- */
-.api-badge {
-    position: absolute;
-    top: -15px;
-    right: 20px;
-    background: linear-gradient(45deg, #ff2d55, #ff7b00);
-    padding: 8px 15px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4);
-    z-index: 10;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    animation: pulse Glow 2s infinite;
-}
-
-.api-badge span {
-    background: rgba(0,0,0,0.2);
-    padding: 2px 6px;
-    border-radius: 6px;
-    font-family: monospace;
-}
-
-@keyframes pulseGlow {
-    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4); }
-    50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(255, 45, 85, 0.6); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4); }
-}
-
-
-        
-        
         /* --- BEAUTIFUL PLAYER --- */
         #resultArea { display: none; animation: slideUp 0.6s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -290,11 +238,6 @@
         </div>
     </div>
 
-
-
-
-
-    
 <div class="bank-card">
     <div style="position: absolute; top: 12px; right: -30px; background: var(--accent); color: white; font-size: 0.6rem; font-weight: 800; padding: 4px 35px; transform: rotate(45deg); box-shadow: 0 2px 10px rgba(0,0,0,0.5); z-index: 1;">
         PREMIUM
@@ -353,7 +296,7 @@
             <span class="detail-value">MR W M V RATHNAYAKA</span>
         </div>
         
-        <div class="acc-number-box" onclick="copyAccountNumber()" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); border: 1px solid var(--accent); padding: 12px; border-radius: 15px; cursor: pointer;">
+        <div class="acc-number-box" onclick="copyText('accNum')" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); border: 1px solid var(--accent); padding: 12px; border-radius: 15px; cursor: pointer;">
             <div>
                 <span style="display:block; font-size:0.6rem; color: var(--text-dim); text-transform: uppercase;">Account Number</span>
                 <span id="accNum" style="letter-spacing: 1.5px; font-weight: 800; font-size: 1rem;">0089860809</span>
@@ -361,7 +304,7 @@
             <i class="fa-regular fa-copy" style="color:var(--accent); font-size: 1.1rem;"></i>
         </div>
         
-        <div id="copyStatus" style="text-align:center; font-size: 0.7rem; color: var(--accent); margin-top: 8px; display: none; font-weight: 700;">✅ Copied!</div>
+        <div id="copyStatus">✅ Copied!</div>
         
         <p style="font-size: 0.6rem; color: var(--text-dim); text-align: center; margin-top: 15px; line-height: 1.4;">
             *After payment, please send a screenshot to the admin to activate your API Key.
@@ -369,50 +312,26 @@
     </div>
 </div>
 
-
-
-
-    
     <footer>
         Powered by: Vajira <span>Rathnayaka</span>
     </footer>
 
     <script>
+        // Single Universal Copy Function
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            const status = document.getElementById('copyStatus');
 
+            navigator.clipboard.writeText(text).then(() => {
+                status.style.display = 'block';
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
 
-
-
-        
-function copyText(elementId) {
-    const text = document.getElementById(elementId).innerText;
-    const status = document.getElementById('copyStatus');
-
-    navigator.clipboard.writeText(text).then(() => {
-        status.style.display = 'block';
-        setTimeout(() => {
-            status.style.display = 'none';
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-}
-
-function copyAccountNumber() {
-    const accNum = document.getElementById('accNum').innerText;
-    const status = document.getElementById('copyStatus');
-
-    navigator.clipboard.writeText(accNum).then(() => {
-        status.style.display = 'block';
-        setTimeout(() => {
-            status.style.display = 'none';
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-}
-
-
-        
         const API_KEY = "vajira-1qg3lqmr60-1768268975394";
 
         function toggleDisplay(type) {
@@ -440,26 +359,22 @@ function copyAccountNumber() {
                 if (vRes.status && aRes.status) {
                     const meta = vRes.metadata;
                     
-                    // Set Player Video Source (Highest quality link)
                     const player = document.getElementById('vidPlayer');
                     player.src = vRes.downloads.video[0].url;
                     player.poster = meta.thumbnails.max || meta.thumbnails.image;
 
-                    // Display Header Meta (Keeping all original info)
                     document.getElementById('vidTitle').innerText = meta.title;
                     document.getElementById('vidAuthor').innerText = meta.author.name;
                     document.getElementById('vidViews').innerText = meta.viewsFormatted + " views";
                     document.getElementById('vidAgo').innerText = meta.ago;
                     document.getElementById('vidTime').innerText = meta.duration.timestamp;
 
-                    // Build Video Buttons (All qualities)
                     const vList = document.getElementById('videoList');
                     vList.innerHTML = "";
                     vRes.downloads.video.forEach(dl => {
                         vList.innerHTML += `<a href="${dl.url}" class="dl-item" target="_blank">${dl.quality}<span>${dl.format}</span></a>`;
                     });
 
-                    // Build Audio Buttons
                     const aList = document.getElementById('audioList');
                     aList.innerHTML = "";
                     aRes.data.downloads.forEach(dl => {
