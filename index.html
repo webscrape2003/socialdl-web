@@ -25,12 +25,10 @@
                 linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 50px 50px;
             color: white;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-
-
-        /* --- TECH LOADING ANIMATION --- */
+        /* --- 1. TECH LOADING ANIMATION --- */
         #loader {
             position: fixed;
             inset: 0;
@@ -41,6 +39,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'JetBrains Mono', monospace;
+            transition: opacity 0.8s ease;
         }
 
         .scanner {
@@ -65,17 +64,66 @@
             50% { transform: translateY(50px); opacity: 1; }
         }
 
-        /* --- CONTENT --- */
+        /* --- 2. ENTRY BUTTON SCREEN --- */
+        #entry-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            background: var(--bg);
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.8s all cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .enter-btn {
+            background: transparent;
+            color: var(--cyan);
+            border: 2px solid var(--cyan);
+            padding: 25px 60px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0% 30%);
+        }
+
+        .enter-btn:hover {
+            background: var(--cyan);
+            color: var(--bg);
+            box-shadow: 0 0 50px var(--cyan);
+            transform: scale(1.05);
+        }
+
+        .hint-text {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: var(--pink);
+            letter-spacing: 4px;
+            font-family: 'JetBrains Mono';
+        }
+
+        /* --- 3. DASHBOARD CONTENT --- */
         .tech-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 60px 20px;
-            visibility: hidden;
+            display: none; 
             opacity: 0;
+            transform: scale(0.9);
             transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .tech-container.active { visibility: visible; opacity: 1; }
+        .tech-container.active { 
+            display: block; 
+            opacity: 1; 
+            transform: scale(1);
+        }
 
         header {
             border-left: 4px solid var(--cyan);
@@ -88,11 +136,10 @@
             font-weight: 700;
             letter-spacing: -2px;
             text-transform: uppercase;
-            position: relative;
         }
 
         .glitch-title::after {
-            content: "SYSTEM ONLINE";
+            content: "SYSTEM ONLINE / VAJIRA OS";
             display: block;
             font-size: 0.7rem;
             font-family: 'JetBrains Mono';
@@ -100,7 +147,7 @@
             letter-spacing: 5px;
         }
 
-        /* --- SOCIAL MEDIA TECH CARDS --- */
+        /* --- ALL CARDS IN GRID --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -119,7 +166,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Corner accents */
         .card::before {
             content: "";
             position: absolute;
@@ -132,65 +178,23 @@
         .card:hover {
             border-color: var(--cyan);
             background: rgba(0, 242, 255, 0.05);
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
         }
 
-        .card i {
-            font-size: 2.5rem;
-            margin-bottom: 25px;
-            color: var(--cyan);
-            filter: drop-shadow(0 0 5px var(--cyan));
-        }
-
-        .card h3 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--cyan);
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            opacity: 0.7;
-            font-weight: 300;
-        }
-
-        .card .btn-label {
-            display: inline-block;
-            margin-top: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            border-bottom: 1px solid var(--cyan);
-            padding-bottom: 5px;
-        }
+        .card i { font-size: 2.5rem; margin-bottom: 25px; color: var(--cyan); filter: drop-shadow(0 0 5px var(--cyan)); }
+        .card h3 { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; margin-bottom: 10px; color: var(--cyan); }
+        .card p { font-size: 0.9rem; line-height: 1.6; opacity: 0.7; font-weight: 300; }
+        .card .btn-label { display: inline-block; margin-top: 20px; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; border-bottom: 1px solid var(--cyan); padding-bottom: 5px; }
 
         /* Specific Hover Glows */
-.yt:hover { border-color: #ff0000; }
-.yt:hover i { color: #ff0000; filter: drop-shadow(0 0 10px #ff0000); }
-.fb:hover { border-color: #1877f2; }
-.fb:hover i { color: #1877f2; filter: drop-shadow(0 0 10px #1877f2); }
-.tt:hover { border-color: #ff00c8; }
-.tt:hover i { color: #ff00c8; filter: drop-shadow(0 0 10px #ff00c8); }
-.tw:hover { border-color: #ffffff; }
-.tw:hover i { color: #ffffff; filter: drop-shadow(0 0 10px #ffffff); }
-.pt:hover { border-color: #e60023; }
-.pt:hover i { color: #e60023; filter: drop-shadow(0 0 10px #e60023); }
-.game:hover { border-color: #00d4ff; }
-.game:hover i { color: #00d4ff; filter: drop-shadow(0 0 10px #00d4ff); }
+        .yt:hover { border-color: #ff0000; } .yt:hover i { color: #ff0000; filter: drop-shadow(0 0 10px #ff0000); }
+        .fb:hover { border-color: #1877f2; } .fb:hover i { color: #1877f2; filter: drop-shadow(0 0 10px #1877f2); }
+        .tt:hover { border-color: #ff00c8; } .tt:hover i { color: #ff00c8; filter: drop-shadow(0 0 10px #ff00c8); }
+        .tw:hover { border-color: #ffffff; } .tw:hover i { color: #ffffff; filter: drop-shadow(0 0 10px #ffffff); }
+        .pt:hover { border-color: #e60023; } .pt:hover i { color: #e60023; filter: drop-shadow(0 0 10px #e60023); }
 
-
-        footer {
-            margin-top: 100px;
-            font-family: 'JetBrains Mono';
-            font-size: 0.6rem;
-            text-align: center;
-            opacity: 0.4;
-            letter-spacing: 2px;
-        }
-
+        footer { margin-top: 100px; font-family: 'JetBrains Mono'; font-size: 0.6rem; text-align: center; opacity: 0.4; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -200,69 +204,69 @@
         <div class="status-text" id="load-msg">Initializing Core...</div>
     </div>
 
+    <div id="entry-screen">
+        <button class="enter-btn" onclick="startSystem()">ACCESS_CORE</button>
+        <div class="hint-text">AUTHORIZATION REQUIRED</div>
+    </div>
+
     <div class="tech-container" id="main">
         <header>
             <h1 class="glitch-title">Vajira<br>SOCIAL_DL</h1>
         </header>
 
-
-
-
         <div class="grid">
-
             <a href="pc-game.html" class="card">
                 <i class="fa-solid fa-gamepad"></i>
-                <h3>07. PC_GAME_DOWNLOADER</h3>
+                <h3>01. PC_GAME_DOWNLOADER</h3>
                 <p>High-performance binaries, DirectX optimized assets, and core game engine files.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
-            
             <a href="ytdl.html" class="card yt">
                 <i class="fa-brands fa-youtube"></i>
-                <h3>01. YOUTUBE_DOWNLOADER</h3>
+                <h3>02. YOUTUBE_DOWNLOADER</h3>
                 <p>Advanced decoding for 4K video streams and high-bitrate audio packets.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
             <a href="tiktok.html" class="card tt">
                 <i class="fa-brands fa-tiktok"></i>
-                <h3>02. TIKTOK_DOWNLOADER</h3>
+                <h3>03. TIKTOK_DOWNLOADER</h3>
                 <p>Securely strip metadata and watermarks from global TikTok content nodes.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
             <a href="fb.html" class="card fb">
                 <i class="fa-brands fa-facebook"></i>
-                <h3>03. FB DOWNLOADER</h3>
+                <h3>04. FB DOWNLOADER</h3>
                 <p>High-speed retrieval of encrypted Facebook Reels and private video data.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
             <a href="twitter.html" class="card tw">
                 <i class="fa-brands fa-x-twitter"></i>
-                <h3>04. TWITTER_DOWNLOADER</h3>
+                <h3>05. TWITTER_DOWNLOADER</h3>
                 <p>Fetch high-quality media from X (Twitter) threads and video posts instantly.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
             <a href="capcut.html" class="card">
                 <i class="fa-solid fa-microchip"></i>
-                <h3>05. CAPCUT_DOWNLOADER</h3>
+                <h3>06. CAPCUT_DOWNLOADER</h3>
                 <p>Direct access to project assets and premium cloud template buffers.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
-            <a href="pinterest.html" class="card">
+            <a href="pinterest.html" class="card pt">
                 <i class="fa-solid fa-palette"></i>
-               <h3>06. PINTEREST_PRO</h3>
-               <p>Extract high-definition visual assets, artistic renders, and 4K video pins.</p>
-               <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>07. PINTEREST_PRO</h3>
+                <p>Extract high-definition visual assets, artistic renders, and 4K video pins.</p>
+                <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
 
             <a href="apk.html" class="card">
                 <i class="fa-solid fa-terminal"></i>
-                <h3>07. APK_DOWNLOADER</h3>
+                <h3>08. APK_DOWNLOADER</h3>
                 <p>Verified software packages, modded binaries, and system applications.</p>
                 <span class="btn-label">INITIATE_DOWNLOAD</span>
             </a>
@@ -272,10 +276,7 @@
     </div>
 
     <script>
-
-
-
-        
+        // Loading Sequence
         const msgs = ["Bypassing Firewall...", "Syncing Data...", "Loading UI Elements...", "Ready."];
         let i = 0;
         const msgEl = document.getElementById('load-msg');
@@ -285,17 +286,33 @@
                 msgEl.innerText = msgs[i];
                 i++;
             }
-        }, 400);
+        }, 500);
 
         window.addEventListener('load', () => {
             setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('main').classList.add('active');
+                    loader.style.display = 'none';
+                    document.getElementById('entry-screen').style.display = 'flex';
                 }, 800);
-            }, 2000);
+            }, 2500);
         });
+
+        // Entry Function
+        function startSystem() {
+            const entry = document.getElementById('entry-screen');
+            const main = document.getElementById('main');
+            
+            entry.style.opacity = '0';
+            entry.style.filter = 'blur(20px)';
+            
+            setTimeout(() => {
+                entry.style.display = 'none';
+                main.classList.add('active');
+                document.body.style.overflow = 'auto'; // Enable scroll
+            }, 800);
+        }
     </script>
 </body>
 </html>
