@@ -78,6 +78,9 @@
         }
 
         .menu-item {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
             font-family: 'JetBrains Mono';
             padding: 15px 12px;
             margin-bottom: 5px;
@@ -92,7 +95,16 @@
         }
 
 
+        
+        .menu-item .arrow {
+            margin-right: 0;
+            width: auto;
+        }
+
+
+        
         .menu-item:hover, .menu-item.active {
+            filter: drop-shadow(0 0 5px var(--cyan));  
             color: var(--cyan);
             background: rgba(0, 242, 255, 0.05);
             border-left: 2px solid var(--cyan);
@@ -273,25 +285,27 @@
 </head>
 <body>
 
-        <nav id="sidebar">
+            <nav id="sidebar">
         <div class="menu-header">
             <span>VAJIRA_CORE_v2.6</span>
             <i class="fas fa-xmark" onclick="toggleMenu()" style="cursor:pointer; font-size: 1.2rem;"></i>
         </div>
         
-                <div class="menu-section-label">CORE_SYSTEM</div>
+        <div class="menu-section-label">CORE_SYSTEM</div>
         <div class="menu-item active" onclick="switchView('dashboard')">
-            <span><i class="fas fa-chart-line" style="margin-right: 10px; width: 20px;"></i>00. SYSTEM_INFO</span>
+            <span><i class="fas fa-chart-line"></i> DASHBOARD</span>
         </div>
-
 
         <div class="menu-divider"></div>
 
         <div class="menu-section-label">OPERATIONAL_HUBS</div>
-        <div class="menu-item" onclick="switchView('social-dl')">01. SOCIAL_DL_HUB</div>
+        
+        <div class="menu-item" onclick="switchView('social-dl')">
+            <span><i class="fas fa-share-nodes"></i> 01. SOCIAL_DL_HUB</span>
+        </div>
         
         <div class="menu-item" onclick="toggleSubMenu()">
-            <span>02. VAJIRA_API_HUB</span>
+            <span><i class="fas fa-gears"></i> 02. VAJIRA_API_HUB</span>
             <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
         </div>
         <div class="submenu-container" id="api-submenu">
@@ -299,9 +313,15 @@
             <div class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</div>
         </div>
 
-        <div class="menu-item" onclick="switchView('ai-hub')">03. VAJIRA_AI_HUB</div>
-        <div class="menu-item" onclick="switchView('flexa')">04. FLEXA_LITE</div>
+        <div class="menu-item" onclick="switchView('ai-hub')">
+            <span><i class="fas fa-brain"></i> 03. VAJIRA_AI_HUB</span>
+        </div>
+
+        <div class="menu-item" onclick="switchView('flexa')">
+            <span><i class="fas fa-bolt-lightning"></i> 04. FLEXA_LITE</span>
+        </div>
     </nav>
+
 
 
     <div id="menu-trigger" onclick="toggleMenu()">
