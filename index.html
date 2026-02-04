@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajira | Tech Hub</title>
+    <title>VAJIRA | ULTRA TECH HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --cyan: #00f2ff;
             --pink: #ff00c8;
-            --bg: #02040a;
-            --glass: rgba(10, 15, 30, 0.7);
-            --border: rgba(0, 242, 255, 0.2);
+            --bg: #03050d;
+            --glass: rgba(10, 15, 30, 0.8);
+            --border: rgba(0, 242, 255, 0.3);
+            --neon-glow: 0 0 15px rgba(0, 242, 255, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -20,15 +21,20 @@
         body {
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--bg);
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
             color: white;
-            overflow: hidden;
+            overflow: hidden; /* Locked until Entry */
+            height: 100vh;
         }
 
-        /* --- 1. TECH LOADING ANIMATION --- */
+        /* --- BACKGROUND PARTICLES --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* --- 1. TECH LOADER --- */
         #loader {
             position: fixed;
             inset: 0;
@@ -39,278 +45,385 @@
             justify-content: center;
             align-items: center;
             font-family: 'JetBrains Mono', monospace;
-            transition: opacity 0.8s ease;
         }
 
-        .scanner {
-            width: 250px;
-            height: 2px;
-            background: var(--cyan);
-            box-shadow: 0 0 15px var(--cyan);
+        .loader-circle {
+            width: 100px;
+            height: 100px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
             position: relative;
-            animation: scan 2s infinite ease-in-out;
+        }
+
+        .loader-circle::before {
+            content: "";
+            position: absolute;
+            inset: 5px;
+            border: 2px solid transparent;
+            border-bottom: 2px solid var(--pink);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
         }
 
         .status-text {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
+            margin-top: 30px;
+            font-size: 0.7rem;
+            letter-spacing: 5px;
             color: var(--cyan);
             text-transform: uppercase;
         }
 
-        @keyframes scan {
-            0%, 100% { transform: translateY(-50px); opacity: 0; }
-            50% { transform: translateY(50px); opacity: 1; }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- 2. ENTRY BUTTON SCREEN --- */
+        /* --- 2. ENTRY SCREEN --- */
         #entry-screen {
             position: fixed;
             inset: 0;
             z-index: 9000;
-            background: var(--bg);
-            display: none; 
+            background: radial-gradient(circle, rgba(0,242,255,0.05) 0%, rgba(3,5,13,1) 80%);
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: 0.8s all cubic-bezier(0.19, 1, 0.22, 1);
+            text-align: center;
+        }
+
+        .entry-title {
+            font-size: 1rem;
+            letter-spacing: 10px;
+            color: var(--cyan);
+            margin-bottom: 40px;
+            opacity: 0.7;
         }
 
         .enter-btn {
             background: transparent;
-            color: var(--cyan);
-            border: 2px solid var(--cyan);
-            padding: 25px 60px;
+            color: white;
+            border: 1px solid var(--cyan);
+            padding: 20px 60px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.5rem;
-            letter-spacing: 8px;
-            text-transform: uppercase;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
             position: relative;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0% 30%);
+            transition: 0.5s;
+            overflow: hidden;
         }
 
         .enter-btn:hover {
             background: var(--cyan);
             color: var(--bg);
             box-shadow: 0 0 50px var(--cyan);
-            transform: scale(1.05);
         }
 
-        .hint-text {
-            margin-top: 20px;
-            font-size: 0.7rem;
-            color: var(--pink);
-            letter-spacing: 4px;
-            font-family: 'JetBrains Mono';
-        }
-
-        /* --- 3. DASHBOARD CONTENT --- */
+        /* --- 3. THE NEW DASHBOARD (HOME PAGE) --- */
         .tech-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            display: none; 
+            height: 100vh;
+            overflow-y: auto;
+            padding: 40px 20px;
+            display: none;
             opacity: 0;
-            transform: scale(0.9);
-            transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(30px);
+            transition: 1s ease;
         }
 
-        .tech-container.active { 
-            display: block; 
-            opacity: 1; 
-            transform: scale(1);
+        .tech-container.active { display: block; opacity: 1; transform: translateY(0); }
+
+        /* HUD Header */
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 50px;
         }
 
-        header {
-            border-left: 4px solid var(--cyan);
-            padding-left: 20px;
-            margin-bottom: 80px;
-        }
-
-        .glitch-title {
-            font-size: clamp(2rem, 8vw, 4.5rem);
-            font-weight: 700;
-            letter-spacing: -2px;
+        .hud-title h1 {
+            font-size: 2.5rem;
+            letter-spacing: -1px;
             text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .glitch-title::after {
-            content: "SYSTEM ONLINE / VAJIRA OS";
-            display: block;
-            font-size: 0.7rem;
+        .hud-stats {
+            text-align: right;
             font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
             color: var(--cyan);
-            letter-spacing: 5px;
         }
 
-        /* --- ALL CARDS IN GRID --- */
+        /* Improved Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding-bottom: 100px;
         }
 
         .card {
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: 30px;
+            padding: 40px 30px;
             position: relative;
             text-decoration: none;
             color: white;
-            transition: 0.4s;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(15px);
+            border-radius: 4px;
         }
 
-        .card::before {
+        /* Scanning line on card hover */
+        .card::after {
             content: "";
             position: absolute;
-            top: 0; right: 0;
-            border-style: solid;
-            border-width: 0 20px 20px 0;
-            border-color: transparent var(--border) transparent transparent;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: var(--cyan);
+            box-shadow: var(--neon-glow);
+            opacity: 0;
+            transition: 0.3s;
         }
+
+        .card:hover::after { opacity: 1; animation: cardScan 2s linear infinite; }
+
+        @keyframes cardScan { 0% { top: 0; } 100% { top: 100%; } }
 
         .card:hover {
             border-color: var(--cyan);
-            background: rgba(0, 242, 255, 0.05);
-            transform: translateY(-8px);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(0, 242, 255, 0.08);
         }
 
-        .card i { font-size: 2.5rem; margin-bottom: 25px; color: var(--cyan); filter: drop-shadow(0 0 5px var(--cyan)); }
-        .card h3 { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; margin-bottom: 10px; color: var(--cyan); }
-        .card p { font-size: 0.9rem; line-height: 1.6; opacity: 0.7; font-weight: 300; }
-        .card .btn-label { display: inline-block; margin-top: 20px; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; border-bottom: 1px solid var(--cyan); padding-bottom: 5px; }
+        .card i {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            display: block;
+            color: var(--cyan);
+        }
 
-        /* Specific Hover Glows */
-        .yt:hover { border-color: #ff0000; } .yt:hover i { color: #ff0000; filter: drop-shadow(0 0 10px #ff0000); }
-        .fb:hover { border-color: #1877f2; } .fb:hover i { color: #1877f2; filter: drop-shadow(0 0 10px #1877f2); }
-        .tt:hover { border-color: #ff00c8; } .tt:hover i { color: #ff00c8; filter: drop-shadow(0 0 10px #ff00c8); }
-        .tw:hover { border-color: #ffffff; } .tw:hover i { color: #ffffff; filter: drop-shadow(0 0 10px #ffffff); }
-        .pt:hover { border-color: #e60023; } .pt:hover i { color: #e60023; filter: drop-shadow(0 0 10px #e60023); }
+        .card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
 
-        footer { margin-top: 100px; font-family: 'JetBrains Mono'; font-size: 0.6rem; text-align: center; opacity: 0.4; letter-spacing: 2px; }
+        .card p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+
+        .card .btn-label {
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--cyan);
+            letter-spacing: 2px;
+        }
+
+        .card .btn-label i {
+            font-size: 0.7rem;
+            margin: 0 0 0 10px;
+        }
+
+        /* Dynamic Card Colors */
+        .yt:hover { border-color: #ff0000; } .yt:hover i { color: #ff0000; }
+        .fb:hover { border-color: #1877f2; } .fb:hover i { color: #1877f2; }
+        .tt:hover { border-color: #ff00c8; } .tt:hover i { color: #ff00c8; }
+        .pt:hover { border-color: #e60023; } .pt:hover i { color: #e60023; }
+
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-family: 'JetBrains Mono';
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            opacity: 0.5;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--cyan); }
     </style>
 </head>
 <body>
 
+    <canvas id="bg-canvas"></canvas>
+
     <div id="loader">
-        <div class="scanner"></div>
-        <div class="status-text" id="load-msg">Initializing Core...</div>
+        <div class="loader-circle"></div>
+        <div class="status-text" id="load-msg">Booting Vajira OS...</div>
     </div>
 
     <div id="entry-screen">
-        <button class="enter-btn" onclick="startSystem()">ACCESS_CORE</button>
-        <div class="hint-text">AUTHORIZATION REQUIRED</div>
+        <div class="entry-title">SECURE ACCESS GATEWAY</div>
+        <button class="enter-btn" onclick="startSystem()">DECRYPT & ENTER</button>
     </div>
 
     <div class="tech-container" id="main">
-        <header>
-            <h1 class="glitch-title">Vajira<br>SOCIAL_DL</h1>
-        </header>
+        <div class="hud-header">
+            <div class="hud-title">
+                <h1>VAJIRA_CORE</h1>
+            </div>
+            <div class="hud-stats">
+                SYS_STABLE: 100%<br>
+                ENCRYPTION: AES-256<br>
+                USER: ADMIN_REV_2
+            </div>
+        </div>
 
         <div class="grid">
             <a href="pc-game.html" class="card">
                 <i class="fa-solid fa-gamepad"></i>
-                <h3>01. PC_GAME_DOWNLOADER</h3>
-                <p>High-performance binaries, DirectX optimized assets, and core game engine files.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>01. PC_GAME_SOURCE</h3>
+                <p>Direct access to high-performance game binaries and optimized DirectX resources.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
             <a href="ytdl.html" class="card yt">
                 <i class="fa-brands fa-youtube"></i>
-                <h3>02. YOUTUBE_DOWNLOADER</h3>
-                <p>Advanced decoding for 4K video streams and high-bitrate audio packets.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>02. YOUTUBE_STREAM_DL</h3>
+                <p>Advanced decoding for ultra 4K video streams and high-fidelity audio buffers.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
             <a href="tiktok.html" class="card tt">
                 <i class="fa-brands fa-tiktok"></i>
-                <h3>03. TIKTOK_DOWNLOADER</h3>
-                <p>Securely strip metadata and watermarks from global TikTok content nodes.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>03. TIKTOK_NODE_EXTRACT</h3>
+                <p>Bypass watermark restrictions and extract raw media from global TikTok CDN nodes.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
             <a href="fb.html" class="card fb">
                 <i class="fa-brands fa-facebook"></i>
-                <h3>04. FB DOWNLOADER</h3>
-                <p>High-speed retrieval of encrypted Facebook Reels and private video data.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>04. FB_REEL_RETRIEVAL</h3>
+                <p>Fetch encrypted video data and private reels through secure gateway tunnels.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
-            <a href="twitter.html" class="card tw">
+            <a href="twitter.html" class="card">
                 <i class="fa-brands fa-x-twitter"></i>
-                <h3>05. TWITTER_DOWNLOADER</h3>
-                <p>Fetch high-quality media from X (Twitter) threads and video posts instantly.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>05. X_MEDIA_FETCH</h3>
+                <p>Instant media extraction from X threads using high-speed API emulation.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
             <a href="capcut.html" class="card">
                 <i class="fa-solid fa-microchip"></i>
-                <h3>06. CAPCUT_DOWNLOADER</h3>
-                <p>Direct access to project assets and premium cloud template buffers.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>06. CAPCUT_ASSET_DL</h3>
+                <p>Access premium template buffers and project assets directly from cloud storage.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
             <a href="pinterest.html" class="card pt">
                 <i class="fa-solid fa-palette"></i>
-                <h3>07. PINTEREST_PRO</h3>
-                <p>Extract high-definition visual assets, artistic renders, and 4K video pins.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>07. PINTEREST_PRO_EXTRACT</h3>
+                <p>Extract high-definition visual assets and 4K video pins from user boards.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
 
             <a href="apk.html" class="card">
                 <i class="fa-solid fa-terminal"></i>
-                <h3>08. APK_DOWNLOADER</h3>
-                <p>Verified software packages, modded binaries, and system applications.</p>
-                <span class="btn-label">INITIATE_DOWNLOAD</span>
+                <h3>08. APK_BINARY_VAULT</h3>
+                <p>Verified software packages, modded binaries, and system-level applications.</p>
+                <span class="btn-label">INITIALIZE <i class="fa-solid fa-chevron-right"></i></span>
             </a>
         </div>
 
-        <footer>[ VAJIRA_OS v.2.6.0 ] — ENCRYPTED CONNECTION</footer>
+        <footer>
+            VAJIRA_OS VERSION 2.6.0 // SYSTEM OPERATIONAL // © 2026
+        </footer>
     </div>
 
     <script>
-        // Loading Sequence
-        const msgs = ["Bypassing Firewall...", "Syncing Data...", "Loading UI Elements...", "Ready."];
-        let i = 0;
+        // Particle Background Logic
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = '#00f2ff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 80; i++) { particles.push(new Particle()); }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        initCanvas();
+        createParticles();
+        animate();
+
+        // System Flow Logic
+        const msgs = ["Connecting to Node...", "Verifying Signature...", "UI_READY"];
+        let mIdx = 0;
         const msgEl = document.getElementById('load-msg');
 
-        const interval = setInterval(() => {
-            if(i < msgs.length) {
-                msgEl.innerText = msgs[i];
-                i++;
-            }
-        }, 500);
+        const loadInt = setInterval(() => {
+            if(mIdx < msgs.length) { msgEl.innerText = msgs[mIdx]; mIdx++; }
+        }, 700);
 
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.style.opacity = '0';
+                document.getElementById('loader').style.opacity = '0';
                 setTimeout(() => {
-                    loader.style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
                     document.getElementById('entry-screen').style.display = 'flex';
                 }, 800);
             }, 2500);
         });
 
-        // Entry Function
         function startSystem() {
             const entry = document.getElementById('entry-screen');
             const main = document.getElementById('main');
-            
             entry.style.opacity = '0';
-            entry.style.filter = 'blur(20px)';
-            
+            entry.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 entry.style.display = 'none';
                 main.classList.add('active');
-                document.body.style.overflow = 'auto'; // Enable scroll
+                document.body.style.overflow = 'auto';
             }, 800);
         }
     </script>
