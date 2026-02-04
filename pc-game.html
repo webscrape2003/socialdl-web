@@ -82,6 +82,14 @@
             cursor: pointer; margin: 15px 0;
         }
 
+        .api-btn-container { display: flex; gap: 8px; margin-bottom: 8px; }
+        .api-btn {
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); 
+            color: #fff; padding: 10px; border-radius: 8px; font-size: 0.65rem; 
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .api-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
+
         #loading { display: none; text-align: center; margin: 15px 0; font-weight: 800; color: var(--accent); }
     </style>
 </head>
@@ -110,10 +118,10 @@
                 
                 <div style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
                     <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;">
-                        To download high-compressed PC games and unlock the <strong>Vajira Game API</strong>, please upgrade to Premium.
+                        Unlock unlimited high-speed PC game downloads and exclusive API access.
                     </p>
                     <div style="margin-top: 8px; font-weight: 800; color: var(--accent); font-size: 0.9rem;">
-                        PRICE: LKR 500.00 (LIFETIME)
+                        PRICE: LKR 500.00
                     </div>
                 </div>
 
@@ -126,7 +134,7 @@
                     <div class="detail-row"><span class="detail-label">Branch</span><span class="detail-value">Balangoda (688)</span></div>
                     <div class="detail-row"><span class="detail-label">Holder</span><span class="detail-value">MR W M V RATHNAYAKA</span></div>
                     
-                    <div class="acc-number-box" onclick="copyAccountNumber()" title="Click to copy">
+                    <div class="acc-number-box" onclick="copyAccountNumber()">
                         <div>
                             <span class="detail-label" style="display:block; font-size:0.6rem;">ACCOUNT NUMBER</span>
                             <span id="accNum" style="letter-spacing: 1px; font-weight: 800;">0089860809</span>
@@ -134,16 +142,20 @@
                         <i class="fa-regular fa-copy" style="color:var(--accent)"></i>
                     </div>
 
-                    <div style="display: flex; gap: 8px;">
-                        <button onclick="copyApi('game')" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 6px; font-size: 0.65rem; cursor: pointer;">
-                            <i class="fa-solid fa-code"></i> GAME API
+                    <div class="api-btn-container">
+                        <button class="api-btn" onclick="copyApi('game')">
+                            <i class="fa-solid fa-gamepad" style="color: var(--accent);"></i> GAME_DL API
                         </button>
-                        <a href="https://wa.me/94719199757" target="_blank" style="flex: 1; text-decoration: none;">
-                            <button style="width: 100%; background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); color: #25D366; padding: 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; cursor: pointer;">
-                                <i class="fa-brands fa-whatsapp"></i> ADMIN
-                            </button>
-                        </a>
+                        <button class="api-btn" onclick="copyApi('assets')">
+                            <i class="fa-solid fa-folder-open" style="color: var(--accent);"></i> ASSETS API
+                        </button>
                     </div>
+
+                    <a href="https://wa.me/94719199757" target="_blank" style="text-decoration: none;">
+                        <button style="width: 100%; background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); color: #25D366; padding: 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-brands fa-whatsapp"></i> CONTACT ADMIN
+                        </button>
+                    </a>
 
                     <div id="copyStatus" style="display:none; text-align:center; font-size:0.7rem; color:var(--accent); margin-top:10px;">✅ Copied to clipboard!</div>
                 </div>
@@ -156,14 +168,12 @@
     function searchGame() {
         const query = document.getElementById('gameSearch').value;
         if(!query) return alert("Please enter a game name!");
-
         document.getElementById('loading').style.display = "block";
         document.getElementById('result-area').style.display = "none";
-
         setTimeout(() => {
             document.getElementById('loading').style.display = "none";
             document.getElementById('result-area').style.display = "block";
-        }, 1500); // Simulated loading time
+        }, 1200);
     }
 
     function copyAccountNumber() {
@@ -171,7 +181,9 @@
     }
 
     function copyApi(type) {
-        showStatus("https://vajira-official-apis.vercel.app/api/pcgames?apikey=PREMIUM_ONLY");
+        // You can replace these '#' with your actual URLs later
+        const url = type === 'game' ? "#" : "#"; 
+        showStatus(url);
     }
 
     function showStatus(text) {
