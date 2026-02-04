@@ -77,10 +77,7 @@
             align-items: center;
         }
 
-        .menu-item {
-            width: 20px;
-            margin-right: 12px;
-            text-align: center;
+                .menu-item {
             font-family: 'JetBrains Mono';
             padding: 15px 12px;
             margin-bottom: 5px;
@@ -94,17 +91,10 @@
             gap: 5px; /* Adds space between icon and text */
         }
 
-
-        
-        .menu-item .arrow {
-            margin-right: 0;
-            width: auto;
-        }
-
+    
 
         
         .menu-item:hover, .menu-item.active {
-            filter: drop-shadow(0 0 5px var(--cyan));  
             color: var(--cyan);
             background: rgba(0, 242, 255, 0.05);
             border-left: 2px solid var(--cyan);
@@ -301,11 +291,11 @@
         <div class="menu-section-label">OPERATIONAL_HUBS</div>
         
         <div class="menu-item" onclick="switchView('social-dl')">
-            <span><i class="fas fa-share-nodes"></i> 01. SOCIAL_DL_HUB</span>
+            <span><i class="fas fa-share-nodes"></i> SOCIAL_DL_HUB</span>
         </div>
         
         <div class="menu-item" onclick="toggleSubMenu()">
-            <span><i class="fas fa-gears"></i> 02. VAJIRA_API_HUB</span>
+            <span><i class="fas fa-gears"></i> VAJIRA_API_HUB</span>
             <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
         </div>
         <div class="submenu-container" id="api-submenu">
@@ -314,11 +304,11 @@
         </div>
 
         <div class="menu-item" onclick="switchView('ai-hub')">
-            <span><i class="fas fa-brain"></i> 03. VAJIRA_AI_HUB</span>
+            <span><i class="fas fa-brain"></i> VAJIRA_AI_HUB</span>
         </div>
 
         <div class="menu-item" onclick="switchView('flexa')">
-            <span><i class="fas fa-bolt-lightning"></i> 04. FLEXA_LITE</span>
+            <span><i class="fas fa-bolt-lightning"></i> FLEXA_LITE</span>
         </div>
     </nav>
 
