@@ -77,9 +77,11 @@
             align-items: center;
         }
 
-                .menu-item {
+        
+    
+        .menu-item {
             font-family: 'JetBrains Mono';
-            padding: 15px 12px;
+            padding: 12px 15px;
             margin-bottom: 5px;
             cursor: pointer;
             transition: 0.3s;
@@ -87,11 +89,32 @@
             font-size: 0.85rem;
             border-left: 2px solid transparent;
             display: flex;
-            align-items: center; /* Ensures icons and text align perfectly */
-            gap: 5px; /* Adds space between icon and text */
+            align-items: center;
+            justify-content: flex-start;
         }
 
-    
+        /* Wrap icon and text in a span to control spacing */
+        .menu-item span {
+            display: flex;
+            align-items: center;
+            flex-grow: 1; /* Pushes the arrow to the right */
+        }
+
+        /* Fixed width for icons ensures text starts at the same spot */
+        .menu-item i:not(.arrow) {
+            width: 24px; 
+            margin-right: 12px;
+            display: flex;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        /* Standardize the arrow positioning */
+        .menu-item .arrow {
+            margin-left: auto;
+            font-size: 0.7rem;
+        }
+
 
         
         .menu-item:hover, .menu-item.active {
