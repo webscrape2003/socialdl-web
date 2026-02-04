@@ -78,78 +78,6 @@
         }
         #fetchBtn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-/* --- BANK PAYMENT SECTION --- */
-.bank-card {
-    position: relative;
-    overflow: hidden; 
-    margin-top: 20px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    border-radius: 25px;
-    padding: 20px;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    display: none; 
-}
-
-.custom-scrollbar {
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  
-}
-
-.bank-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: var(--accent);
-    font-size: 0.9rem;
-    font-weight: 700;
-}
-
-.bank-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-}
-
-.detail-label { color: var(--text-dim); }
-.detail-value { color: #fff; font-weight: 600; }
-
-.acc-number-box {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 12px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.acc-number-box:hover {
-    border-color: var(--accent);
-    background: rgba(255, 45, 85, 0.05);
-}
-
-#copyStatus {
-    font-size: 0.7rem;
-    color: var(--accent);
-    display: none;
-    margin-top: 8px;
-    text-align: center;
-    font-weight: 700;
-}
-
         /* --- BEAUTIFUL PLAYER --- */
         #resultArea { display: none; animation: slideUp 0.6s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -238,100 +166,11 @@
         </div>
     </div>
 
-<div class="bank-card">
-    <div style="position: absolute; top: 12px; right: -30px; background: var(--accent); color: white; font-size: 0.6rem; font-weight: 800; padding: 4px 35px; transform: rotate(45deg); box-shadow: 0 2px 10px rgba(0,0,0,0.5); z-index: 1;">
-        PREMIUM
-    </div>
-
-    <div class="bank-header">
-        <i class="fa-solid fa-crown"></i> GET PREMIUM ACCESS
-    </div>
-    
-    <div style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px; position: relative;">
-        <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 10px;">
-            Unlock high-speed downloads and unlimited requests. 
-            <strong style="color: #fff;">VajiraOfficial YTDL API Key</strong> is available for a lifetime price.
-        </p>
-
-        <div style="font-size: 0.65rem; color: var(--accent); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">FREE API ENDPOINTS:</div>
-        
-        <div style="display: flex; align-items: center; background: rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; overflow: hidden;">
-            <div style="flex: 1; overflow-x: auto; white-space: nowrap; font-size: 0.65rem; color: #94a3b8; padding: 12px; scrollbar-width: none;" class="custom-scrollbar">
-                <span id="urlMp3">https://vajira-official-apis.vercel.app/api/ytmp3?apikey=YOUR_KEY&url=</span>
-            </div>
-            <button onclick="copyText('urlMp3')" style="background: rgba(255,45,85,0.1); border: none; border-left: 1px solid var(--border); color: var(--accent); padding: 12px; cursor: pointer; width: 45px;">
-                <i class="fa-regular fa-copy"></i>
-            </button>
-        </div>
-
-        <div style="display: flex; align-items: center; background: rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; overflow: hidden;">
-            <div style="flex: 1; overflow-x: auto; white-space: nowrap; font-size: 0.65rem; color: #94a3b8; padding: 12px; scrollbar-width: none;" class="custom-scrollbar">
-                <span id="urlMp4">https://vajira-official-apis.vercel.app/api/ytmp4?apikey=YOUR_KEY&url=</span>
-            </div>
-            <button onclick="copyText('urlMp4')" style="background: rgba(255,45,85,0.1); border: none; border-left: 1px solid var(--border); color: var(--accent); padding: 12px; cursor: pointer; width: 45px;">
-                <i class="fa-regular fa-copy"></i>
-            </button>
-        </div>
-
-        <div style="font-weight: 800; color: var(--accent); font-size: 0.95rem; text-align: center; background: rgba(255,45,85,0.05); padding: 8px; border-radius: 8px;">
-            API KEY PRICE: LKR 500.00
-        </div>
-    </div>
-
-    <div class="bank-details">
-        <div class="bank-header" style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 10px;">
-            <i class="fa-solid fa-building-columns"></i> PAYMENT DETAILS
-        </div>
-        
-        <div class="detail-row" style="margin-bottom: 5px;">
-            <span class="detail-label">Bank</span>
-            <span class="detail-value">Bank of Ceylon</span>
-        </div>
-        <div class="detail-row" style="margin-bottom: 5px;">
-            <span class="detail-label">Branch</span>
-            <span class="detail-value">Balangoda (688)</span>
-        </div>
-        <div class="detail-row" style="margin-bottom: 12px;">
-            <span class="detail-label">Holder</span>
-            <span class="detail-value">MR W M V RATHNAYAKA</span>
-        </div>
-        
-        <div class="acc-number-box" onclick="copyText('accNum')" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); border: 1px solid var(--accent); padding: 12px; border-radius: 15px; cursor: pointer;">
-            <div>
-                <span style="display:block; font-size:0.6rem; color: var(--text-dim); text-transform: uppercase;">Account Number</span>
-                <span id="accNum" style="letter-spacing: 1.5px; font-weight: 800; font-size: 1rem;">0089860809</span>
-            </div>
-            <i class="fa-regular fa-copy" style="color:var(--accent); font-size: 1.1rem;"></i>
-        </div>
-        
-        <div id="copyStatus">✅ Copied!</div>
-        
-        <p style="font-size: 0.6rem; color: var(--text-dim); text-align: center; margin-top: 15px; line-height: 1.4;">
-            *After payment, please send a screenshot to the admin to activate your API Key.
-        </p>
-    </div>
-</div>
-
     <footer>
         Powered by: Vajira <span>Rathnayaka</span>
     </footer>
 
     <script>
-        // Single Universal Copy Function
-        function copyText(elementId) {
-            const text = document.getElementById(elementId).innerText;
-            const status = document.getElementById('copyStatus');
-
-            navigator.clipboard.writeText(text).then(() => {
-                status.style.display = 'block';
-                setTimeout(() => {
-                    status.style.display = 'none';
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        }
-
         const API_KEY = "vajira-1qg3lqmr60-1768268975394";
 
         function toggleDisplay(type) {
@@ -359,22 +198,26 @@
                 if (vRes.status && aRes.status) {
                     const meta = vRes.metadata;
                     
+                    // Set Player Video Source (Highest quality link)
                     const player = document.getElementById('vidPlayer');
                     player.src = vRes.downloads.video[0].url;
                     player.poster = meta.thumbnails.max || meta.thumbnails.image;
 
+                    // Display Header Meta (Keeping all original info)
                     document.getElementById('vidTitle').innerText = meta.title;
                     document.getElementById('vidAuthor').innerText = meta.author.name;
                     document.getElementById('vidViews').innerText = meta.viewsFormatted + " views";
                     document.getElementById('vidAgo').innerText = meta.ago;
                     document.getElementById('vidTime').innerText = meta.duration.timestamp;
 
+                    // Build Video Buttons (All qualities)
                     const vList = document.getElementById('videoList');
                     vList.innerHTML = "";
                     vRes.downloads.video.forEach(dl => {
                         vList.innerHTML += `<a href="${dl.url}" class="dl-item" target="_blank">${dl.quality}<span>${dl.format}</span></a>`;
                     });
 
+                    // Build Audio Buttons
                     const aList = document.getElementById('audioList');
                     aList.innerHTML = "";
                     aRes.data.downloads.forEach(dl => {
