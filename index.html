@@ -30,116 +30,6 @@
 
 
 
-/* --- BANK PAYMENT SECTION --- */
-.bank-card {
-    margin-top: 25px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 1px dashed var(--border);
-    border-radius: 20px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-.bank-card::before {
-    content: 'PREMIUM SUPPORT';
-    position: absolute;
-    top: 10px;
-    right: -20px;
-    background: var(--accent);
-    font-size: 0.6rem;
-    font-weight: 800;
-    padding: 2px 30px;
-    transform: rotate(45deg);
-}
-
-.bank-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: var(--accent);
-    font-size: 0.9rem;
-    font-weight: 700;
-}
-
-.bank-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-}
-
-.detail-label { color: var(--text-dim); }
-.detail-value { color: #fff; font-weight: 600; }
-
-.acc-number-box {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 12px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.acc-number-box:hover {
-    border-color: var(--accent);
-    background: rgba(255, 45, 85, 0.05);
-}
-
-#copyStatus {
-    font-size: 0.7rem;
-    color: var(--accent);
-    display: none;
-    margin-top: 5px;
-    text-align: center;
-}
-
-/* --- API PRICING BADGE --- */
-.api-badge {
-    position: absolute;
-    top: -15px;
-    right: 20px;
-    background: linear-gradient(45deg, #ff2d55, #ff7b00);
-    padding: 8px 15px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4);
-    z-index: 10;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    animation: pulse Glow 2s infinite;
-}
-
-.api-badge span {
-    background: rgba(0,0,0,0.2);
-    padding: 2px 6px;
-    border-radius: 6px;
-    font-family: monospace;
-}
-
-@keyframes pulseGlow {
-    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4); }
-    50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(255, 45, 85, 0.6); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4); }
-}
-
-
-
-        
         /* --- TECH LOADING ANIMATION --- */
         #loader {
             position: fixed;
@@ -315,57 +205,6 @@
 
 
 
-<div class="bank-card">
-    <div class="bank-header">
-        <i class="fa-solid fa-crown"></i> GET PREMIUM ACCESS
-    </div>
-    
-    <div style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-        <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;">
-            Unlock high-speed downloads and unlimited requests. 
-            <strong style="color: #fff;">VajiraOfficial YTDL API Key</strong> is now available for a lifetime price.
-        </p>
-        <div style="margin-top: 8px; font-weight: 800; color: var(--accent); font-size: 0.9rem;">
-            PRICE: LKR 500.00
-        </div>
-    </div>
-
-    <div class="bank-details">
-        <div class="bank-header" style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 8px;">
-            <i class="fa-solid fa-building-columns"></i> PAYMENT DETAILS
-        </div>
-        
-        <div class="detail-row">
-            <span class="detail-label">Bank</span>
-            <span class="detail-value">Bank of Ceylon</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-label">Branch</span>
-            <span class="detail-value">Balangoda (688)</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-label">Holder</span>
-            <span class="detail-value">MR W M V RATHNAYAKA</span>
-        </div>
-        
-        <div class="acc-number-box" onclick="copyAccountNumber()" title="Click to copy account number">
-            <div>
-                <span class="detail-label" style="display:block; font-size:0.6rem;">ACCOUNT NUMBER</span>
-                <span id="accNum" style="letter-spacing: 1px; font-weight: 800;">0089860809</span>
-            </div>
-            <i class="fa-regular fa-copy" style="color:var(--accent)"></i>
-        </div>
-        <div id="copyStatus">✅ Copied to clipboard!</div>
-        
-        <p style="font-size: 0.65rem; color: var(--text-dim); text-align: center; margin-top: 12px; font-style: italic;">
-            *After payment, please send a screenshot to the admin to activate your API Key.
-        </p>
-    </div>
-</div>
-
-        
-
-        
 
         <div class="grid">
             <a href="ytdl.html" class="card yt">
@@ -424,16 +263,6 @@
     <script>
 
 
-function copyAccountNumber() {
-    const accNum = document.getElementById('accNum').innerText;
-    navigator.clipboard.writeText(accNum).then(() => {
-        const status = document.getElementById('copyStatus');
-        status.style.display = 'block';
-        setTimeout(() => {
-            status.style.display = 'none';
-        }, 2000);
-    });
-}
 
         
         const msgs = ["Bypassing Firewall...", "Syncing Data...", "Loading UI Elements...", "Ready."];
