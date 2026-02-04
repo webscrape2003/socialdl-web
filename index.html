@@ -401,24 +401,22 @@
         <span><i class="fas fa-share-nodes"></i> SOCIAL_HUB</span>
     </div>
     
-
-<div class="menu-item" onclick="toggleSubMenu()">
+    <div class="menu-item link-item" onclick="toggleSubMenu()">
         <span><i class="fas fa-gears"></i> VAJIRA_API_HUB</span>
         <i class="fas fa-chevron-down arrow" id="api-arrow"></i>
     </div>
-        <div class="submenu-container" id="api-submenu">
-            <div class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</div>
-            <div class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</div>
-        </div>
+    <div class="submenu-container" id="api-submenu">
+        <a href="#" class="sub-item" onclick="switchView('official-api')">> OFFICIAL_API</a>
+        <a href="https://vajira-mv-apikeys.netlify.app/" class="sub-item" onclick="switchView('movie-api')">> MOVIE_API</a>
+    </div>
 
-    
-<div class="menu-item" onclick="switchView('ai-hub')">
+    <a href="https://vajira-gpt.vercel.app/" class="menu-item link-item" style="text-decoration: none;" onclick="switchView('ai-hub')">
         <span><i class="fas fa-brain"></i> VAJIRA_AI_HUB</span>
-    </div>
+    </a>
 
-    <div class="menu-item" onclick="switchView('flexa')">
+    <a href="https://flexa-lite.42web.io/" class="menu-item link-item" style="text-decoration: none;" onclick="switchView('flexa')">
         <span><i class="fas fa-bolt-lightning"></i> FLEXA_LITE</span>
-    </div>
+    </a>
 </nav>
 
 
