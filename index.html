@@ -12,7 +12,7 @@
             --pink: #ff00c8;
             --bg: #02040a;
             --glass: rgba(10, 15, 30, 0.85);
-            --border: rgba(0, 242, 255, 0.15);
+            --border: rgba(0, 242, 255, 0.2);
             --sidebar-width: 280px;
         }
 
@@ -22,9 +22,9 @@
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--bg);
             background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
             color: white;
             overflow-x: hidden;
         }
@@ -111,13 +111,6 @@
             animation: scan 2s infinite ease-in-out;
         }
 
-        .status-text {
-            margin-top: 20px;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--cyan);
-        }
-
         @keyframes scan {
             0%, 100% { transform: translateY(-40px); opacity: 0; }
             50% { transform: translateY(40px); opacity: 1; }
@@ -146,7 +139,7 @@
         header { margin-bottom: 60px; border-left: 4px solid var(--cyan); padding-left: 20px; }
         .glitch-title { font-size: clamp(2rem, 8vw, 3.5rem); text-transform: uppercase; line-height: 1; }
 
-        /* --- IMAGE-STYLE SOCIAL CARDS --- */
+        /* --- EXACT IMAGE STYLE SOCIAL CARDS --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -154,8 +147,8 @@
         }
 
         .card {
-            background: #080c14;
-            border: 1px solid var(--border);
+            background: #05080f; /* Darker like the image */
+            border: 1px solid rgba(0, 242, 255, 0.1);
             padding: 40px 30px;
             position: relative;
             text-decoration: none;
@@ -164,54 +157,57 @@
             overflow: hidden;
         }
 
+        /* Corner Accent from your image */
         .card::after {
             content: "";
             position: absolute;
             top: 0; right: 0;
             border-style: solid;
             border-width: 0 25px 25px 0;
-            border-color: transparent var(--border) transparent transparent;
+            border-color: transparent #00f2ff33 transparent transparent;
         }
 
         .card:hover {
             border-color: var(--cyan);
-            background: #0a0f1a;
-            transform: scale(1.02);
+            background: #080c14;
         }
 
         .card i {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 35px;
             color: var(--cyan);
-            filter: drop-shadow(0 0 12px var(--cyan));
+            filter: drop-shadow(0 0 15px var(--cyan)); /* Strong neon glow */
             display: inline-block;
         }
 
         .card h3 {
             font-family: 'JetBrains Mono';
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             margin-bottom: 15px;
             color: var(--cyan);
             letter-spacing: 1px;
+            font-weight: 500;
         }
 
         .card p {
             font-size: 0.95rem;
             opacity: 0.6;
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             font-weight: 300;
         }
 
+        /* The Button Style from your image */
         .btn-label {
             font-family: 'JetBrains Mono';
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 2px;
             color: white;
-            border-bottom: 2px solid var(--cyan);
-            padding-bottom: 4px;
+            border-bottom: 3px solid var(--cyan); /* Thick underline from image */
+            padding-bottom: 6px;
             text-transform: uppercase;
+            display: inline-block;
         }
 
         footer { margin-top: 100px; font-family: 'JetBrains Mono'; font-size: 0.65rem; text-align: center; opacity: 0.3; }
@@ -222,20 +218,20 @@
 
     <nav id="sidebar">
         <div class="menu-header">
-            <span>CORE_OS_v2.6</span>
+            <span>VAJIRA_CORE_v2.6</span>
             <i class="fas fa-xmark" onclick="toggleMenu()" style="cursor:pointer; font-size: 1.2rem;"></i>
         </div>
-        <div class="menu-item active" onclick="switchView('dashboard')">DASHBOARD_INFO</div>
-        <div class="menu-item" onclick="switchView('social-dl')">SOCIAL_DL_HUB</div>
-        <div class="menu-item" onclick="switchView('movie-api')">VAJIRA_MOVIE_API</div>
-        <div class="menu-item" onclick="switchView('official-api')">VAJIRA_OFFICIAL_API</div>
-        <div class="menu-item" onclick="switchView('ai-hub')">VAJIRA_AI_HUB</div>
-        <div class="menu-item" onclick="switchView('flexa')">FLEXA_LITE</div>
+        <div class="menu-item active" onclick="switchView('dashboard')">00. SYSTEM_INFO</div>
+        <div class="menu-item" onclick="switchView('social-dl')">01. SOCIAL_DL_HUB</div>
+        <div class="menu-item" onclick="switchView('movie-api')">02. VAJIRA_MOVIE_API</div>
+        <div class="menu-item" onclick="switchView('official-api')">03. VAJIRA_OFFICIAL_API</div>
+        <div class="menu-item" onclick="switchView('ai-hub')">04. VAJIRA_AI_HUB</div>
+        <div class="menu-item" onclick="switchView('flexa')">05. FLEXA_LITE</div>
     </nav>
 
     <div id="menu-trigger" onclick="toggleMenu()">
         <i class="fa-solid fa-bars-staggered"></i>
-        <span>MENU</span>
+        <span>SYSTEM_MENU</span>
     </div>
 
     <div id="loader">
@@ -252,18 +248,13 @@
             <div class="grid">
                 <div class="card">
                     <i class="fas fa-microchip"></i>
-                    <h3>KERNEL_INFO</h3>
-                    <p>Architecture optimized for distributed media scraping and automated packet handling via encrypted tunnels.</p>
+                    <h3>TECHNOLOGY_DETAILS</h3>
+                    <p>Core system running on optimized Node architecture. Visual interface renders using CSS-Grid frameworks with hardware-accelerated animations.</p>
                 </div>
                 <div class="card">
-                    <i class="fas fa-server"></i>
-                    <h3>SERVER_STATUS</h3>
-                    <p>Primary node active in West-Data region. Current Latency: 18ms. Throughput: 1.2Gbps.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-user-shield"></i>
-                    <h3>SECURITY_LAYER</h3>
-                    <p>All download requests are anonymized through rotating proxy headers to prevent IP blacklisting.</p>
+                    <i class="fas fa-network-wired"></i>
+                    <h3>API_ENDPOINTS</h3>
+                    <p>Distributed backend nodes for media processing. Latency: 12ms. Status: SECURE_CONNECTION.</p>
                 </div>
             </div>
         </div>
@@ -293,51 +284,55 @@
 
                 <a href="twitter.html" class="card">
                     <i class="fa-brands fa-x-twitter"></i>
-                    <h3>04. X_DOWNLOADER</h3>
-                    <p>Extract media from X threads and video posts using direct API buffers.</p>
+                    <h3>04. TWITTER_DOWNLOADER</h3>
+                    <p>Fetch high-quality media from X (Twitter) threads and video posts instantly.</p>
                     <span class="btn-label">INITIATE_DOWNLOAD</span>
                 </a>
 
                 <a href="pinterest.html" class="card">
                     <i class="fa-solid fa-palette"></i>
                     <h3>05. PINTEREST_PRO</h3>
-                    <p>High-definition visual assets and 4K video pin extraction.</p>
+                    <p>Extract high-definition visual assets, artistic renders, and 4K video pins.</p>
+                    <span class="btn-label">INITIATE_DOWNLOAD</span>
+                </a>
+
+                <a href="capcut.html" class="card">
+                    <i class="fa-solid fa-microchip"></i>
+                    <h3>06. CAPCUT_DL</h3>
+                    <p>Direct access to project assets and premium cloud template buffers.</p>
                     <span class="btn-label">INITIATE_DOWNLOAD</span>
                 </a>
 
                 <a href="pc-game.html" class="card">
                     <i class="fa-solid fa-gamepad"></i>
-                    <h3>06. PC_GAME_DL</h3>
-                    <p>Direct download links for verified binaries and game assets.</p>
+                    <h3>07. PC_GAME_DL</h3>
+                    <p>High-performance binaries, DirectX optimized assets, and game files.</p>
+                    <span class="btn-label">INITIATE_DOWNLOAD</span>
+                </a>
+
+                <a href="apk.html" class="card">
+                    <i class="fa-solid fa-terminal"></i>
+                    <h3>08. APK_DOWNLOADER</h3>
+                    <p>Verified software packages, modded binaries, and system apps.</p>
                     <span class="btn-label">INITIATE_DOWNLOAD</span>
                 </a>
             </div>
         </div>
 
-        <div id="view-movie-api" class="view-section">
-            <div class="card"><h3>MOVIE_API</h3><p>API Bridge Connection: Pending Configuration...</p></div>
-        </div>
-        <div id="view-official-api" class="view-section">
-            <div class="card"><h3>OFFICIAL_API</h3><p>Authentication Required for API Access.</p></div>
-        </div>
-        <div id="view-ai-hub" class="view-section">
-            <div class="card"><h3>AI_HUB</h3><p>Neural Processing Unit (NPU) Initialization Required.</p></div>
-        </div>
-        <div id="view-flexa" class="view-section">
-            <div class="card"><h3>FLEXA_LITE</h3><p>Lite Mode environment loading...</p></div>
-        </div>
+        <div id="view-movie-api" class="view-section"><div class="card"><h3>VAJIRA_MOVIE_API</h3><p>Link Pending...</p></div></div>
+        <div id="view-official-api" class="view-section"><div class="card"><h3>OFFICIAL_API</h3><p>Authorized access only.</p></div></div>
+        <div id="view-ai-hub" class="view-section"><div class="card"><h3>VAJIRA_AI_HUB</h3><p>Neural engine offline.</p></div></div>
+        <div id="view-flexa" class="view-section"><div class="card"><h3>FLEXA_LITE</h3><p>Loading lightweight UI...</p></div></div>
 
         <footer>[ VAJIRA_OS v.2.6.0 ] — ENCRYPTED CONNECTION</footer>
     </div>
 
     <script>
-        // Loading Sequence
-        const msgs = ["SYNCHRONIZING...", "BYPASSING FIREWALL...", "FETCHING UI...", "ONLINE."];
+        // Loading
+        const msgs = ["BYPASSING...", "SYNCING...", "LOADING UI...", "READY."];
         let i = 0;
         const msgEl = document.getElementById('load-msg');
-        const interval = setInterval(() => {
-            if(i < msgs.length) { msgEl.innerText = msgs[i]; i++; }
-        }, 400);
+        setInterval(() => { if(i < msgs.length) { msgEl.innerText = msgs[i]; i++; } }, 400);
 
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -349,24 +344,14 @@
             }, 2000);
         });
 
-        // Navigation Controls
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
+        // Navigation
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
 
         function switchView(viewId) {
-            // Hide all views
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active-view'));
-            // Remove active from menu items
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-
-            // Show selected view
             document.getElementById('view-' + viewId).classList.add('active-view');
             
-            // Set menu item as active
-            event.currentTarget.classList.add('active');
-
-            // Update Header Text
             const titles = {
                 'dashboard': 'DASHBOARD',
                 'social-dl': 'SOCIAL_DL',
@@ -376,8 +361,7 @@
                 'flexa': 'FLEXA_LITE'
             };
             document.getElementById('view-title').innerHTML = `Vajira<br>${titles[viewId]}`;
-            
-            toggleMenu(); // Auto-close sidebar
+            toggleMenu();
         }
     </script>
 </body>
