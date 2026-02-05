@@ -508,7 +508,7 @@
 
         
 
-        <div id="view-dashboard" class="view-section active-view">
+<div id="view-dashboard" class="view-section active-view">
     <div class="grid">
         <div class="card">
             <div class="card-header-flex">
@@ -516,35 +516,61 @@
                 <span class="live-tag"><span class="pulse-dot"></span> LIVE</span>
             </div>
             <h3>SYSTEM_PERFORMANCE</h3>
-            
             <div class="stat-row">
                 <div class="stat-label">CPU_LOAD</div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="cpu-bar" style="width: 45%"></div>
-                </div>
+                <div class="progress-container"><div class="progress-bar" id="cpu-bar" style="width: 45%"></div></div>
                 <div class="stat-value" id="cpu-text">45%</div>
             </div>
-
             <div class="stat-row">
                 <div class="stat-label">RAM_USAGE</div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="ram-bar" style="width: 62%" data-color="pink"></div>
-                </div>
+                <div class="progress-container"><div class="progress-bar" id="ram-bar" style="width: 62%" data-color="pink"></div></div>
                 <div class="stat-value" id="ram-text">62%</div>
             </div>
         </div>
 
         <div class="card">
-            <i class="fas fa-network-wired"></i>
-            <h3>NETWORK_REACTION</h3>
-            <p>LATENCY: <span id="latency-val" style="color: var(--cyan)">12ms</span></p>
-            <p>STATUS: <span class="status-online">STABLE_ENCRYPTED</span></p>
-            <div class="mini-graph">
-                <div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div><div class="graph-bar"></div>
+            <div class="card-header-flex">
+                <i class="fas fa-battery-three-quarters"></i>
+                <span id="pwr-status" style="font-size: 0.6rem; color: var(--cyan);">DISCHARGING</span>
+            </div>
+            <h3>POWER_MANAGEMENT</h3>
+            <div class="stat-row">
+                <div class="stat-label">BATTERY_LEVEL</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="bat-bar" style="width: 85%; background: #00ff88; box-shadow: 0 0 10px #00ff88;"></div>
+                </div>
+                <div class="stat-value" id="bat-text">85%</div>
+            </div>
+            <p style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">SOURCE: <span style="color:white">INTERNAL_CELL</span></p>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-database"></i>
+            <h3>STORAGE_ALLOCATION</h3>
+            <div class="stat-row">
+                <div class="stat-label">SSD_MAIN_PARTITION</div>
+                <div class="progress-container"><div class="progress-bar" style="width: 78%"></div></div>
+                <div class="stat-value">182GB / 256GB</div>
+            </div>
+            <div class="mini-graph" style="margin-top:15px; display:flex; gap:2px;">
+                <div style="height:10px; width:20%; background:var(--cyan);"></div>
+                <div style="height:10px; width:45%; background:var(--pink);"></div>
+                <div style="height:10px; width:15%; background:gray;"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-shield-halved"></i>
+            <h3>SECURITY_FIREWALL</h3>
+            <div id="sys-logs" style="font-family:'JetBrains Mono'; font-size:0.6rem; color:rgba(255,255,255,0.4); height:80px; overflow:hidden;">
+                <div>> INITIALIZING FIREWALL...</div>
+                <div>> SCANNING PORT 443...</div>
+                <div>> ENCRYPTED_TUNNEL: ACTIVE</div>
             </div>
         </div>
     </div>
 </div>
+
 
 
         <div id="view-social-dl" class="view-section">
@@ -635,6 +661,39 @@
         });
 
 
+        function updateExtendedStats() {
+            // Update CPU & RAM (already in your code, keeping it synced)
+            const cpu = Math.floor(Math.random() * (55 - 20) + 20);
+            document.getElementById('cpu-bar').style.width = cpu + '%';
+            document.getElementById('cpu-text').innerText = cpu + '%';
+
+            // Fake Battery Drain simulation
+            let batLevel = parseInt(document.getElementById('bat-text').innerText);
+            if (batLevel > 5) {
+                document.getElementById('bat-bar').style.width = (batLevel - 0.01) + '%';
+                // Note: Real battery API can be used, but this keeps the 'OS' feel.
+            }
+
+            // Update Logs
+            const logContainer = document.getElementById('sys-logs');
+            const activities = [
+                "> INCOMING CONNECTION CLOAKED",
+                "> DATA PACKET RECEIVED",
+                "> PORT SCAN BLOCKED",
+                "> SYSTEM OPTIMIZED",
+                "> HEARTBEAT_PULSE: OK"
+            ];
+            const newLog = document.createElement('div');
+            newLog.innerText = activities[Math.floor(Math.random() * activities.length)];
+            logContainer.prepend(newLog);
+            if(logContainer.children.length > 5) logContainer.lastChild.remove();
+        }
+
+        setInterval(updateExtendedStats, 3000);
+
+
+
+        
 
         function updateLiveStats() {
             // Random CPU fluctuation
