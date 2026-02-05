@@ -1240,12 +1240,12 @@ function togglePhoneMode() {
 // --- PHONE AUTH LOGIC ---
 
 function handlePhoneAuth() {
+    const btn = document.getElementById('send-otp-btn');
     const phoneNumber = document.getElementById('phone-number').value;
     
-    if(!phoneNumber.startsWith('+')) {
-        alert("FORMAT_ERROR: Use international format (e.g., +947XXXXXXXX)");
-        return;
-    }
+    // Add visual feedback
+    btn.innerText = "AUTHENTICATING...";
+    btn.disabled = true;
 
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
         'size': 'invisible'
@@ -1255,14 +1255,21 @@ function handlePhoneAuth() {
         .then((result) => {
             confirmationResult = result;
             document.getElementById('otp-verify-section').style.display = 'block';
-            document.getElementById('send-otp-btn').style.display = 'none';
-            // Assuming showTechAlert is the function we built earlier
+            btn.style.display = 'none';
             showTechAlert("OTP_SENT", "CHECK_SMS_INBOX");
         }).catch((error) => {
-            alert("SMS_FAILED: " + error.message);
-            if(window.recaptchaVerifier) window.recaptchaVerifier.clear();
+            // Reset button on error
+            btn.innerText = "SEND_OTP_KEY";
+            btn.disabled = false;
+            
+            if (error.code === 'auth/billing-not-enabled') {
+                alert("CRITICAL_ERROR: Upgrade to Blaze Plan or use your Testing Number.");
+            } else {
+                alert("SMS_FAILED: " + error.message);
+            }
         });
 }
+
 
 function verifyOtp() {
     const code = document.getElementById('verification-code').value;
@@ -1276,6 +1283,11 @@ function verifyOtp() {
 }
 
 
+
+
+
+
+        
         
 
 function handleSignup() {
