@@ -30,6 +30,74 @@
         }
 
 
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 20000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: #05080f;
+            border: 1px solid var(--cyan);
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+            text-align: center;
+        }
+
+        .login-desc { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-bottom: 25px; }
+
+        .social-auth-grid { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; }
+        
+        .social-btn {
+            background: transparent;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            color: white;
+            padding: 12px;
+            flex: 1;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .social-btn:hover { border-color: var(--cyan); background: rgba(0, 242, 255, 0.1); }
+
+        .divider { 
+            display: flex; align-items: center; margin: 20px 0; 
+            font-size: 0.6rem; color: gray; font-family: 'JetBrains Mono';
+        }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.1); margin: 0 10px; }
+
+        .login-input {
+            width: 100%;
+            background: #0a0f1a;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px;
+            color: white;
+            margin-bottom: 15px;
+            font-family: 'JetBrains Mono';
+        }
+
+        .login-primary-btn {
+            width: 100%;
+            background: var(--cyan);
+            color: black;
+            border: none;
+            padding: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono';
+            transition: 0.3s;
+        }
+        .login-primary-btn:hover { box-shadow: 0 0 20px var(--cyan); transform: scale(1.02); }
+
+
+        
 
 
         /* Stat Rows & Progress Bars */
@@ -665,6 +733,31 @@
 
 
 
+
+
+        // Show/Hide Logic
+        function openLogin() { document.getElementById('login-modal').style.display = 'flex'; }
+        function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
+
+        // Social Authentication Handler
+        function handleSocial(provider) {
+            console.log(`Connecting to ${provider} gateway...`);
+            // Here you would call Firebase/Supabase Auth:
+            // firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+            alert(`${provider} AUTH_INITIALIZED: Check Console for Callback`);
+        }
+
+        function handleLogin() {
+            // Add your logic to verify email/pass
+            alert("SESSION_INITIATED: ACCESS_GRANTED");
+            closeLogin();
+        }
+
+
+
+
+        
+
 async function initBattery() {
     if ('getBattery' in navigator) {
         const battery = await navigator.getBattery();
@@ -807,5 +900,37 @@ initBattery();
             toggleMenu();
         }
     </script>
+
+
+
+<div id="login-modal" class="login-overlay">
+    <div class="login-box">
+        <div class="menu-header">
+            <span><i class="fas fa-user-shield"></i> AUTH_REQUIRED</span>
+            <i class="fas fa-xmark close-btn" onclick="closeLogin()"></i>
+        </div>
+        
+        <p class="login-desc">INITIALIZE SECURE_SESSION TO ACCESS_CORE</p>
+
+        <div class="social-auth-grid">
+            <button class="social-btn google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
+            <button class="social-btn facebook" onclick="handleSocial('facebook')"><i class="fa-brands fa-facebook-f"></i></button>
+            <button class="social-btn github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
+        </div>
+
+        <div class="divider"><span>OR_USE_EMAIL</span></div>
+
+        <input type="email" placeholder="USER_IDENTIFIER" class="login-input">
+        <input type="password" placeholder="ENCRYPTED_KEY" class="login-input">
+        
+        <button class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+        
+        <p class="signup-link">NO_ACCESS_KEY? <a href="#" onclick="toggleAuthMode()">REQUEST_CREDENTIALS</a></p>
+    </div>
+</div>
+
+
+
+    
 </body>
 </html>
