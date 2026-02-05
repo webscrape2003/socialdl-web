@@ -800,9 +800,9 @@
             <i class="fas fa-xmark close-btn" onclick="closeLogin()"></i>
         </div>
         
-        <p class="login-desc">SELECT LOGIN PLATFORM IN HERE</p>
+        <p class="login-desc" id="auth-description">SELECT LOGIN PLATFORM IN HERE</p>
 
-        <div class="social-auth-grid">
+        <div class="social-auth-grid" id="social-container">
             <button class="social-btn google" onclick="handleSocial('google')">
                 <i class="fa-brands fa-google"></i>
             </button>
@@ -811,22 +811,38 @@
             </button>
         </div>
 
-        <div class="divider"><span>OR_USE_EMAIL</span></div>
+        <div class="divider"><span id="divider-text">OR_USE_EMAIL</span></div>
 
-<input type="email" placeholder="USER_IDENTIFIER" class="login-input" id="login-email">
-<input type="password" placeholder="ENCRYPTED_KEY" class="login-input" id="login-pass">
+        <div id="email-auth-fields">
+            <input type="email" placeholder="USER_IDENTIFIER" class="login-input" id="login-email">
+            <input type="password" placeholder="ENCRYPTED_KEY" class="login-input" id="login-pass">
+            <button id="login-btn" class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+            <button id="signup-btn" class="login-primary-btn" onclick="handleSignup()" style="display:none; background: var(--pink);">CREATE_CREDENTIALS</button>
+        </div>
 
-<button id="login-btn" class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+        <div id="phone-auth-container" style="display:none;">
+            <input type="tel" placeholder="+947XXXXXXXX" class="login-input" id="phone-number">
+            <button id="send-otp-btn" class="login-primary-btn" onclick="handlePhoneAuth()">SEND_OTP_KEY</button>
+            
+            <div id="otp-verify-section" style="display:none; margin-top:15px;">
+                <input type="text" placeholder="6-DIGIT_CODE" class="login-input" id="verification-code">
+                <button class="login-primary-btn" style="background: var(--pink);" onclick="verifyOtp()">VERIFY_IDENTITY</button>
+            </div>
+        </div>
 
-<button id="signup-btn" class="login-primary-btn" onclick="handleSignup()" style="display:none; background: var(--pink);">CREATE_CREDENTIALS</button>
+        <div id="recaptcha-container"></div>
 
-<p id="auth-toggle-text" style="font-size: 0.65rem; margin-top: 15px; text-align: center;">
-    NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>
-</p>
-
-    
+        <div class="auth-footer-links" style="margin-top: 15px; text-align: center; display: flex; flex-direction: column; gap: 8px;">
+            <p id="auth-toggle-text" style="font-size: 0.65rem;">
+                NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>
+            </p>
+            <p style="font-size: 0.6rem;">
+                <span onclick="togglePhoneMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;" id="phone-toggle-text">USE_PHONE_NUMBER</span>
+            </p>
+        </div>
     </div>
 </div>
+
 
 
 
@@ -1162,18 +1178,30 @@ function closeLogin() {
 
 
 let isLoginMode = true;
+let isPhoneMode = false;
+let confirmationResult; // For Firebase Phone Auth
 
 function toggleAuthMode() {
+    // Reset phone mode if we switch between Login/Signup
+    isPhoneMode = false; 
     isLoginMode = !isLoginMode;
+    
     const loginBtn = document.getElementById('login-btn');
     const signupBtn = document.getElementById('signup-btn');
     const toggleText = document.getElementById('auth-toggle-text');
-    const desc = document.querySelector('.login-desc');
+    const desc = document.getElementById('auth-description');
+    
+    // UI reset for switching back from Phone
+    document.getElementById('email-auth-fields').style.display = 'block';
+    document.getElementById('phone-auth-container').style.display = 'none';
+    document.getElementById('social-container').style.display = 'flex';
+    document.getElementById('divider-text').innerText = "OR_USE_EMAIL";
+    document.getElementById('phone-toggle-text').innerText = "USE_PHONE_NUMBER";
 
     if (isLoginMode) {
         loginBtn.style.display = 'block';
         signupBtn.style.display = 'none';
-        desc.innerText = "SELECT AUTH_PROVIDER TO INITIALIZE SESSION";
+        desc.innerText = "SELECT LOGIN PLATFORM IN HERE";
         toggleText.innerHTML = 'NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>';
     } else {
         loginBtn.style.display = 'none';
@@ -1183,7 +1211,72 @@ function toggleAuthMode() {
     }
 }
 
+function togglePhoneMode() {
+    isPhoneMode = !isPhoneMode;
+    const emailFields = document.getElementById('email-auth-fields');
+    const phoneFields = document.getElementById('phone-auth-container');
+    const socialGrid = document.getElementById('social-container');
+    const divider = document.getElementById('divider-text');
+    const phoneToggle = document.getElementById('phone-toggle-text');
+    const desc = document.getElementById('auth-description');
 
+    if (isPhoneMode) {
+        emailFields.style.display = 'none';
+        socialGrid.style.display = 'none';
+        phoneFields.style.display = 'block';
+        desc.innerText = "INITIALIZE SECURE_MOBILE_LINK";
+        divider.innerText = "SECURE_MOBILE_LINK";
+        phoneToggle.innerText = "RETURN_TO_EMAIL";
+    } else {
+        emailFields.style.display = 'block';
+        socialGrid.style.display = 'flex';
+        phoneFields.style.display = 'none';
+        desc.innerText = isLoginMode ? "SELECT LOGIN PLATFORM IN HERE" : "CREATE NEW SYSTEM IDENTIFIER";
+        divider.innerText = "OR_USE_EMAIL";
+        phoneToggle.innerText = "USE_PHONE_NUMBER";
+    }
+}
+
+// --- PHONE AUTH LOGIC ---
+
+function handlePhoneAuth() {
+    const phoneNumber = document.getElementById('phone-number').value;
+    
+    if(!phoneNumber.startsWith('+')) {
+        alert("FORMAT_ERROR: Use international format (e.g., +947XXXXXXXX)");
+        return;
+    }
+
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'invisible'
+    });
+
+    auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+        .then((result) => {
+            confirmationResult = result;
+            document.getElementById('otp-verify-section').style.display = 'block';
+            document.getElementById('send-otp-btn').style.display = 'none';
+            // Assuming showTechAlert is the function we built earlier
+            showTechAlert("OTP_SENT", "CHECK_SMS_INBOX");
+        }).catch((error) => {
+            alert("SMS_FAILED: " + error.message);
+            if(window.recaptchaVerifier) window.recaptchaVerifier.clear();
+        });
+}
+
+function verifyOtp() {
+    const code = document.getElementById('verification-code').value;
+    
+    confirmationResult.confirm(code).then((result) => {
+        const user = result.user;
+        unlockSystem("MOBILE_USER_" + user.phoneNumber.slice(-4));
+    }).catch((error) => {
+        alert("INVALID_CODE: Verification failed.");
+    });
+}
+
+
+        
 
 function handleSignup() {
     const email = document.getElementById('login-email').value;
