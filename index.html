@@ -970,93 +970,62 @@ const firebaseConfig = {
 
 
 
-// Initialize Firebase safely
-if (!firebase.apps.length) {
-    try {
-        firebase.initializeApp(firebaseConfig);
-        console.log("Firebase Core Initialized");
-    } catch (e) {
-        console.error("Firebase Init Error:", e);
-    }
-}
 
+// STEP 2: Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const auth = firebase.auth();
 
-// Function to handle Social Clicks
+// STEP 3: The Real Login Function
+function handleLogin() {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-pass').value;
+
+    // Check if email format is correct
+    if (!email.includes('@')) {
+        alert("SYSTEM_ERROR: Please enter a valid email (e.g., name@gmail.com)");
+        return;
+    }
+
+    auth.signInWithEmailAndPassword(email, pass)
+        .then((userCredential) => {
+            alert("ACCESS_GRANTED: Welcome back.");
+            closeLogin();
+            document.getElementById('user-status-text').innerText = "USER_AUTHORIZED";
+        })
+        .catch((error) => {
+            // This specifically fixes your "Configuration Not Found" error
+            if (error.code === 'auth/configuration-not-found') {
+                alert("CRITICAL: You must enable 'Email/Password' inside the Firebase Console Sign-in Methods!");
+            } else {
+                alert("AUTH_ERROR: " + error.message);
+            }
+        });
+}
+
+// STEP 4: Social Login Function
 function handleSocial(providerName) {
     let provider;
     if (providerName === 'google') provider = new firebase.auth.GoogleAuthProvider();
     if (providerName === 'facebook') provider = new firebase.auth.FacebookAuthProvider();
     if (providerName === 'github') provider = new firebase.auth.GithubAuthProvider();
 
-    // Use the Auth object to trigger the popup
     auth.signInWithPopup(provider)
         .then((result) => {
-            alert("ACCESS_GRANTED: " + result.user.displayName);
-            location.reload(); // Refresh to show logged in state
+            alert("WELCOME: " + result.user.displayName);
+            closeLogin();
+            document.getElementById('user-status-text').innerText = result.user.displayName.toUpperCase();
         })
         .catch((error) => {
+            alert("SOCIAL_AUTH_ERROR: Ensure this provider is ENABLED in Firebase Console.");
             console.error(error);
-            alert("SYSTEM_ERROR: " + error.message);
         });
 }
+
 
 
         
-
-// Real Email/Password Login
-function handleLogin() {
-    const email = document.getElementById('login-email').value;
-    const pass = document.getElementById('login-pass').value;
-
-    auth.signInWithEmailAndPassword(email, pass)
-        .then((userCredential) => {
-            alert("SESSION_INITIALIZED");
-            closeLogin();
-        })
-        .catch((error) => {
-            alert("ERROR: " + error.message);
-        });
-}
-
-function updateUIAfterLogin(user) {
-    document.getElementById('user-status-text').innerText = user.displayName.toUpperCase();
-    document.querySelector('#login-trigger span').innerText = "ACCOUNT";
-}
-
-
-    
-
-
-// 1. Open the Modal
-function openLogin() {
-    document.getElementById('login-modal').style.display = 'flex';
-}
-
-// 2. Close the Modal
-function closeLogin() {
-    document.getElementById('login-modal').style.display = 'none';
-}
-
-// 3. Handle Social Clicks
-function handleSocial(provider) {
-    // Visual feedback that the system is "working"
-    console.log(`Attempting handshake with ${provider}...`);
-    
-    // For a real app, you'd use Firebase: 
-    // auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-    
-    alert(`SYSTEM_MESSAGE: Redirecting to ${provider.toUpperCase()} secure gateway...`);
-    
-    // Simulate a successful login after a brief delay
-    setTimeout(() => {
-        handleLogin(); 
-    }, 1000);
-}
-
-// 4. Update UI after Login
-
-
 
 
 
