@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
+
     <style>
         :root {
             --cyan: #00f2ff;
@@ -74,14 +75,19 @@
 /* Fix the Login Textboxes (Second Image) */
 .login-input {
     width: 100%;
-    background: rgba(0, 242, 255, 0.05) !important;
-    border: 1px solid rgba(0, 242, 255, 0.3) !important;
+    background: #0a0f1a !important; /* Dark background */
+    border: 1px solid var(--cyan) !important;
+    color: var(--cyan) !important;
     padding: 12px;
-    color: white !important;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-family: 'JetBrains Mono', monospace;
-    outline: none;
+    box-shadow: inset 0 0 5px rgba(0, 242, 255, 0.1);
 }
+
+.login-input::placeholder {
+    color: rgba(0, 242, 255, 0.3);
+}
+
 
 .login-primary-btn {
     width: 100%;
@@ -93,6 +99,7 @@
     font-family: 'JetBrains Mono', monospace;
     color: black;
 }
+
 
 
         
@@ -961,40 +968,39 @@ const firebaseConfig = {
 
 
 
-
-// Initialize
+// Initialize Firebase safely
 if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+    try {
+        firebase.initializeApp(firebaseConfig);
+        console.log("Firebase Core Initialized");
+    } catch (e) {
+        console.error("Firebase Init Error:", e);
+    }
 }
+
 const auth = firebase.auth();
 
-
-        
-        
-// Real Social Login Method
+// Function to handle Social Clicks
 function handleSocial(providerName) {
     let provider;
-    
-    if (providerName === 'google') {
-        provider = new firebase.auth.GoogleAuthProvider();
-    } else if (providerName === 'facebook') {
-        provider = new firebase.auth.FacebookAuthProvider();
-    } else if (providerName === 'github') {
-        provider = new firebase.auth.GithubAuthProvider();
-    }
+    if (providerName === 'google') provider = new firebase.auth.GoogleAuthProvider();
+    if (providerName === 'facebook') provider = new firebase.auth.FacebookAuthProvider();
+    if (providerName === 'github') provider = new firebase.auth.GithubAuthProvider();
 
+    // Use the Auth object to trigger the popup
     auth.signInWithPopup(provider)
         .then((result) => {
-            console.log("Success:", result.user);
-            alert("ACCESS_GRANTED: Welcome " + result.user.displayName);
-            closeLogin();
-            updateUIAfterLogin(result.user);
+            alert("ACCESS_GRANTED: " + result.user.displayName);
+            location.reload(); // Refresh to show logged in state
         })
         .catch((error) => {
-            console.error("Auth Error:", error.message);
-            alert("AUTH_FAILED: " + error.message);
+            console.error(error);
+            alert("SYSTEM_ERROR: " + error.message);
         });
 }
+
+
+        
 
 // Real Email/Password Login
 function handleLogin() {
