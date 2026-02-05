@@ -851,39 +851,55 @@
 
 
 
-        // Open the modal
-        function openLogin() {
-            const modal = document.getElementById('login-modal');
-            modal.style.display = 'flex';
-            console.log("Login Gate Opened.");
-        }
-
-        // Close the modal
-        function closeLogin() {
-            document.getElementById('login-modal').style.display = 'none';
-        }
-
-        // Social Login Logic (Placeholder for Firebase/Supabase)
-        function handleSocial(provider) {
-            alert(`CONNECTING_TO_${provider.toUpperCase()}_GATEWAY...`);
-            
-            // To make this 'Real', you would insert Firebase code here:
-            // Example: firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
-            
-            setTimeout(() => {
-                alert(`SUCCESS: ${provider} Authenticated.`);
-                handleLogin(); // Close and update UI
-            }, 1500);
-        }
-
-        function handleLogin() {
-            document.getElementById('user-status-text').innerText = "USER_ACTIVE";
-            document.querySelector('#login-trigger span').innerText = "SESSION_01";
-            closeLogin();
-        }
+    
 
 
+// 1. Open the Modal
+function openLogin() {
+    document.getElementById('login-modal').style.display = 'flex';
+}
 
+// 2. Close the Modal
+function closeLogin() {
+    document.getElementById('login-modal').style.display = 'none';
+}
+
+// 3. Handle Social Clicks
+function handleSocial(provider) {
+    // Visual feedback that the system is "working"
+    console.log(`Attempting handshake with ${provider}...`);
+    
+    // For a real app, you'd use Firebase: 
+    // auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    
+    alert(`SYSTEM_MESSAGE: Redirecting to ${provider.toUpperCase()} secure gateway...`);
+    
+    // Simulate a successful login after a brief delay
+    setTimeout(() => {
+        handleLogin(); 
+    }, 1000);
+}
+
+// 4. Update UI after Login
+function handleLogin() {
+    const statusText = document.getElementById('user-status-text');
+    const loginBtn = document.querySelector('#login-trigger span');
+    
+    if(statusText) statusText.innerText = "USER_01_AUTHORIZED";
+    if(loginBtn) loginBtn.innerText = "DASHBOARD_LIVE";
+    
+    closeLogin();
+    
+    // Optional: add a sound effect or glitch transition here
+    console.log("ACCESS_GRANTED: Session initialized.");
+}
+
+
+
+
+
+
+        
         
 
 async function initBattery() {
