@@ -734,14 +734,18 @@
 
         <div class="divider"><span>OR_USE_EMAIL</span></div>
 
-        <input type="email" placeholder="USER_IDENTIFIER" class="login-input" id="login-email">
-        <input type="password" placeholder="ENCRYPTED_KEY" class="login-input" id="login-pass">
-        
-        <button class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
-        
-        <p class="signup-link" style="font-size: 0.6rem; margin-top: 15px; color: rgba(255,255,255,0.3);">
-            NO_ACCESS_KEY? <a href="#" style="color: var(--pink); text-decoration: none;">REQUEST_CREDENTIALS</a>
-        </p>
+<input type="email" placeholder="USER_IDENTIFIER" class="login-input" id="login-email">
+<input type="password" placeholder="ENCRYPTED_KEY" class="login-input" id="login-pass">
+
+<button id="login-btn" class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+
+<button id="signup-btn" class="login-primary-btn" onclick="handleSignup()" style="display:none; background: var(--pink);">CREATE_CREDENTIALS</button>
+
+<p id="auth-toggle-text" style="font-size: 0.65rem; margin-top: 15px; text-align: center;">
+    NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>
+</p>
+
+    
     </div>
 </div>
 
@@ -1054,6 +1058,55 @@ function closeLogin() {
 
 
 
+
+let isLoginMode = true;
+
+function toggleAuthMode() {
+    isLoginMode = !isLoginMode;
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    const toggleText = document.getElementById('auth-toggle-text');
+    const desc = document.querySelector('.login-desc');
+
+    if (isLoginMode) {
+        loginBtn.style.display = 'block';
+        signupBtn.style.display = 'none';
+        desc.innerText = "SELECT AUTH_PROVIDER TO INITIALIZE SESSION";
+        toggleText.innerHTML = 'NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>';
+    } else {
+        loginBtn.style.display = 'none';
+        signupBtn.style.display = 'block';
+        desc.innerText = "CREATE NEW SYSTEM IDENTIFIER";
+        toggleText.innerHTML = 'ALREADY_HAVE_KEY? <span onclick="toggleAuthMode()" style="color: var(--pink); cursor: pointer; text-decoration: underline;">RETURN_TO_LOGIN</span>';
+    }
+}
+
+
+
+function handleSignup() {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-pass').value;
+
+    if (pass.length < 6) {
+        alert("SECURITY_FLAW: Password must be at least 6 characters.");
+        return;
+    }
+
+    auth.createUserWithEmailAndPassword(email, pass)
+        .then((userCredential) => {
+            alert("CREDENTIALS_CREATED: Welcome to the system.");
+            unlockSystem(email.split('@')[0].toUpperCase()); // Uses the first part of email as username
+        })
+        .catch((error) => {
+            if (error.code === 'auth/email-already-in-use') {
+                alert("ERROR: User already exists. Try logging in.");
+            } else {
+                alert("REGISTRATION_ERROR: " + error.message);
+            }
+        });
+}
+
+        
 
 function unlockSystem(username) {
     alert("ACCESS_GRANTED: Welcome " + username);
