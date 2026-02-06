@@ -36,6 +36,90 @@
 
 
 
+   .auth-shell {
+    width: 400px;
+    height: 520px;
+    background: rgba(2, 4, 10, 0.95);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0, 242, 255, 0.15);
+}
+
+.auth-wrapper {
+    display: flex;
+    width: 300%; /* Three panels side-by-side */
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.auth-panel {
+    width: 33.33%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.scanner-bar {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    z-index: 5;
+    animation: scan 4s infinite linear;
+}
+
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+.input-glow {
+    margin-bottom: 15px;
+    border-left: 2px solid var(--cyan);
+    background: rgba(0, 242, 255, 0.03);
+}
+
+.input-glow input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 12px;
+    color: white;
+    font-family: 'JetBrains Mono';
+    outline: none;
+}
+
+.main-auth-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.main-auth-btn:hover {
+    background: var(--cyan);
+    color: black;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+}
+
+.pink-theme { border-color: var(--pink); color: var(--pink); }
+.pink-theme:hover { background: var(--pink); color: white; box-shadow: 0 0 20px var(--pink); }
+
+.auth-nav {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: rgba(0, 242, 255, 0.6);
+    cursor: pointer;
+}
+
+.auth-nav .highlight { color: var(--cyan); text-decoration: underline; }
+     
+
 
 .auth-container {
     width: 800px;
@@ -979,69 +1063,91 @@
 
     
 <div id="login-modal" class="login-overlay">
-    <div class="auth-container">
-        <i class="fas fa-xmark auth-close" onclick="closeLogin()"></i>
+    <div class="auth-shell">
+        <div class="scanner-bar"></div>
+        <i class="fas fa-xmark auth-close-x" onclick="closeLogin()"></i>
 
-        <div class="auth-side-panel">
-            <div class="panel-content">
-                <h2 id="panel-title">WELCOME_BACK</h2>
-                <p id="panel-desc">ENTER SYSTEM CREDENTIALS TO INITIALIZE SESSION</p>
-                <div class="tech-lines"></div>
+        <div class="auth-wrapper" id="auth-wrapper">
+            
+            <div class="auth-panel" id="login-view">
+                <div class="panel-header">
+                    <h2 class="cyber-glitch">LOGIN_SEQUENCE</h2>
+                    <p>INITIALIZE SECURE ACCESS PROTOCOL</p>
+                </div>
+
+                <div class="social-auth-row">
+                    <button class="social-icon google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
+                    <button class="social-icon github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
+                    <button class="social-icon guest" onclick="handleAnonymousLogin()" title="GUEST_ACCESS"><i class="fas fa-user-secret"></i></button>
+                </div>
+
+                <div class="auth-divider"><span>OR_IDENTITY_KEY</span></div>
+
+                <div id="login-email-container">
+                    <div class="input-glow">
+                        <input type="email" id="login-email" placeholder="USER_IDENTIFIER">
+                    </div>
+                    <div class="input-glow">
+                        <input type="password" id="login-pass" placeholder="ENCRYPTED_KEY">
+                    </div>
+                    <button class="main-auth-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+                </div>
+
+                <div class="auth-nav">
+                    <span onclick="togglePhoneMode()">BYPASS_TO_MOBILE</span>
+                    <span class="highlight" onclick="switchAuthFlow('signup')">CREATE_NEW_ID</span>
+                </div>
             </div>
-        </div>
 
-        <div class="auth-form-box">
-            <div class="form-wrapper" id="form-wrapper">
-                
-                <div class="auth-view" id="login-view">
-                    <h3 class="view-header"><i class="fas fa-shield-halved"></i> SECURE_LOGIN</h3>
+            <div class="auth-panel" id="signup-view">
+                <div class="panel-header">
+                    <h2 class="cyber-glitch pink">REGISTER_ID</h2>
+                    <p>ESTABLISH NEW CORE CREDENTIALS</p>
+                </div>
+
+                <div class="auth-input-group">
+                    <div class="input-glow">
+                        <input type="email" id="signup-email" placeholder="NEW_IDENTIFIER">
+                    </div>
+                    <div class="input-glow">
+                        <input type="password" id="signup-pass" placeholder="CREATE_ACCESS_KEY">
+                    </div>
+                    <button class="main-auth-btn pink-theme" onclick="handleSignup()">GENERATE_IDENTITY</button>
+                </div>
+
+                <div class="auth-nav">
+                    <span class="highlight" onclick="switchAuthFlow('login')">RETURN_TO_LOGIN</span>
+                </div>
+            </div>
+
+            <div class="auth-panel" id="phone-view">
+                <div class="panel-header">
+                    <h2>MOBILE_LINK</h2>
+                    <p>OTP_VERIFICATION_REQUIRED</p>
+                </div>
+
+                <div id="phone-auth-container">
+                    <div class="input-glow">
+                        <input type="tel" id="phone-number" placeholder="+94 7X XXX XXXX">
+                    </div>
+                    <button id="send-otp-btn" class="main-auth-btn" onclick="handlePhoneAuth()">REQUEST_OTP</button>
                     
-                    <div class="social-auth-grid">
-                        <button class="social-btn google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
-                        <button class="social-btn github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
-                    </div>
-
-                    <div class="auth-input-group">
-                        <input type="email" id="login-email" placeholder=" " required>
-                        <label>USER_IDENTIFIER</label>
-                    </div>
-                    <div class="auth-input-group">
-                        <input type="password" id="login-pass" placeholder=" " required>
-                        <label>ENCRYPTED_KEY</label>
-                    </div>
-
-                    <button class="auth-submit-btn" onclick="handleLogin()">INITIATE_SESSION</button>
-                    
-                    <div class="auth-footer">
-                        <span onclick="togglePhoneMode()">USE_MOBILE_LINK</span>
-                        <span onclick="switchAuthView('signup')">CREATE_NEW_ACCOUNT</span>
+                    <div id="otp-verify-section" style="display:none; margin-top:15px;">
+                        <div class="input-glow">
+                            <input type="text" id="verification-code" placeholder="6-DIGIT_OTP">
+                        </div>
+                        <button class="main-auth-btn pink-theme" onclick="verifyOtp()">VERIFY_LINK</button>
                     </div>
                 </div>
 
-                <div class="auth-view" id="signup-view">
-                    <h3 class="view-header" style="color: var(--pink);"><i class="fas fa-user-plus"></i> REGISTER_USER</h3>
-                    
-                    <div class="auth-input-group">
-                        <input type="email" id="signup-email" placeholder=" " required>
-                        <label>NEW_IDENTIFIER</label>
-                    </div>
-                    <div class="auth-input-group">
-                        <input type="password" id="signup-pass" placeholder=" " required>
-                        <label>CREATE_KEY</label>
-                    </div>
-
-                    <button class="auth-submit-btn signup-theme" onclick="handleSignup()">CREATE_CREDENTIALS</button>
-                    
-                    <div class="auth-footer">
-                        <span onclick="switchAuthView('login')">RETURN_TO_LOGIN</span>
-                    </div>
+                <div class="auth-nav">
+                    <span onclick="togglePhoneMode()">RETURN_TO_BASE_AUTH</span>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
+<div id="recaptcha-container"></div>
 
 
 
@@ -1362,6 +1468,37 @@ function switchAuthView(view) {
     }
 }
 
+
+
+function switchAuthFlow(mode) {
+    const wrapper = document.getElementById('auth-wrapper');
+    
+    if (mode === 'signup') {
+        wrapper.style.transform = 'translateX(-33.33%)';
+    } else if (mode === 'phone') {
+        wrapper.style.transform = 'translateX(-66.66%)';
+    } else {
+        wrapper.style.transform = 'translateX(0%)';
+    }
+}
+
+// Updated toggle for phone mode to use the new slider
+function togglePhoneMode() {
+    isPhoneMode = !isPhoneMode;
+    if (isPhoneMode) {
+        switchAuthFlow('phone');
+    } else {
+        switchAuthFlow('login');
+    }
+}
+
+// Added Anonymous Logic back in
+function handleAnonymousLogin() {
+    showTechAlert("INITIALIZING_GUEST", "LIMITED_PRIVILEGES");
+    auth.signInAnonymously()
+        .then(() => unlockSystem("GUEST_" + Math.floor(Math.random()*999)))
+        .catch(err => alert("GUEST_ERR: " + err.message));
+}
 
         
         
