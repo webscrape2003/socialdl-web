@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1362,6 +1362,15 @@ function closeTechAlert() {
     document.getElementById('tech-alert').style.display = 'none';
 }
 
+function unlockSystem(username) {
+    // Replace alert() with our custom UI
+    showTechAlert("ACCESS_GRANTED", username);
+    
+    // Original unlock logic
+    closeLogin();
+    document.getElementById('main').classList.remove('locked');
+    document.getElementById('user-status-text').innerText = username;
+}
 
 
 
@@ -1414,11 +1423,40 @@ function togglePhoneMode() {
     switchAuthMode(isPhoneMode ? 'phone' : 'login');
 }
 
-
-
         
         
-//
+// STEP 4: Social Login Function
+
+function handleSocial(providerName) {
+    let provider;
+    if (providerName === 'google') provider = new firebase.auth.GoogleAuthProvider();
+    if (providerName === 'github') provider = new firebase.auth.GithubAuthProvider();
+
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            // UNLOCK SYSTEM
+            unlockSystem(result.user.displayName.toUpperCase());
+        })
+        .catch((error) => {
+            alert("SOCIAL_AUTH_ERROR: " + error.message);
+        });
+}
+
+// --- ANONYMOUS GUEST AUTH ---
+// Added to bypass billing/SMS issues for immediate access
+function handleAnonymousLogin() {
+    showTechAlert("INITIALIZING_GUEST", "LIMITED_PRIVILEGES_APPLIED");
+
+    auth.signInAnonymously()
+        .then(() => {
+            // Unlocks system with a unique temporary ID
+            unlockSystem("GUEST_USER_" + Math.floor(1000 + Math.random() * 9000));
+        })
+        .catch((error) => {
+            console.error("Anonymous Auth Failed:", error);
+            alert("GUEST_BOOT_FAILED: " + error.message);
+        });
+}
         
 // --- LOGIN MODAL CONTROL ---
 function openLogin() {
@@ -1538,103 +1576,36 @@ function verifyOtp() {
 
 
 
-// --- FIXED UNLOCK SYSTEM (The Master Controller) ---
-function unlockSystem(username) {
-    // 1. Show the high-tech alert
-    showTechAlert("ACCESS_GRANTED", username);
-    
-    // 2. Hide the Login Modal (Fixed ID reference)
-    document.getElementById('login-modal').style.display = 'none';
-    
-    // 3. Remove the blur/lock from the main dashboard
-    const mainContainer = document.getElementById('main');
-    if(mainContainer) {
-        mainContainer.classList.remove('locked');
-    }
-    
-    // 4. Update the Top Status Bar
-    const statusText = document.getElementById('user-status-text');
-    if(statusText) {
-        statusText.innerText = username;
-    }
 
-    console.log("OS_KERNEL: System fully unlocked for " + username);
-}
+        
+        
 
-// --- FIXED EMAIL LOGIN ---
-function handleLogin() {
+function handleSignup() {
     const email = document.getElementById('login-email').value;
     const pass = document.getElementById('login-pass').value;
 
-    if (!email || !pass) {
-        showTechAlert("AUTH_ERROR", "MISSING_CREDENTIALS");
-        return;
-    }
-
-    auth.signInWithEmailAndPassword(email, pass)
-        .then((userCredential) => {
-            const name = userCredential.user.email.split('@')[0].toUpperCase();
-            unlockSystem(name);
-        })
-        .catch((error) => {
-            showTechAlert("ACCESS_DENIED", error.message.toUpperCase());
-        });
-}
-
-// --- FIXED SIGNUP ---
-function handleSignup() {
-    const email = document.getElementById('signup-email').value; // Fixed ID
-    const pass = document.getElementById('signup-pass').value;   // Fixed ID
-
     if (pass.length < 6) {
-        showTechAlert("SECURITY_FLAW", "KEY_TOO_SHORT");
+        alert("SECURITY_FLAW: Password must be at least 6 characters.");
         return;
     }
 
     auth.createUserWithEmailAndPassword(email, pass)
         .then((userCredential) => {
-            const name = email.split('@')[0].toUpperCase();
-            unlockSystem(name);
+            alert("CREDENTIALS_CREATED: Welcome to the system.");
+            unlockSystem(email.split('@')[0].toUpperCase()); // Uses the first part of email as username
         })
         .catch((error) => {
-            showTechAlert("REG_ERROR", error.code);
-        });
-}
-
-// --- FIXED SOCIAL LOGIN ---
-function handleSocial(providerName) {
-    let provider;
-    if (providerName === 'google') provider = new firebase.auth.GoogleAuthProvider();
-    if (providerName === 'github') provider = new firebase.auth.GithubAuthProvider();
-
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            unlockSystem(result.user.displayName.toUpperCase());
-        })
-        .catch((error) => {
-            showTechAlert("SOCIAL_ERROR", "LINK_FAILED");
-        });
-}
-
-// --- FIXED GUEST LOGIN ---
-function handleAnonymousLogin() {
-    showTechAlert("INITIALIZING_GUEST", "CLOAKING_IDENTITY...");
-    auth.signInAnonymously()
-        .then(() => {
-            unlockSystem("GUEST_" + Math.floor(1000 + Math.random() * 9000));
-        })
-        .catch((error) => {
-            showTechAlert("BOOT_ERROR", "GUEST_LINK_FAILED");
+            if (error.code === 'auth/email-already-in-use') {
+                alert("ERROR: User already exists. Try logging in.");
+            } else {
+                alert("REGISTRATION_ERROR: " + error.message);
+            }
         });
 }
 
 
 
 
-
-
-
-        
         
         
 
