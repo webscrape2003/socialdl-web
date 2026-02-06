@@ -42,47 +42,47 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 95%;
+    width: 90%;
     max-width: 450px;
-    height: 80vh; /* Uses 80% of screen height to ensure visibility */
+    height: 80vh; /* Responsive height */
     max-height: 600px;
     display: none;
-    background: var(--bg);
-    border: 1px solid var(--cyan);
-    border-radius: 8px;
+    background: #fff;
+    border: 2px solid #00f2ff;
+    border-radius: 12px;
     overflow: hidden;
-    z-index: 100001;
-    box-shadow: 0 0 50px rgba(0, 242, 255, 0.3);
+    z-index: 10001; /* Higher than pre-loader and sidebar */
+    box-shadow: 0 10px 40px rgba(0, 242, 255, 0.4);
 }
 
 /* Header for the chat box */
 .cbox-header {
-    background: var(--cyan);
+    background: #00f2ff;
     color: #000;
     padding: 12px 15px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
 }
 
-/* The Floating Bubble */
+/* Floating Bubble */
 #cbox-bubble {
     position: fixed;
     bottom: 25px;
     right: 25px;
     width: 60px;
     height: 60px;
-    background: var(--cyan);
+    background: #00f2ff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 100001;
-    box-shadow: 0 0 15px var(--cyan);
-    transition: 0.3s;
+    z-index: 10001;
+    box-shadow: 0 4px 15px rgba(0, 242, 255, 0.5);
+    transition: transform 0.3s ease;
 }
 
 #cbox-bubble:hover {
@@ -1339,16 +1339,17 @@
 
 
 <div id="cbox-bubble" onclick="toggleCbox()">
-    <i class="fas fa-comment-dots" style="color: #000; font-size: 24px;"></i>
+    <i class="bi bi-chat-dots-fill" style="color: #000; font-size: 26px;"></i>
 </div>
 
 <div id="cbox-window">
     <div class="cbox-header">
-        <span><i class="fas fa-terminal"></i> LIVE_CHAT</span>
-        <span onclick="toggleCbox()" style="cursor: pointer; font-size: 24px; line-height: 1;">&times;</span>
+        <span><i class="bi bi-chat-fill"></i> VAJIRA CHAT</span>
+        <span onclick="toggleCbox()" style="cursor: pointer; font-size: 28px; line-height: 1;">&times;</span>
     </div>
-    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="calc(100% - 45px)" frameborder="0" style="display: block;"></iframe>
+    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="calc(100% - 48px)" frameborder="0" style="display: block;"></iframe>
 </div>
+
 
 
 
@@ -1359,12 +1360,14 @@
 
 function toggleCbox() {
     const win = document.getElementById('cbox-window');
+    // If hidden or not set, show it; otherwise hide it
     if (win.style.display === 'none' || win.style.display === '') {
         win.style.display = 'block';
     } else {
         win.style.display = 'none';
     }
 }
+
 
 
 
