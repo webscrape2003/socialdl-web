@@ -35,163 +35,6 @@
 
 
 
-.auth-portal {
-    width: 380px;
-    height: 550px;
-    background: rgba(5, 10, 20, 0.98);
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 0 50px rgba(0, 242, 255, 0.15);
-}
-
-.portal-scanner {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    animation: portal-scan 4s infinite linear;
-    z-index: 5;
-}
-
-@keyframes portal-scan { 0% { top: 0; } 100% { top: 100%; } }
-
-.auth-slider {
-    display: flex;
-    width: 300%; /* Three sections: Login, Signup, Phone */
-    height: 100%;
-    transition: transform 0.7s cubic-bezier(0.85, 0, 0.15, 1);
-}
-
-.auth-section {
-    width: 33.333%;
-    padding: 40px 30px;
-    display: flex;
-    flex-direction: column;
-}
-
-.cyber-title {
-    font-size: 1.5rem;
-    color: var(--cyan);
-    letter-spacing: 3px;
-    margin-bottom: 5px;
-    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-}
-
-.cyber-title.pink { color: var(--pink); text-shadow: 0 0 10px rgba(255, 0, 200, 0.5); }
-
-.cyber-subtitle {
-    font-size: 0.6rem;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 30px;
-}
-
-.cyber-input-wrap {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 20px;
-    padding: 0 15px;
-}
-
-.cyber-input-wrap i { color: var(--cyan); font-size: 0.8rem; margin-right: 15px; }
-.cyber-input-wrap.pink-border i { color: var(--pink); }
-
-.cyber-input-wrap input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 15px 0;
-    color: white;
-    font-family: 'JetBrains Mono';
-    font-size: 0.8rem;
-    outline: none;
-}
-
-.cyber-btn {
-    width: 100%;
-    padding: 15px;
-    background: transparent;
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    font-family: 'Space Grotesk';
-    font-weight: bold;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 10px;
-}
-
-.cyber-btn:hover { background: var(--cyan); color: black; box-shadow: 0 0 20px var(--cyan); }
-.pink-bg { border-color: var(--pink); color: var(--pink); }
-.pink-bg:hover { background: var(--pink); color: white; box-shadow: 0 0 20px var(--pink); }
-
-.auth-nav-links {
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.65rem;
-}
-
-.auth-nav-links span { cursor: pointer; color: rgba(255, 255, 255, 0.5); transition: 0.3s; }
-.auth-nav-links span:hover { color: var(--cyan); }
-.auth-nav-links .highlight { color: var(--cyan); text-decoration: underline; }
-
-
-        
-
-
-/* Guest Button Specific Styling */
-#guest-auth-container .login-primary-btn {
-    position: relative;
-    overflow: hidden;
-    background: rgba(0, 242, 255, 0.03);
-    border: 1px dashed var(--cyan);
-    color: var(--cyan);
-    transition: all 0.4s ease;
-    text-shadow: 0 0 5px var(--cyan);
-}
-
-#guest-auth-container .login-primary-btn:hover {
-    background: rgba(0, 242, 255, 0.1);
-    border-style: solid;
-    box-shadow: inset 0 0 15px rgba(0, 242, 255, 0.2), 0 0 10px rgba(0, 242, 255, 0.2);
-    transform: translateY(-1px);
-}
-
-/* Optional: Animated Scanline for the Guest Button */
-#guest-auth-container .login-primary-btn::after {
-    content: "";
-    position: absolute;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgba(0, 242, 255, 0.1),
-        transparent
-    );
-    animation: scanline-guest 3s infinite linear;
-}
-
-@keyframes scanline-guest {
-    0% { top: -100%; }
-    100% { top: 100%; }
-}
-
-/* Guest Button Icon spacing */
-#guest-auth-container i {
-    margin-right: 10px;
-    font-size: 0.9rem;
-    filter: drop-shadow(0 0 3px var(--cyan));
-}
-
-
-
-        
 
 /* Makes the dot next to GUEST_MODE blink */
 .pulse-dot {
@@ -951,100 +794,54 @@
 
     
 <div id="login-modal" class="login-overlay">
-    <div class="auth-portal">
-        <div class="portal-bg"></div>
-        <div class="portal-scanner"></div>
-        <i class="fas fa-xmark portal-close" onclick="closeLogin()"></i>
+    <div class="login-box">
+        <div class="menu-header">
+            <span><i class="fas fa-user-shield"></i> AUTH_REQUIRED</span>
+            <i class="fas fa-xmark close-btn" onclick="closeLogin()"></i>
+        </div>
+        
+        <p class="login-desc" id="auth-description">SELECT LOGIN PLATFORM IN HERE</p>
 
-        <div class="auth-slider" id="auth-slider">
+        <div class="social-auth-grid" id="social-container">
+            <button class="social-btn google" onclick="handleSocial('google')">
+                <i class="fa-brands fa-google"></i>
+            </button>
+            <button class="social-btn github" onclick="handleSocial('github')">
+                <i class="fa-brands fa-github"></i>
+            </button>
+        </div>
+
+        <div class="divider"><span id="divider-text">OR_USE_EMAIL</span></div>
+
+        <div id="email-auth-fields">
+            <input type="email" placeholder="USER_IDENTIFIER" class="login-input" id="login-email">
+            <input type="password" placeholder="ENCRYPTED_KEY" class="login-input" id="login-pass">
+            <button id="login-btn" class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+            <button id="signup-btn" class="login-primary-btn" onclick="handleSignup()" style="display:none; background: var(--pink);">CREATE_CREDENTIALS</button>
+        </div>
+
+        <div id="phone-auth-container" style="display:none;">
+            <input type="tel" placeholder="+947XXXXXXXX" class="login-input" id="phone-number">
+            <button id="send-otp-btn" class="login-primary-btn" onclick="handlePhoneAuth()">SEND_OTP_KEY</button>
             
-            <div class="auth-section" id="section-login">
-                <div class="auth-header">
-                    <h2 class="cyber-title">SYSTEM_LOGIN</h2>
-                    <p class="cyber-subtitle">IDENTIFY_YOURSELF_TO_PROCEED</p>
-                </div>
-
-                <div class="social-auth-grid">
-                    <button class="social-btn google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
-                    <button class="social-btn github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
-                    <button class="social-btn guest" onclick="handleAnonymousLogin()"><i class="fas fa-user-secret"></i></button>
-                </div>
-
-                <div class="cyber-divider"><span>OR_VIA_CREDENTIALS</span></div>
-
-                <div class="input-container">
-                    <div class="cyber-input-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="login-email" placeholder="USER_IDENTIFIER">
-                    </div>
-                    <div class="cyber-input-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-pass" placeholder="ACCESS_KEY">
-                    </div>
-                    <button class="cyber-btn" onclick="handleLogin()">INITIALIZE_SESSION</button>
-                </div>
-
-                <div class="auth-nav-links">
-                    <span onclick="togglePhoneMode()">BYPASS_PHONE_LINK</span>
-                    <span class="highlight" onclick="switchAuthMode('signup')">CREATE_NEW_ID</span>
-                </div>
+            <div id="otp-verify-section" style="display:none; margin-top:15px;">
+                <input type="text" placeholder="6-DIGIT_CODE" class="login-input" id="verification-code">
+                <button class="login-primary-btn" style="background: var(--pink);" onclick="verifyOtp()">VERIFY_IDENTITY</button>
             </div>
+        </div>
 
-            <div class="auth-section" id="section-signup">
-                <div class="auth-header">
-                    <h2 class="cyber-title pink">REGISTER_ID</h2>
-                    <p class="cyber-subtitle">ESTABLISH_NEW_CORE_IDENTITY</p>
-                </div>
+        <div id="recaptcha-container"></div>
 
-                <div class="input-container">
-                    <div class="cyber-input-wrap pink-border">
-                        <i class="fas fa-user-plus"></i>
-                        <input type="email" id="signup-email" placeholder="NEW_IDENTIFIER">
-                    </div>
-                    <div class="cyber-input-wrap pink-border">
-                        <i class="fas fa-key"></i>
-                        <input type="password" id="signup-pass" placeholder="GENERATE_KEY">
-                    </div>
-                    <button class="cyber-btn pink-bg" onclick="handleSignup()">GENERATE_IDENTITY</button>
-                </div>
-
-                <div class="auth-nav-links">
-                    <span class="highlight" onclick="switchAuthMode('login')">RETURN_TO_LOGIN</span>
-                </div>
-            </div>
-
-            <div class="auth-section" id="section-phone">
-                <div class="auth-header">
-                    <h2 class="cyber-title">MOBILE_LINK</h2>
-                    <p class="cyber-subtitle">OTP_VERIFICATION_REQUIRED</p>
-                </div>
-
-                <div id="phone-fields">
-                    <div class="cyber-input-wrap">
-                        <i class="fas fa-phone"></i>
-                        <input type="tel" id="phone-number" placeholder="+94 7X XXX XXXX">
-                    </div>
-                    <button id="send-otp-btn" class="cyber-btn" onclick="handlePhoneAuth()">SEND_OTP_KEY</button>
-                    
-                    <div id="otp-verify-section" style="display:none; margin-top:20px;">
-                        <div class="cyber-input-wrap pink-border">
-                            <i class="fas fa-shield"></i>
-                            <input type="text" id="verification-code" placeholder="6-DIGIT_CODE">
-                        </div>
-                        <button class="cyber-btn pink-bg" onclick="verifyOtp()">VERIFY_IDENTITY</button>
-                    </div>
-                </div>
-
-                <div class="auth-nav-links">
-                    <span onclick="togglePhoneMode()">RETURN_TO_LOGIN</span>
-                </div>
-            </div>
-
+        <div class="auth-footer-links" style="margin-top: 15px; text-align: center; display: flex; flex-direction: column; gap: 8px;">
+            <p id="auth-toggle-text" style="font-size: 0.65rem;">
+                NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>
+            </p>
+            <p style="font-size: 0.6rem;">
+                <span onclick="togglePhoneMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;" id="phone-toggle-text">USE_PHONE_NUMBER</span>
+            </p>
         </div>
     </div>
 </div>
-<div id="recaptcha-container"></div>
-
 
 
 
@@ -1115,29 +912,6 @@
 
 <div id="view-dashboard" class="view-section active-view">
     <div class="grid">
-
-
-<div class="card">
-    <div class="card-header-flex">
-        <i class="fas fa-users-viewfinder"></i>
-        <span class="live-tag"><span class="pulse-dot"></span> REALTIME</span>
-    </div>
-    <h3>TRAFFIC_MONITOR</h3>
-    <div class="stat-row">
-        <div class="stat-label">TOTAL_SYSTEM_VISITS</div>
-        <div class="view-count-display" style="font-size: 2rem; font-weight: bold; color: var(--cyan); text-shadow: 0 0 15px var(--cyan); font-family: 'JetBrains Mono'; margin: 10px 0;">
-            <span id="visit-count">0000</span>
-        </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="visit-bar" style="width: 100%; opacity: 0.5;"></div>
-        </div>
-        <p style="font-size: 0.6rem; opacity: 0.5; letter-spacing: 1px;">STATUS: MONITORING_LIVE_TRAFFIC</p>
-    </div>
-</div>
-
-
-
-        
         <div class="card">
             <div class="card-header-flex">
                 <i class="fas fa-microchip"></i>
@@ -1300,42 +1074,6 @@ window.addEventListener('load', () => {
 });
 
 
-
-
-// 1. Initialize Database Reference (Place this near your auth const)
-const database = firebase.database();
-
-// 2. Function to Handle Real-Time Counter
-function initVisitorCounter() {
-    const visitRef = database.ref('system_stats/visitor_count');
-
-    // Increment count on every new session (Page Load)
-    visitRef.transaction((currentValue) => {
-        return (currentValue || 0) + 1;
-    });
-
-    // Listen for real-time updates to display to all users
-    visitRef.on('value', (snapshot) => {
-        const count = snapshot.val();
-        const display = document.getElementById('visit-count');
-        
-        // Formats number to look like a tech counter (e.g., 0042)
-        if (display) {
-            display.innerText = count.toString().padStart(4, '0');
-            
-            // Subtle pulse effect when number changes
-            display.style.animation = 'none';
-            display.offsetHeight; // trigger reflow
-            display.style.animation = 'headerFlicker 0.5s ease';
-        }
-    });
-}
-
-// 3. Call the function
-initVisitorCounter();
-
-
-        
         
 // Firebase Configuration (Replace with your own from Firebase Console)
 const firebaseConfig = {
@@ -1405,36 +1143,8 @@ function handleLogin() {
 
 
 
-
-function switchAuthMode(mode) {
-    const slider = document.getElementById('auth-slider');
-    if (mode === 'signup') {
-        slider.style.transform = 'translateX(-33.333%)';
-    } else if (mode === 'phone') {
-        slider.style.transform = 'translateX(-66.666%)';
-    } else {
-        slider.style.transform = 'translateX(0%)';
-    }
-}
-
-// Update your toggle functions to use the slider
-function togglePhoneMode() {
-    isPhoneMode = !isPhoneMode;
-    switchAuthMode(isPhoneMode ? 'phone' : 'login');
-}
-
-// Add the Anonymous handler back to work with the icon
-function handleAnonymousLogin() {
-    showTechAlert("INITIALIZING_GUEST", "RESTRICTED_ACCESS_ENABLED");
-    auth.signInAnonymously()
-        .then(() => unlockSystem("GUEST_" + Math.floor(Math.random() * 9999)))
-        .catch(err => alert("GUEST_BOOT_ERR: " + err.message));
-}
-
-        
         
 // STEP 4: Social Login Function
-
 function handleSocial(providerName) {
     let provider;
     if (providerName === 'google') provider = new firebase.auth.GoogleAuthProvider();
@@ -1450,36 +1160,29 @@ function handleSocial(providerName) {
         });
 }
 
-// --- ANONYMOUS GUEST AUTH ---
-// Added to bypass billing/SMS issues for immediate access
-function handleAnonymousLogin() {
-    showTechAlert("INITIALIZING_GUEST", "LIMITED_PRIVILEGES_APPLIED");
 
-    auth.signInAnonymously()
-        .then(() => {
-            // Unlocks system with a unique temporary ID
-            unlockSystem("GUEST_USER_" + Math.floor(1000 + Math.random() * 9000));
-        })
-        .catch((error) => {
-            console.error("Anonymous Auth Failed:", error);
-            alert("GUEST_BOOT_FAILED: " + error.message);
-        });
-}
+
         
 // --- LOGIN MODAL CONTROL ---
+// This function makes the login box appear
 function openLogin() {
     document.getElementById('login-modal').style.display = 'flex';
 }
 
+// This function hides the login box
 function closeLogin() {
     document.getElementById('login-modal').style.display = 'none';
 }
 
+
+
+
 let isLoginMode = true;
 let isPhoneMode = false;
-let confirmationResult; 
+let confirmationResult; // For Firebase Phone Auth
 
 function toggleAuthMode() {
+    // Reset phone mode if we switch between Login/Signup
     isPhoneMode = false; 
     isLoginMode = !isLoginMode;
     
@@ -1488,6 +1191,7 @@ function toggleAuthMode() {
     const toggleText = document.getElementById('auth-toggle-text');
     const desc = document.getElementById('auth-description');
     
+    // UI reset for switching back from Phone
     document.getElementById('email-auth-fields').style.display = 'block';
     document.getElementById('phone-auth-container').style.display = 'none';
     document.getElementById('social-container').style.display = 'flex';
@@ -1534,19 +1238,18 @@ function togglePhoneMode() {
 }
 
 // --- PHONE AUTH LOGIC ---
+
 function handlePhoneAuth() {
     const btn = document.getElementById('send-otp-btn');
     const phoneNumber = document.getElementById('phone-number').value;
     
+    // Add visual feedback
     btn.innerText = "AUTHENTICATING...";
     btn.disabled = true;
 
-    // Fixed: Initialize verifier once to prevent duplication errors
-    if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-            'size': 'invisible'
-        });
-    }
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'invisible'
+    });
 
     auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
         .then((result) => {
@@ -1555,19 +1258,18 @@ function handlePhoneAuth() {
             btn.style.display = 'none';
             showTechAlert("OTP_SENT", "CHECK_SMS_INBOX");
         }).catch((error) => {
+            // Reset button on error
             btn.innerText = "SEND_OTP_KEY";
             btn.disabled = false;
             
-            // Check for Identity Platform billing issues
             if (error.code === 'auth/billing-not-enabled') {
-                alert("CRITICAL_ERROR: Upgrade to Blaze Plan or use Testing Number.");
-            } else if (error.code === 'auth/operation-not-allowed') {
-                alert("REGION_LOCKED: Enable SMS for Sri Lanka in Firebase Console.");
+                alert("CRITICAL_ERROR: Upgrade to Blaze Plan or use your Testing Number.");
             } else {
                 alert("SMS_FAILED: " + error.message);
             }
         });
 }
+
 
 function verifyOtp() {
     const code = document.getElementById('verification-code').value;
