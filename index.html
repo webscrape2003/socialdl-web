@@ -1271,6 +1271,46 @@
     </div>
 
     <script>
+
+
+
+
+// Initialize Database (Ensure your firebase-app and database SDKs are loaded)
+const db = firebase.database();
+const userCountRef = db.ref('status/liveCount'); // Location for the total count
+const myStatusRef = db.ref('status/users').push(); // Unique entry for this session
+
+// 1. Monitor Connection State
+db.ref('.info/connected').on('value', (snapshot) => {
+    if (snapshot.val() === true) {
+        // When connected, add this user to the active list
+        // onDisconnect() automatically removes this entry when the user leaves
+        myStatusRef.onDisconnect().remove();
+        myStatusRef.set({
+            status: 'online',
+            last_changed: firebase.database.ServerValue.TIMESTAMP
+        });
+    }
+});
+
+// 2. Listen for changes in the active users list to update the UI
+db.ref('status/users').on('value', (snapshot) => {
+    const count = snapshot.numChildren(); // Get the total number of child nodes
+    const countElement = document.getElementById('user-count');
+    
+    if (countElement) {
+        countElement.innerText = count;
+        
+        // Optional: Add a small glow effect when the count changes
+        countElement.style.textShadow = "0 0 10px var(--cyan)";
+        setTimeout(() => {
+            countElement.style.textShadow = "none";
+        }, 500);
+    }
+});
+
+
+        
         // Loading
         const msgs = ["BYPASSING...", "SYNCING...", "LOADING UI...", "READY."];
         let i = 0;
