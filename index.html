@@ -35,61 +35,87 @@
         }
 
 
-/* Floating Chat Button */
+
+        
+
+/* Tech-Themed Floating Button */
 .chat-float {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 60px;
-    height: 60px;
-    background-color: #007bff;
-    color: white;
+    width: 65px;
+    height: 65px;
+    background: rgba(0, 123, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid #007bff;
+    color: #00f2ff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-size: 28px;
     cursor: pointer;
     z-index: 9999;
-    transition: transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5), inset 0 0 10px rgba(0, 123, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: tech-pulse 2s infinite;
 }
 
 .chat-float:hover {
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(15deg);
+    background: rgba(0, 123, 255, 0.4);
+    box-shadow: 0 0 30px #00f2ff;
 }
 
-/* Floating Chat Window (Hidden by default) */
+/* Cyber Pulse Animation */
+@keyframes tech-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(0, 242, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0); }
+}
+
+/* Attractive Sliding Chat Window */
 .chat-window {
     position: fixed;
-    bottom: 100px;
+    bottom: 110px;
     right: 30px;
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    width: 380px;
+    height: 550px;
+    background: rgba(15, 15, 25, 0.95);
+    border: 1px solid #007bff;
+    border-radius: 20px;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.8);
     display: none;
     flex-direction: column;
     overflow: hidden;
     z-index: 9999;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
 }
 
 .chat-window.show {
     display: flex;
+    transform: translateY(0);
 }
 
 .chat-header {
-    background: #007bff;
+    background: linear-gradient(90deg, #007bff, #00d4ff);
     color: white;
-    padding: 15px;
-    font-weight: bold;
+    padding: 15px 20px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
 }
 
 
+
+
+        
 
 
 
@@ -1342,17 +1368,21 @@
     </div>
 
 
-<div class="chat-float" onclick="toggleChat()">
-    <i class="bi bi-chat-dots-fill"></i>
+
+
+    
+<div class="chat-float" onclick="toggleChat()" id="chatBtn">
+    <i class="bi bi-cpu-fill"></i> <span style="position:absolute; top:5px; right:5px; width:12px; height:12px; background:#00ff88; border-radius:50%; border:2px solid #02040a;"></span>
 </div>
 
 <div class="chat-window" id="floatingChat">
     <div class="chat-header">
-        <span>Vajira Chat</span>
-        <i class="bi bi-x-lg" style="cursor:pointer" onclick="toggleChat()"></i>
+        <span><i class="bi bi-shield-lock-fill"></i> VAJIRA_SECURE_CHAT</span>
+        <i class="bi bi-x-circle-fill" style="cursor:pointer; font-size: 1.2rem;" onclick="toggleChat()"></i>
     </div>
     <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="100%" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
 </div>
+
 
 
 
@@ -1365,8 +1395,19 @@
 
 function toggleChat() {
     const chatWin = document.getElementById('floatingChat');
-    chatWin.classList.toggle('show');
+    const btnIcon = document.querySelector('#chatBtn i');
+    
+    if (chatWin.classList.contains('show')) {
+        chatWin.classList.remove('show');
+        setTimeout(() => { chatWin.style.display = 'none'; }, 500);
+        btnIcon.className = "bi bi-cpu-fill";
+    } else {
+        chatWin.style.display = 'flex';
+        setTimeout(() => { chatWin.classList.add('show'); }, 10);
+        btnIcon.className = "bi bi-chevron-down";
+    }
 }
+
 
 
 
