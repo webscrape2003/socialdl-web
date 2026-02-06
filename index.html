@@ -9,8 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+
 
     <style>
         :root {
@@ -37,76 +36,6 @@
 
 
 
-        
-
-/* Tech Chat Button */
-.chat-float {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 65px;
-    height: 65px;
-    background: rgba(2, 4, 10, 0.8);
-    border: 2px solid var(--cyan);
-    border-radius: 50%;
-    display: none; /* Hidden until login */
-    align-items: center;
-    justify-content: center;
-    color: var(--cyan);
-    font-size: 24px;
-    z-index: 1000;
-    box-shadow: 0 0 15px var(--cyan);
-    cursor: pointer;
-    transition: 0.3s;
-    animation: pulse-border 2s infinite;
-}
-
-@keyframes pulse-border {
-    0% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(0, 242, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0); }
-}
-
-/* Centered Chat Box */
-.chat-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-}
-
-.chat-content {
-    width: 90%;
-    max-width: 500px;
-    height: 70vh;
-    background: var(--glass);
-    border: 1px solid var(--cyan);
-    border-radius: 15px;
-    position: relative;
-    overflow: hidden;
-}
-
-.close-chat {
-    position: absolute;
-    top: 10px; right: 15px;
-    color: var(--pink);
-    font-size: 20px;
-    cursor: pointer;
-}
-
-
-
-
-
-        
-
-
-
-        
 .auth-portal {
     width: 380px;
     height: 550px;
@@ -990,11 +919,6 @@
 
 
 
-<audio id="bg-music" loop style="display:none;">
-    <source src="https://cdn400.savetube.vip/media/flsrVsns1SM/don-omar-danza-kuduro-remix-car-video-128-ytshorts.savetube.me.mp3" type="audio/mpeg">
-</audio>
-
-    
 
 <div id="tech-alert" class="tech-alert-overlay">
     <div class="tech-alert-box">
@@ -1354,33 +1278,7 @@
         <footer>[ VAJIRA_OS v.2.6.0 ] — ENCRYPTED CONNECTION</footer>
     </div>
 
-
-
-
-    
-<div class="chat-float" id="chat-btn" onclick="openChat()">
-    <i class="fas fa-headset"></i>
-</div>
-
-<div class="chat-overlay" id="chat-box">
-    <div class="chat-content">
-        <div style="padding: 10px; border-bottom: 1px solid var(--border); color: var(--cyan);">
-            SYSTEM_CHAT_v4.0
-            <span class="close-chat" onclick="closeChat()">&times;</span>
-        </div>
-        <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="90%" frameborder="0"></iframe>
-    </div>
-</div>
-
-
-
-
-
-
-
-
     <script>
-
 
 
 
@@ -1395,33 +1293,6 @@
         setInterval(() => { if(i < msgs.length) { msgEl.innerText = msgs[i]; i++; } }, 400);
 
 
-
-window.addEventListener('load', () => {
-    const music = document.getElementById('bg-music');
-    
-    // Set volume to 50% so it's not too loud
-    music.volume = 0.5;
-
-    // Function to attempt play
-    const playMusic = () => {
-        music.play().then(() => {
-            console.log("Audio started successfully");
-        }).catch(err => {
-            // If browser blocks it, wait for the first click anywhere to start
-            console.log("Waiting for user interaction to play audio...");
-            document.addEventListener('click', () => {
-                music.play();
-            }, { once: true });
-        });
-    };
-
-    // Trigger play exactly when the loader disappears
-    setTimeout(playMusic, 2500); 
-});
-
-
-
-        
 
 window.addEventListener('load', () => {
     setTimeout(() => {
@@ -1460,43 +1331,6 @@ const firebaseConfig = {
 
 
 
-
-
-firebase.auth().onAuthStateChanged((user) => {
-    const loader = document.getElementById('loader');
-    const chatBtn = document.getElementById('chat-btn');
-
-    if (user) {
-        console.log("User Logged In:", user.uid);
-        
-        // 1. Hide the loader
-        loader.style.opacity = '0';
-        setTimeout(() => { loader.style.display = 'none'; }, 500);
-
-        // 2. IMPORTANT: Switch to the dashboard view
-        switchView('dashboard'); 
-
-        // 3. Show the tech-styled chat button
-        if(chatBtn) chatBtn.style.display = 'flex';
-
-        // 4. Update Header Info
-        document.getElementById('user-status-text').innerText = 'SESSION_ACTIVE';
-        document.getElementById('login-trigger').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>LOGOUT</span>';
-        document.getElementById('login-trigger').onclick = () => firebase.auth().signOut();
-    } else {
-        // If logged out, hide the chat and loader
-        if(chatBtn) chatBtn.style.display = 'none';
-        loader.style.display = 'none';
-        switchView('login'); // Ensure you have a 'view-login' ID in your HTML
-    }
-});
-
-
-
-   function openChat() { document.getElementById('chat-box').style.display = 'flex'; }
-function closeChat() { document.getElementById('chat-box').style.display = 'none'; }
-     
-        
 
 // --- 2. INITIALIZE FIREBASE FIRST ---
 if (!firebase.apps.length) {
