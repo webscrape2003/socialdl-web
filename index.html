@@ -35,184 +35,86 @@
 
 
 
-
-   .auth-shell {
-    width: 400px;
-    height: 520px;
-    background: rgba(2, 4, 10, 0.95);
+.auth-portal {
+    width: 380px;
+    height: 550px;
+    background: rgba(5, 10, 20, 0.98);
     border: 1px solid var(--border);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 40px rgba(0, 242, 255, 0.15);
+    border-radius: 8px;
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.15);
 }
 
-.auth-wrapper {
-    display: flex;
-    width: 300%; /* Three panels side-by-side */
-    height: 100%;
-    transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
-}
-
-.auth-panel {
-    width: 33.33%;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-}
-
-.scanner-bar {
+.portal-scanner {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 2px;
-    background: var(--cyan);
-    box-shadow: 0 0 10px var(--cyan);
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    animation: portal-scan 4s infinite linear;
     z-index: 5;
-    animation: scan 4s infinite linear;
 }
 
-@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+@keyframes portal-scan { 0% { top: 0; } 100% { top: 100%; } }
 
-.input-glow {
-    margin-bottom: 15px;
-    border-left: 2px solid var(--cyan);
-    background: rgba(0, 242, 255, 0.03);
-}
-
-.input-glow input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    padding: 12px;
-    color: white;
-    font-family: 'JetBrains Mono';
-    outline: none;
-}
-
-.main-auth-btn {
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    font-weight: bold;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.main-auth-btn:hover {
-    background: var(--cyan);
-    color: black;
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-}
-
-.pink-theme { border-color: var(--pink); color: var(--pink); }
-.pink-theme:hover { background: var(--pink); color: white; box-shadow: 0 0 20px var(--pink); }
-
-.auth-nav {
-    margin-top: auto;
+.auth-slider {
     display: flex;
-    justify-content: space-between;
-    font-size: 0.6rem;
-    color: rgba(0, 242, 255, 0.6);
-    cursor: pointer;
-}
-
-.auth-nav .highlight { color: var(--cyan); text-decoration: underline; }
-     
-
-
-.auth-container {
-    width: 800px;
-    max-width: 95%;
-    height: 500px;
-    background: rgba(5, 10, 20, 0.95);
-    border: 1px solid var(--border);
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
-    border-radius: 4px;
-}
-
-.auth-side-panel {
-    flex: 1;
-    background: linear-gradient(45deg, #050a14, #0a1428);
-    border-right: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 40px;
-    position: relative;
-}
-
-.auth-side-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
-}
-
-.auth-form-box {
-    flex: 1.5;
-    position: relative;
-    overflow: hidden;
-}
-
-.form-wrapper {
-    display: flex;
-    width: 200%; /* Holds two views side-by-side */
+    width: 300%; /* Three sections: Login, Signup, Phone */
     height: 100%;
-    transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: transform 0.7s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
-.auth-view {
-    width: 50%;
-    padding: 40px;
+.auth-section {
+    width: 33.333%;
+    padding: 40px 30px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 }
 
-/* Floating Label Inputs */
-.auth-input-group {
-    position: relative;
-    margin-bottom: 25px;
+.cyber-title {
+    font-size: 1.5rem;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
 }
 
-.auth-input-group input {
-    width: 100%;
+.cyber-title.pink { color: var(--pink); text-shadow: 0 0 10px rgba(255, 0, 200, 0.5); }
+
+.cyber-subtitle {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 30px;
+}
+
+.cyber-input-wrap {
+    display: flex;
+    align-items: center;
     background: rgba(255, 255, 255, 0.03);
-    border: none;
     border-bottom: 1px solid var(--border);
-    padding: 12px 5px;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+.cyber-input-wrap i { color: var(--cyan); font-size: 0.8rem; margin-right: 15px; }
+.cyber-input-wrap.pink-border i { color: var(--pink); }
+
+.cyber-input-wrap input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 15px 0;
     color: white;
     font-family: 'JetBrains Mono';
+    font-size: 0.8rem;
     outline: none;
-    transition: 0.3s;
 }
 
-.auth-input-group label {
-    position: absolute;
-    left: 5px;
-    top: 12px;
-    color: rgba(0, 242, 255, 0.5);
-    pointer-events: none;
-    transition: 0.3s;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-}
-
-.auth-input-group input:focus ~ label,
-.auth-input-group input:not(:placeholder-shown) ~ label {
-    top: -12px;
-    font-size: 0.6rem;
-    color: var(--cyan);
-}
-
-.auth-submit-btn {
+.cyber-btn {
+    width: 100%;
+    padding: 15px;
     background: transparent;
     border: 1px solid var(--cyan);
     color: var(--cyan);
-    padding: 12px;
     font-family: 'Space Grotesk';
     font-weight: bold;
     letter-spacing: 2px;
@@ -221,34 +123,20 @@
     margin-top: 10px;
 }
 
-.auth-submit-btn:hover {
-    background: var(--cyan);
-    color: black;
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-}
+.cyber-btn:hover { background: var(--cyan); color: black; box-shadow: 0 0 20px var(--cyan); }
+.pink-bg { border-color: var(--pink); color: var(--pink); }
+.pink-bg:hover { background: var(--pink); color: white; box-shadow: 0 0 20px var(--pink); }
 
-.auth-footer {
-    margin-top: 20px;
+.auth-nav-links {
+    margin-top: auto;
     display: flex;
     justify-content: space-between;
     font-size: 0.65rem;
-    color: var(--cyan);
-    text-decoration: underline;
-    cursor: pointer;
 }
 
-.auth-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
-    color: white;
-    cursor: pointer;
-    opacity: 0.5;
-}
-
-.auth-close:hover { opacity: 1; color: var(--pink); }
-
+.auth-nav-links span { cursor: pointer; color: rgba(255, 255, 255, 0.5); transition: 0.3s; }
+.auth-nav-links span:hover { color: var(--cyan); }
+.auth-nav-links .highlight { color: var(--cyan); text-decoration: underline; }
 
 
         
@@ -1063,91 +951,100 @@
 
     
 <div id="login-modal" class="login-overlay">
-    <div class="auth-shell">
-        <div class="scanner-bar"></div>
-        <i class="fas fa-xmark auth-close-x" onclick="closeLogin()"></i>
+    <div class="auth-portal">
+        <div class="portal-bg"></div>
+        <div class="portal-scanner"></div>
+        <i class="fas fa-xmark portal-close" onclick="closeLogin()"></i>
 
-        <div class="auth-wrapper" id="auth-wrapper">
+        <div class="auth-slider" id="auth-slider">
             
-            <div class="auth-panel" id="login-view">
-                <div class="panel-header">
-                    <h2 class="cyber-glitch">LOGIN_SEQUENCE</h2>
-                    <p>INITIALIZE SECURE ACCESS PROTOCOL</p>
+            <div class="auth-section" id="section-login">
+                <div class="auth-header">
+                    <h2 class="cyber-title">SYSTEM_LOGIN</h2>
+                    <p class="cyber-subtitle">IDENTIFY_YOURSELF_TO_PROCEED</p>
                 </div>
 
-                <div class="social-auth-row">
-                    <button class="social-icon google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
-                    <button class="social-icon github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
-                    <button class="social-icon guest" onclick="handleAnonymousLogin()" title="GUEST_ACCESS"><i class="fas fa-user-secret"></i></button>
+                <div class="social-auth-grid">
+                    <button class="social-btn google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
+                    <button class="social-btn github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
+                    <button class="social-btn guest" onclick="handleAnonymousLogin()"><i class="fas fa-user-secret"></i></button>
                 </div>
 
-                <div class="auth-divider"><span>OR_IDENTITY_KEY</span></div>
+                <div class="cyber-divider"><span>OR_VIA_CREDENTIALS</span></div>
 
-                <div id="login-email-container">
-                    <div class="input-glow">
+                <div class="input-container">
+                    <div class="cyber-input-wrap">
+                        <i class="fas fa-envelope"></i>
                         <input type="email" id="login-email" placeholder="USER_IDENTIFIER">
                     </div>
-                    <div class="input-glow">
-                        <input type="password" id="login-pass" placeholder="ENCRYPTED_KEY">
+                    <div class="cyber-input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-pass" placeholder="ACCESS_KEY">
                     </div>
-                    <button class="main-auth-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+                    <button class="cyber-btn" onclick="handleLogin()">INITIALIZE_SESSION</button>
                 </div>
 
-                <div class="auth-nav">
-                    <span onclick="togglePhoneMode()">BYPASS_TO_MOBILE</span>
-                    <span class="highlight" onclick="switchAuthFlow('signup')">CREATE_NEW_ID</span>
+                <div class="auth-nav-links">
+                    <span onclick="togglePhoneMode()">BYPASS_PHONE_LINK</span>
+                    <span class="highlight" onclick="switchAuthMode('signup')">CREATE_NEW_ID</span>
                 </div>
             </div>
 
-            <div class="auth-panel" id="signup-view">
-                <div class="panel-header">
-                    <h2 class="cyber-glitch pink">REGISTER_ID</h2>
-                    <p>ESTABLISH NEW CORE CREDENTIALS</p>
+            <div class="auth-section" id="section-signup">
+                <div class="auth-header">
+                    <h2 class="cyber-title pink">REGISTER_ID</h2>
+                    <p class="cyber-subtitle">ESTABLISH_NEW_CORE_IDENTITY</p>
                 </div>
 
-                <div class="auth-input-group">
-                    <div class="input-glow">
+                <div class="input-container">
+                    <div class="cyber-input-wrap pink-border">
+                        <i class="fas fa-user-plus"></i>
                         <input type="email" id="signup-email" placeholder="NEW_IDENTIFIER">
                     </div>
-                    <div class="input-glow">
-                        <input type="password" id="signup-pass" placeholder="CREATE_ACCESS_KEY">
+                    <div class="cyber-input-wrap pink-border">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="signup-pass" placeholder="GENERATE_KEY">
                     </div>
-                    <button class="main-auth-btn pink-theme" onclick="handleSignup()">GENERATE_IDENTITY</button>
+                    <button class="cyber-btn pink-bg" onclick="handleSignup()">GENERATE_IDENTITY</button>
                 </div>
 
-                <div class="auth-nav">
-                    <span class="highlight" onclick="switchAuthFlow('login')">RETURN_TO_LOGIN</span>
+                <div class="auth-nav-links">
+                    <span class="highlight" onclick="switchAuthMode('login')">RETURN_TO_LOGIN</span>
                 </div>
             </div>
 
-            <div class="auth-panel" id="phone-view">
-                <div class="panel-header">
-                    <h2>MOBILE_LINK</h2>
-                    <p>OTP_VERIFICATION_REQUIRED</p>
+            <div class="auth-section" id="section-phone">
+                <div class="auth-header">
+                    <h2 class="cyber-title">MOBILE_LINK</h2>
+                    <p class="cyber-subtitle">OTP_VERIFICATION_REQUIRED</p>
                 </div>
 
-                <div id="phone-auth-container">
-                    <div class="input-glow">
+                <div id="phone-fields">
+                    <div class="cyber-input-wrap">
+                        <i class="fas fa-phone"></i>
                         <input type="tel" id="phone-number" placeholder="+94 7X XXX XXXX">
                     </div>
-                    <button id="send-otp-btn" class="main-auth-btn" onclick="handlePhoneAuth()">REQUEST_OTP</button>
+                    <button id="send-otp-btn" class="cyber-btn" onclick="handlePhoneAuth()">SEND_OTP_KEY</button>
                     
-                    <div id="otp-verify-section" style="display:none; margin-top:15px;">
-                        <div class="input-glow">
-                            <input type="text" id="verification-code" placeholder="6-DIGIT_OTP">
+                    <div id="otp-verify-section" style="display:none; margin-top:20px;">
+                        <div class="cyber-input-wrap pink-border">
+                            <i class="fas fa-shield"></i>
+                            <input type="text" id="verification-code" placeholder="6-DIGIT_CODE">
                         </div>
-                        <button class="main-auth-btn pink-theme" onclick="verifyOtp()">VERIFY_LINK</button>
+                        <button class="cyber-btn pink-bg" onclick="verifyOtp()">VERIFY_IDENTITY</button>
                     </div>
                 </div>
 
-                <div class="auth-nav">
-                    <span onclick="togglePhoneMode()">RETURN_TO_BASE_AUTH</span>
+                <div class="auth-nav-links">
+                    <span onclick="togglePhoneMode()">RETURN_TO_LOGIN</span>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 <div id="recaptcha-container"></div>
+
 
 
 
@@ -1450,54 +1347,29 @@ function handleLogin() {
 
 
 
-function switchAuthView(view) {
-    const wrapper = document.getElementById('form-wrapper');
-    const title = document.getElementById('panel-title');
-    const desc = document.getElementById('panel-desc');
-
-    if (view === 'signup') {
-        wrapper.style.transform = 'translateX(-50%)';
-        title.innerText = "JOIN_NETWORK";
-        title.style.color = "var(--pink)";
-        desc.innerText = "ESTABLISH NEW SECURE IDENTITY PROTOCOLS";
-    } else {
-        wrapper.style.transform = 'translateX(0%)';
-        title.innerText = "WELCOME_BACK";
-        title.style.color = "var(--cyan)";
-        desc.innerText = "ENTER SYSTEM CREDENTIALS TO INITIALIZE SESSION";
-    }
-}
-
-
-
-function switchAuthFlow(mode) {
-    const wrapper = document.getElementById('auth-wrapper');
-    
+function switchAuthMode(mode) {
+    const slider = document.getElementById('auth-slider');
     if (mode === 'signup') {
-        wrapper.style.transform = 'translateX(-33.33%)';
+        slider.style.transform = 'translateX(-33.333%)';
     } else if (mode === 'phone') {
-        wrapper.style.transform = 'translateX(-66.66%)';
+        slider.style.transform = 'translateX(-66.666%)';
     } else {
-        wrapper.style.transform = 'translateX(0%)';
+        slider.style.transform = 'translateX(0%)';
     }
 }
 
-// Updated toggle for phone mode to use the new slider
+// Update your toggle functions to use the slider
 function togglePhoneMode() {
     isPhoneMode = !isPhoneMode;
-    if (isPhoneMode) {
-        switchAuthFlow('phone');
-    } else {
-        switchAuthFlow('login');
-    }
+    switchAuthMode(isPhoneMode ? 'phone' : 'login');
 }
 
-// Added Anonymous Logic back in
+// Add the Anonymous handler back to work with the icon
 function handleAnonymousLogin() {
-    showTechAlert("INITIALIZING_GUEST", "LIMITED_PRIVILEGES");
+    showTechAlert("INITIALIZING_GUEST", "RESTRICTED_ACCESS_ENABLED");
     auth.signInAnonymously()
-        .then(() => unlockSystem("GUEST_" + Math.floor(Math.random()*999)))
-        .catch(err => alert("GUEST_ERR: " + err.message));
+        .then(() => unlockSystem("GUEST_" + Math.floor(Math.random() * 9999)))
+        .catch(err => alert("GUEST_BOOT_ERR: " + err.message));
 }
 
         
