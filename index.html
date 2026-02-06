@@ -38,79 +38,78 @@
 
         
 
-/* High-Tech Chat Bubble */
+/* React-Style Floating Action Button */
 .chat-float {
     position: fixed;
     bottom: 30px;
     right: 30px;
     width: 60px;
     height: 60px;
-    /* Glassmorphism Effect */
-    background: rgba(0, 242, 255, 0.1);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    /* Tech Border & Glow */
-    border: 1px solid rgba(0, 242, 255, 0.5);
-    border-radius: 50% 50% 0 50%; /* Chat bubble shape */
-    color: #00f2ff;
+    /* Deep shadow and brand color */
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 26px;
     cursor: pointer;
     z-index: 9999;
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-    transition: all 0.3s ease-in-out;
-    /* Pulsing Animation */
-    animation: digital-breath 3s infinite ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 123, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
 }
 
 .chat-float:hover {
-    transform: scale(1.1) translateY(-5px);
-    background: rgba(0, 242, 255, 0.2);
-    box-shadow: 0 0 25px rgba(0, 242, 255, 0.6);
-    border-color: #00f2ff;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 12px 32px rgba(0, 123, 255, 0.3);
+    background: #0069d9;
 }
 
-/* Digital Breathing Animation */
-@keyframes digital-breath {
-    0%, 100% { 
-        box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
-        border-color: rgba(0, 242, 255, 0.4);
-    }
-    50% { 
-        box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
-        border-color: rgba(0, 242, 255, 1);
-    }
+.chat-float:active {
+    transform: scale(0.9);
 }
 
-/* Chat Window Entrance */
+/* React Window Container */
 .chat-window {
     position: fixed;
     bottom: 100px;
     right: 30px;
-    width: 350px;
-    height: 500px;
-    background: #0b0e14;
-    border: 1px solid #00f2ff;
-    border-radius: 15px;
-    overflow: hidden;
+    width: 360px;
+    height: 520px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
     display: none;
     flex-direction: column;
+    overflow: hidden;
     z-index: 10000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    /* Smooth entrance */
+    transform-origin: bottom right;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s linear;
 }
 
 .chat-window.show {
     display: flex;
-    animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    animation: react-pop 0.3s forwards;
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px) scale(0.9); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes react-pop {
+    from { opacity: 0; transform: scale(0.8) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* Header style for the React component */
+.chat-header {
+    background: #007bff;
+    color: white;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
 
 
 
@@ -1371,17 +1370,18 @@
 
 
     
-<div class="chat-float" onclick="toggleChat()" id="chatBtn">
-    <i class="bi bi-cpu-fill"></i> <span style="position:absolute; top:5px; right:5px; width:12px; height:12px; background:#00ff88; border-radius:50%; border:2px solid #02040a;"></span>
+<div class="chat-float" onclick="toggleChat()">
+    <i class="bi bi-chat-dots-fill"></i>
 </div>
 
 <div class="chat-window" id="floatingChat">
     <div class="chat-header">
-        <span><i class="bi bi-shield-lock-fill"></i> VAJIRA_SECURE_CHAT</span>
-        <i class="bi bi-x-circle-fill" style="cursor:pointer; font-size: 1.2rem;" onclick="toggleChat()"></i>
+        <span>Support Chat</span>
+        <i class="bi bi-x-lg" style="cursor:pointer; font-size: 1.1rem;" onclick="toggleChat()"></i>
     </div>
-    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="100%" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
+    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="100%" frameborder="0" style="background: white;"></iframe>
 </div>
+
 
 
 
@@ -1395,18 +1395,9 @@
 
 function toggleChat() {
     const chatWin = document.getElementById('floatingChat');
-    const btnIcon = document.querySelector('#chatBtn i');
-    
-    if (chatWin.classList.contains('show')) {
-        chatWin.classList.remove('show');
-        setTimeout(() => { chatWin.style.display = 'none'; }, 500);
-        btnIcon.className = "bi bi-cpu-fill";
-    } else {
-        chatWin.style.display = 'flex';
-        setTimeout(() => { chatWin.classList.add('show'); }, 10);
-        btnIcon.className = "bi bi-chevron-down";
-    }
+    chatWin.classList.toggle('show');
 }
+
 
 
 
