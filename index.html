@@ -36,6 +36,140 @@
 
 
 
+
+.auth-container {
+    width: 800px;
+    max-width: 95%;
+    height: 500px;
+    background: rgba(5, 10, 20, 0.95);
+    border: 1px solid var(--border);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
+    border-radius: 4px;
+}
+
+.auth-side-panel {
+    flex: 1;
+    background: linear-gradient(45deg, #050a14, #0a1428);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 40px;
+    position: relative;
+}
+
+.auth-side-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
+}
+
+.auth-form-box {
+    flex: 1.5;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-wrapper {
+    display: flex;
+    width: 200%; /* Holds two views side-by-side */
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.auth-view {
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Floating Label Inputs */
+.auth-input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.auth-input-group input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 5px;
+    color: white;
+    font-family: 'JetBrains Mono';
+    outline: none;
+    transition: 0.3s;
+}
+
+.auth-input-group label {
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    color: rgba(0, 242, 255, 0.5);
+    pointer-events: none;
+    transition: 0.3s;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.auth-input-group input:focus ~ label,
+.auth-input-group input:not(:placeholder-shown) ~ label {
+    top: -12px;
+    font-size: 0.6rem;
+    color: var(--cyan);
+}
+
+.auth-submit-btn {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 12px;
+    font-family: 'Space Grotesk';
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.auth-submit-btn:hover {
+    background: var(--cyan);
+    color: black;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+}
+
+.auth-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--cyan);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.auth-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    color: white;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.auth-close:hover { opacity: 1; color: var(--pink); }
+
+
+
+        
+
+
 /* Guest Button Specific Styling */
 #guest-auth-container .login-primary-btn {
     position: relative;
@@ -845,59 +979,65 @@
 
     
 <div id="login-modal" class="login-overlay">
-    <div class="login-box">
-        <div class="menu-header">
-            <span><i class="fas fa-user-shield"></i> AUTH_REQUIRED</span>
-            <i class="fas fa-xmark close-btn" onclick="closeLogin()"></i>
-        </div>
-        
-        <p class="login-desc" id="auth-description">SELECT LOGIN PLATFORM IN HERE</p>
+    <div class="auth-container">
+        <i class="fas fa-xmark auth-close" onclick="closeLogin()"></i>
 
-        <div class="social-auth-grid" id="social-container">
-            <button class="social-btn google" onclick="handleSocial('google')">
-                <i class="fa-brands fa-google"></i>
-            </button>
-            <button class="social-btn github" onclick="handleSocial('github')">
-                <i class="fa-brands fa-github"></i>
-            </button>
-        </div>
-
-        <div id="guest-auth-container" style="margin-top: 15px;">
-            <button class="login-primary-btn" 
-                    style="background: rgba(0, 242, 255, 0.05); border: 1px dashed var(--cyan); color: var(--cyan);" 
-                    onclick="handleAnonymousLogin()">
-                <i class="fas fa-user-secret"></i> INITIATE_GUEST_SESSION
-            </button>
-        </div>
-
-        <div class="divider"><span id="divider-text">OR_USE_EMAIL</span></div>
-
-        <div id="email-auth-fields">
-            <input type="email" placeholder="USER_IDENTIFIER" class="login-input" id="login-email">
-            <input type="password" placeholder="ENCRYPTED_KEY" class="login-input" id="login-pass">
-            <button id="login-btn" class="login-primary-btn" onclick="handleLogin()">INITIATE_SESSION</button>
-            <button id="signup-btn" class="login-primary-btn" onclick="handleSignup()" style="display:none; background: var(--pink);">CREATE_CREDENTIALS</button>
-        </div>
-
-        <div id="phone-auth-container" style="display:none;">
-            <input type="tel" placeholder="+947XXXXXXXX" class="login-input" id="phone-number">
-            <button id="send-otp-btn" class="login-primary-btn" onclick="handlePhoneAuth()">SEND_OTP_KEY</button>
-            
-            <div id="otp-verify-section" style="display:none; margin-top:15px;">
-                <input type="text" placeholder="6-DIGIT_CODE" class="login-input" id="verification-code">
-                <button class="login-primary-btn" style="background: var(--pink);" onclick="verifyOtp()">VERIFY_IDENTITY</button>
+        <div class="auth-side-panel">
+            <div class="panel-content">
+                <h2 id="panel-title">WELCOME_BACK</h2>
+                <p id="panel-desc">ENTER SYSTEM CREDENTIALS TO INITIALIZE SESSION</p>
+                <div class="tech-lines"></div>
             </div>
         </div>
 
-        <div id="recaptcha-container"></div>
+        <div class="auth-form-box">
+            <div class="form-wrapper" id="form-wrapper">
+                
+                <div class="auth-view" id="login-view">
+                    <h3 class="view-header"><i class="fas fa-shield-halved"></i> SECURE_LOGIN</h3>
+                    
+                    <div class="social-auth-grid">
+                        <button class="social-btn google" onclick="handleSocial('google')"><i class="fa-brands fa-google"></i></button>
+                        <button class="social-btn github" onclick="handleSocial('github')"><i class="fa-brands fa-github"></i></button>
+                    </div>
 
-        <div class="auth-footer-links" style="margin-top: 15px; text-align: center; display: flex; flex-direction: column; gap: 8px;">
-            <p id="auth-toggle-text" style="font-size: 0.65rem;">
-                NO_ACCESS_KEY? <span onclick="toggleAuthMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;">REGISTER_NEW_USER</span>
-            </p>
-            <p style="font-size: 0.6rem;">
-                <span onclick="togglePhoneMode()" style="color: var(--cyan); cursor: pointer; text-decoration: underline;" id="phone-toggle-text">USE_PHONE_NUMBER</span>
-            </p>
+                    <div class="auth-input-group">
+                        <input type="email" id="login-email" placeholder=" " required>
+                        <label>USER_IDENTIFIER</label>
+                    </div>
+                    <div class="auth-input-group">
+                        <input type="password" id="login-pass" placeholder=" " required>
+                        <label>ENCRYPTED_KEY</label>
+                    </div>
+
+                    <button class="auth-submit-btn" onclick="handleLogin()">INITIATE_SESSION</button>
+                    
+                    <div class="auth-footer">
+                        <span onclick="togglePhoneMode()">USE_MOBILE_LINK</span>
+                        <span onclick="switchAuthView('signup')">CREATE_NEW_ACCOUNT</span>
+                    </div>
+                </div>
+
+                <div class="auth-view" id="signup-view">
+                    <h3 class="view-header" style="color: var(--pink);"><i class="fas fa-user-plus"></i> REGISTER_USER</h3>
+                    
+                    <div class="auth-input-group">
+                        <input type="email" id="signup-email" placeholder=" " required>
+                        <label>NEW_IDENTIFIER</label>
+                    </div>
+                    <div class="auth-input-group">
+                        <input type="password" id="signup-pass" placeholder=" " required>
+                        <label>CREATE_KEY</label>
+                    </div>
+
+                    <button class="auth-submit-btn signup-theme" onclick="handleSignup()">CREATE_CREDENTIALS</button>
+                    
+                    <div class="auth-footer">
+                        <span onclick="switchAuthView('login')">RETURN_TO_LOGIN</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -1203,6 +1343,27 @@ function handleLogin() {
 
 
 
+
+function switchAuthView(view) {
+    const wrapper = document.getElementById('form-wrapper');
+    const title = document.getElementById('panel-title');
+    const desc = document.getElementById('panel-desc');
+
+    if (view === 'signup') {
+        wrapper.style.transform = 'translateX(-50%)';
+        title.innerText = "JOIN_NETWORK";
+        title.style.color = "var(--pink)";
+        desc.innerText = "ESTABLISH NEW SECURE IDENTITY PROTOCOLS";
+    } else {
+        wrapper.style.transform = 'translateX(0%)';
+        title.innerText = "WELCOME_BACK";
+        title.style.color = "var(--cyan)";
+        desc.innerText = "ENTER SYSTEM CREDENTIALS TO INITIALIZE SESSION";
+    }
+}
+
+
+        
         
 // STEP 4: Social Login Function
 
