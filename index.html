@@ -1128,10 +1128,12 @@
         <div class="stat-label">LIVE_USERS</div>
         <div class="stat-value" id="user-count">0</div>
     </div>
-    <p style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">
-        STATUS: <span style="color: var(--cyan);">MONITORING...</span>
-    </p>
+    <div class="stat-row">
+        <div class="stat-label">COORDINATES</div>
+        <div class="stat-value" id="user-location" style="font-size: 0.6rem; color: var(--cyan);">SEARCHING...</div>
+    </div>
 </div>
+
 
         
         
@@ -1276,49 +1278,7 @@
 
 
 
-// Initialize Database (Ensure your firebase-app and database SDKs are loaded)
-const db = firebase.database();
-const myStatusRef = db.ref('status/users').push(); // This creates a unique ID for the current visitor
 
-// 1. Monitor when the user connects
-db.ref('.info/connected').on('value', (snapshot) => {
-    if (snapshot.val() === true) {
-        
-        // If the user closes the tab, delete their data automatically
-        myStatusRef.onDisconnect().remove();
-
-        // Try to get the user's location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                // SUCCESS: Save user status with coordinates
-                myStatusRef.set({
-                    status: 'online',
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    time: firebase.database.ServerValue.TIMESTAMP
-                });
-            }, () => {
-                // ERROR: User blocked location access
-                myStatusRef.set({ status: 'online', lat: 'HIDDEN', lng: 'HIDDEN' });
-            });
-        }
-    }
-});
-
-// 2. Update the Dashboard UI
-db.ref('status/users').on('value', (snapshot) => {
-    // Update total count
-    const count = snapshot.numChildren();
-    document.getElementById('user-count').innerText = count;
-
-    // Show the location of the most recent user who joined
-    snapshot.forEach((child) => {
-        const data = child.val();
-        if(data.lat && data.lat !== 'HIDDEN') {
-            document.getElementById('user-location').innerText = `${data.lat.toFixed(2)}, ${data.lng.toFixed(2)}`;
-        }
-    });
-});
 
         
         // Loading
@@ -1366,6 +1326,56 @@ const firebaseConfig = {
 
 
 
+
+    // 2. INITIALIZE FIREBASE FIRST
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    // 3. NOW PUT YOUR TRACKING CODE HERE
+    const db = firebase.database();
+    const myStatusRef = db.ref('status/users').push();
+
+    db.ref('.info/connected').on('value', (snapshot) => {
+        if (snapshot.val() === true) {
+            myStatusRef.onDisconnect().remove();
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    myStatusRef.set({
+                        status: 'online',
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        time: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }, () => {
+                    myStatusRef.set({ status: 'online', lat: 'HIDDEN', lng: 'HIDDEN' });
+                });
+            }
+        }
+    });
+
+    // Listener for UI updates
+    db.ref('status/users').on('value', (snapshot) => {
+        const count = snapshot.numChildren();
+        const countElement = document.getElementById('user-count');
+        const locElement = document.getElementById('user-location');
+        
+        if(countElement) countElement.innerText = count;
+        
+        snapshot.forEach((child) => {
+            const data = child.val();
+            if(locElement && data.lat && data.lat !== 'HIDDEN') {
+                locElement.innerText = `${data.lat.toFixed(2)}, ${data.lng.toFixed(2)}`;
+            }
+        });
+    });
+
+    // ... The rest of your existing loader and UI functions go here ...
+
+
+
+
+        
 
 function showTechAlert(mainText, userName) {
     document.getElementById('alert-main-text').innerText = mainText;
