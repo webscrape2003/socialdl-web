@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 
     <style>
@@ -38,36 +39,36 @@
 
         
 
-/* Modern Messaging Button */
+/* Fixed Message Button */
 .chat-float {
     position: fixed;
     bottom: 30px;
     right: 30px;
     width: 60px;
     height: 60px;
-    background-color: #0084ff; /* Messenger Blue */
-    color: #ffffff;
+    background-color: #0084ff !important; /* Force Messenger Blue */
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important; /* Force flexbox */
+    align-items: center !important;
+    justify-content: center !important;
     cursor: pointer;
     z-index: 10000;
-    /* Layered shadows for depth */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     border: none;
+    transition: all 0.2s ease;
 }
 
 .chat-float:hover {
-    transform: scale(1.05);
-    background-color: #0073e6;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+    background-color: #0073e6 !important;
 }
 
+/* Force the Icon to be Visible */
 .chat-float i {
-    font-size: 28px; /* Larger icon for better visibility */
-    margin: 0;
+    color: #ffffff !important; /* Force icon color to white */
+    font-size: 30px !important; /* Make icon large */
+    display: block !important;
+    line-height: 1;
 }
 
 /* Chat Window - Material Design Style */
@@ -1358,16 +1359,17 @@
 
     
 <div class="chat-float" onclick="toggleChat()">
-    <i class="bi bi-chat-fill"></i>
+    <i class="bi bi-chat-dots-fill"></i>
 </div>
 
-<div class="chat-window" id="floatingChat">
-    <div style="background:#0084ff; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:600; font-family:'Inter', sans-serif;">Live Support</span>
+<div class="chat-window" id="floatingChat" style="display:none;">
+    <div style="background:#0084ff; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center; border-radius:15px 15px 0 0;">
+        <span style="font-weight:bold;">LIVE_SUPPORT</span>
         <i class="bi bi-x-lg" style="cursor:pointer" onclick="toggleChat()"></i>
     </div>
-    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="100%" frameborder="0"></iframe>
+    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="500px" frameborder="0"></iframe>
 </div>
+
 
 
 
