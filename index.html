@@ -36,8 +36,25 @@
 
 
 
+/* Centered Chat Window Styling */
+#cbox-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* This centers the box perfectly */
+    width: 90%;
+    max-width: 450px; /* Adjust size for desktop */
+    height: 600px;
+    display: none;
+    background: var(--bg);
+    border: 1px solid var(--cyan);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 100001; /* Higher than overlays */
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.3);
+}
 
-/* Floating Chat Bubble Styling */
+/* Floating Bubble Button (stays in corner) */
 #cbox-bubble {
     position: fixed;
     bottom: 30px;
@@ -50,29 +67,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
     z-index: 100001;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-#cbox-bubble:hover {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 0 25px var(--cyan);
-}
-
-#cbox-window {
-    position: fixed;
-    bottom: 110px;
-    right: 30px;
-    width: 380px;
-    height: 550px;
-    display: none;
-    background: var(--bg);
-    border: 1px solid var(--cyan);
-    border-radius: 4px;
-    overflow: hidden;
-    z-index: 100001;
-    box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+    transition: all 0.3s ease;
 }
 
 .cbox-header {
@@ -84,8 +80,9 @@
     justify-content: space-between;
     align-items: center;
     font-family: 'JetBrains Mono';
-    letter-spacing: 1px;
 }
+
+
 
         
 
