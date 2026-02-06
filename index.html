@@ -36,6 +36,60 @@
 
 
 
+
+/* Floating Chat Bubble Styling */
+#cbox-bubble {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
+    background: var(--cyan);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+    z-index: 100001;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#cbox-bubble:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 25px var(--cyan);
+}
+
+#cbox-window {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    width: 380px;
+    height: 550px;
+    display: none;
+    background: var(--bg);
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 100001;
+    box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+}
+
+.cbox-header {
+    background: var(--cyan);
+    color: black;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono';
+    letter-spacing: 1px;
+}
+
+        
+
+
 .auth-portal {
     width: 380px;
     height: 550px;
@@ -1278,10 +1332,33 @@
         <footer>[ VAJIRA_OS v.2.6.0 ] — ENCRYPTED CONNECTION</footer>
     </div>
 
+
+<div id="cbox-bubble" onclick="toggleCbox()">
+    <i class="fas fa-comment-dots" style="color: black; font-size: 28px;"></i>
+</div>
+
+<div id="cbox-window">
+    <div class="cbox-header">
+        <span><i class="fas fa-terminal"></i> LIVE_CHAT_FEED</span>
+        <span onclick="toggleCbox()" style="cursor: pointer; font-size: 20px;">[X]</span>
+    </div>
+    <iframe src="https://my.cbox.ws/vajiratech" width="100%" height="100%" frameborder="0"></iframe>
+</div>
+
+
+    
     <script>
 
 
 
+function toggleCbox() {
+    const win = document.getElementById('cbox-window');
+    if (win.style.display === 'none' || win.style.display === '') {
+        win.style.display = 'block';
+    } else {
+        win.style.display = 'none';
+    }
+}
 
 
 
