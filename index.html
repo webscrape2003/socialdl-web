@@ -36,61 +36,77 @@
 
 
 
-/* Ensure the bubble is above the pre-loader (z-index: 999999) */
-/* Floating Chat Button */
+//* Modern React-Style Message Button */
 .chat-float {
     position: fixed;
     bottom: 30px;
     right: 30px;
     width: 60px;
     height: 60px;
-    background-color: #007bff;
+    background: #0084ff; /* Messenger Blue */
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-size: 28px;
+    box-shadow: 0 8px 24px rgba(0, 132, 255, 0.3);
     cursor: pointer;
-    z-index: 9999;
-    transition: transform 0.3s ease;
+    z-index: 999;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
 }
 
 .chat-float:hover {
-    transform: scale(1.1);
+    transform: scale(1.1) translateY(-5px);
+    background: #0073e6;
 }
 
-/* Floating Chat Window (Hidden by default) */
-.chat-window {
+/* Background Overlay to center the chat */
+.chat-overlay {
     position: fixed;
-    bottom: 100px;
-    right: 30px;
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: none; /* Controlled by JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+/* Chat Window Fixed to Middle */
+.chat-window {
+    width: 90%;
+    max-width: 450px;
+    height: 80vh;
+    background: #05080f; /* Tech dark theme */
+    border: 1px solid #00f2ff;
+    border-radius: 20px;
+    display: flex;
     flex-direction: column;
     overflow: hidden;
-    z-index: 9999;
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+    animation: zoomIn 0.3s ease-out;
 }
 
-.chat-window.show {
-    display: flex;
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .chat-header {
-    background: #007bff;
+    background: linear-gradient(90deg, #0084ff, #00d4ff);
     color: white;
-    padding: 15px;
+    padding: 15px 20px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'JetBrains Mono', monospace;
 }
-
 
 
         
