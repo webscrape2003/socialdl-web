@@ -919,6 +919,11 @@
 
 
 
+<audio id="bg-music" loop style="display:none;">
+    <source src="https://cdn402.savetube.vip/media/kwbj-y6I4_k/don-omar-dame-una-llamada-visualizer-ft-syko-128-ytshorts.savetube.me.mp3" type="audio/mpeg">
+</audio>
+
+    
 
 <div id="tech-alert" class="tech-alert-overlay">
     <div class="tech-alert-box">
@@ -1293,6 +1298,33 @@
         setInterval(() => { if(i < msgs.length) { msgEl.innerText = msgs[i]; i++; } }, 400);
 
 
+
+window.addEventListener('load', () => {
+    const music = document.getElementById('bg-music');
+    
+    // Set volume to 50% so it's not too loud
+    music.volume = 0.5;
+
+    // Function to attempt play
+    const playMusic = () => {
+        music.play().then(() => {
+            console.log("Audio started successfully");
+        }).catch(err => {
+            // If browser blocks it, wait for the first click anywhere to start
+            console.log("Waiting for user interaction to play audio...");
+            document.addEventListener('click', () => {
+                music.play();
+            }, { once: true });
+        });
+    };
+
+    // Trigger play exactly when the loader disappears
+    setTimeout(playMusic, 2500); 
+});
+
+
+
+        
 
 window.addEventListener('load', () => {
     setTimeout(() => {
