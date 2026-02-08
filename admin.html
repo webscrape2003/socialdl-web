@@ -2,176 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajira OS | Admin Terminal</title>
+    <title>Admin Panel | Vajira OS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
     <style>
-        :root {
-            --cyan: #00f2ff;
-            --pink: #ff00c8;
-            --bg: #02040a;
-            --glass: rgba(10, 15, 30, 0.85);
-            --border: rgba(0, 242, 255, 0.2);
-        }
-
-        body {
-            background: var(--bg);
-            color: white;
-            font-family: 'Space Grotesk', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .admin-container {
-            width: 90%;
-            max-width: 600px;
-            background: var(--glass);
-            border: 1px solid var(--pink);
-            padding: 30px;
-            position: relative;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(255, 0, 200, 0.2);
-        }
-
-        h2 { font-family: 'JetBrains Mono'; color: var(--pink); letter-spacing: 4px; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-
-        .input-group { margin-bottom: 20px; }
-        label { display: block; font-size: 0.7rem; color: var(--cyan); margin-bottom: 8px; font-family: 'JetBrains Mono'; }
-
-        input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-            padding: 12px;
-            color: white;
-            font-family: 'Space Grotesk';
-            box-sizing: border-box;
-        }
-
-        input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
-
-        .btn-row { display: flex; gap: 15px; margin-top: 30px; }
-
-        .cyber-btn {
-            flex: 1;
-            padding: 15px;
-            cursor: pointer;
-            border: 1px solid var(--cyan);
-            background: transparent;
-            color: var(--cyan);
-            font-family: 'JetBrains Mono';
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .cyber-btn:hover { background: var(--cyan); color: black; box-shadow: 0 0 20px var(--cyan); }
-        .pink-btn { border-color: var(--pink); color: var(--pink); }
-        .pink-btn:hover { background: var(--pink); color: white; box-shadow: 0 0 20px var(--pink); }
-
-        #status-msg { margin-top: 15px; font-size: 0.8rem; font-family: 'JetBrains Mono'; }
-        
-        #auth-lock {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 10; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
-        }
+        :root { --cyan: #00f2ff; --pink: #ff00c8; --bg: #02040a; }
+        body { background: var(--bg); color: white; font-family: 'JetBrains Mono', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .admin-box { background: #05080f; border: 1px solid var(--cyan); padding: 30px; width: 400px; box-shadow: 0 0 30px rgba(0,242,255,0.2); border-radius: 8px; }
+        input, textarea { width: 100%; background: rgba(0,242,255,0.05); border: 1px solid var(--cyan); padding: 12px; color: white; margin-bottom: 15px; font-family: 'JetBrains Mono'; outline: none; box-sizing: border-box; }
+        button { width: 100%; background: var(--cyan); color: black; border: none; padding: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        button:hover { background: white; box-shadow: 0 0 15px white; }
+        .logout-btn { background: transparent; color: var(--pink); border: 1px solid var(--pink); margin-top: 10px; }
+        .logout-btn:hover { background: var(--pink); color: white; }
+        #admin-controls { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="auth-lock">
-        <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--pink); margin-bottom: 20px;"></i>
-        <p style="color: var(--cyan);">VERIFYING_ADMIN_CREDENTIALS...</p>
+    <div class="admin-box" id="login-panel">
+        <h2 style="color:var(--cyan); margin-bottom:20px; font-size:1rem; text-align: center;">ADMIN_LOGIN</h2>
+        <input type="text" id="admin-user" placeholder="USERNAME">
+        <input type="password" id="admin-pass" placeholder="PASSWORD">
+        <button onclick="loginAdmin()">ACCESS_SYSTEM</button>
     </div>
 
-    <div class="admin-container">
-        <h2><i class="fas fa-broadcast-tower"></i> NOTIFY_SYSTEM</h2>
-        
-        <div class="input-group">
-            <label>NOTIFICATION_CONTENT</label>
-            <input type="text" id="notif-msg" placeholder="What is the system update?">
-        </div>
-
-        <div class="input-group">
-            <label>DATE_STAMP</label>
-            <input type="text" id="notif-date" placeholder="e.g., 08 FEB 2026">
-        </div>
-
-        <div class="input-group">
-            <label>ADMIN_ACCESS_KEY</label>
-            <input type="password" id="admin-key" placeholder="Enter System Password">
-        </div>
-
-        <div class="btn-row">
-            <button class="cyber-btn pink-btn" onclick="sendBroadcast()">SEND_BROADCAST</button>
-            <button class="cyber-btn" onclick="window.location.href='index.html'">BACK_TO_HOME</button>
-        </div>
-
-        <div id="status-msg"></div>
+    <div class="admin-box" id="admin-controls">
+        <h2 style="color:var(--pink); margin-bottom:20px; font-size:1rem; text-align: center;">BROADCAST_CENTER</h2>
+        <textarea id="noti-msg" rows="4" placeholder="ENTER SYSTEM MESSAGE..."></textarea>
+        <button onclick="sendNotification()">SEND_GLOBAL_NOTIFICATION</button>
+        <button class="logout-btn" onclick="logout()">LOGOUT</button>
+        <p id="status" style="margin-top:10px; font-size:0.7rem; color:var(--cyan); text-align: center;"></p>
     </div>
 
     <script>
-        // --- 1. FIREBASE CONFIG (Copy from your index.html) ---
+        // Firebase Configuration
         const firebaseConfig = {
-  apiKey: "AIzaSyD6wnG-Gd-UIuNOtCHG3r7cxTFqTh9MyHc",
-  authDomain: "vajiraofficial-55739.firebaseapp.com",
-  databaseURL: "https://vajiraofficial-55739-default-rtdb.firebaseio.com",
-  projectId: "vajiraofficial-55739",
-  storageBucket: "vajiraofficial-55739.firebasestorage.app",
-  messagingSenderId: "837876706312",
-  appId: "1:837876706312:web:25ed963765947587c275bd",
-  measurementId: "G-5NBJ5CLWX4"
-};
+            apiKey: "AIzaSyD6wnG-Gd-UIuNOtCHG3r7cxTFqTh9MyHc",
+            databaseURL: "https://vajiraofficial-55739-default-rtdb.firebaseio.com",
+            projectId: "vajiraofficial-55739",
+        };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const db = firebase.database();
 
-        // --- 2. ADMIN CREDENTIALS ---
-        const ADMIN_EMAIL = "vajirarathnayaka529@gmail.com"; 
-        const ADMIN_SYSTEM_KEY = "Vajira2003@"; 
+        // Login Logic
+        function loginAdmin() {
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
 
-        // Security Check
-        auth.onAuthStateChanged(user => {
-            if (user && user.email.toUpperCase() === ADMIN_EMAIL.toUpperCase()) {
-                document.getElementById('auth-lock').style.display = 'none';
+            // Updated Credentials
+            if(u === "VajiraOfficial" && p === "Vajira2003@") {
+                document.getElementById('login-panel').style.display = 'none';
+                document.getElementById('admin-controls').style.display = 'block';
             } else {
-                alert("ACCESS_DENIED: Redirecting to main OS...");
-                window.location.href = 'index.html';
+                alert("ACCESS_DENIED: INVALID_CREDENTIALS");
             }
-        });
+        }
 
-        function sendBroadcast() {
-            const msg = document.getElementById('notif-msg').value;
-            const date = document.getElementById('notif-date').value;
-            const key = document.getElementById('admin-key').value;
-            const status = document.getElementById('status-msg');
+        // Logout Logic
+        function logout() {
+            document.getElementById('admin-user').value = "";
+            document.getElementById('admin-pass').value = "";
+            document.getElementById('login-panel').style.display = 'block';
+            document.getElementById('admin-controls').style.display = 'none';
+        }
 
-            if (key !== ADMIN_SYSTEM_KEY) {
-                status.style.color = 'var(--pink)';
-                status.innerText = "> INVALID_ACCESS_KEY";
+        // Send Notification Logic
+        function sendNotification() {
+            const msg = document.getElementById('noti-msg').value;
+            if(!msg) {
+                alert("Please enter a message");
                 return;
             }
 
-            db.ref('system/notifications').push({
+            const timestamp = new Date().toLocaleString(); // Shows Date and Time
+            
+            db.ref('notifications').push({
                 message: msg,
-                timestamp: date,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
+                time: timestamp
             }).then(() => {
-                status.style.color = 'var(--cyan)';
-                status.innerText = "> BROADCAST_SUCCESSFUL";
-                document.getElementById('notif-msg').value = "";
-                document.getElementById('admin-key').value = "";
-            }).catch(err => {
-                status.innerText = "> ERROR: " + err.message;
+                document.getElementById('status').innerText = "SUCCESS: MESSAGE_BROADCASTED";
+                document.getElementById('noti-msg').value = "";
+                // Clear status message after 3 seconds
+                setTimeout(() => { document.getElementById('status').innerText = ""; }, 3000);
+            }).catch((error) => {
+                document.getElementById('status').innerText = "ERROR: " + error.message;
             });
         }
     </script>
