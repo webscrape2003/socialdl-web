@@ -36,69 +36,6 @@
 
 
 
-
-
-
-
-/* Notification Specifics */
-.notification-dot {
-    position: absolute;
-    top: 5px; right: 5px;
-    width: 8px; height: 8px;
-    background: #ff0055;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ff0055;
-    animation: pulse-red 1.5s infinite;
-}
-
-@keyframes pulse-red {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.5; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.notif-dropdown {
-    position: absolute;
-    top: 55px; right: 0;
-    width: 300px;
-    background: rgba(5, 8, 15, 0.98);
-    border: 1px solid var(--cyan);
-    display: none;
-    z-index: 1000;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-}
-
-.notif-header {
-    padding: 12px;
-    font-size: 0.65rem;
-    color: var(--cyan);
-    border-bottom: 1px solid var(--border);
-    letter-spacing: 2px;
-    font-family: 'JetBrains Mono';
-}
-
-.notif-body { max-height: 350px; overflow-y: auto; }
-
-.notif-item {
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.notif-time {
-    display: block;
-    font-size: 0.6rem;
-    color: var(--pink);
-    margin-bottom: 5px;
-    font-family: 'JetBrains Mono';
-}
-
-.notif-text { font-size: 0.75rem; color: #fff; line-height: 1.4; }
-
-
-
-
-        
-
 .auth-portal {
     width: 380px;
     height: 550px;
@@ -1004,66 +941,18 @@
     
 
 
-
-
 <div id="top-status-bar">
     <div class="status-connection">
         <span class="pulse-dot"></span>
         <span id="user-status-text">GUEST_MODE</span>
     </div>
-
-    <div class="notification-wrapper" style="position: relative; display: inline-block;">
-        <button id="notification-trigger" onclick="toggleNotifications()" style="background: var(--glass); border: 1px solid var(--border); padding: 10px; color: var(--cyan); cursor: pointer; font-size: 1.1rem; backdrop-filter: blur(10px); display: flex; align-items: center; position: relative;">
-            <i class="fas fa-bell"></i>
-            <span id="nav-red-dot" class="notification-dot" style="display:none;"></span>
-        </button>
-        <div id="notification-dropdown" class="notif-dropdown">
-            <div class="notif-header">SYSTEM_NOTIFICATIONS</div>
-            <div id="notif-content" class="notif-body">
-                <div style="padding:20px; text-align:center; font-size:0.6rem; opacity:0.5;">INITIALIZING_FEED...</div>
-            </div>
-        </div>
-    </div>
-
     <button id="login-trigger" onclick="openLogin()">
         <i class="fas fa-user-circle"></i>
         <span>LOGIN</span>
     </button>
 </div>
 
-<div class="card" id="admin-panel" style="display: none; border-color: var(--pink); grid-column: 1 / -1;">
-    <div class="card-header-flex">
-        <i class="fas fa-user-shield" style="color: var(--pink);"></i>
-        <span class="live-tag" style="background: rgba(255, 0, 200, 0.1); color: var(--pink);">ADMIN_OVERRIDE</span>
-    </div>
-    <h3>BROADCAST_CONTROL_UNIT</h3>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-        <div class="stat-row">
-            <div class="stat-label">NOTIF_MESSAGE</div>
-            <input type="text" id="admin-notif-msg" class="login-input" placeholder="Update message...">
-        </div>
-        <div class="stat-row">
-            <div class="stat-label">DATE_STAMP</div>
-            <input type="text" id="admin-notif-date" class="login-input" placeholder="e.g. 10 FEB 2026">
-        </div>
-    </div>
-    <div class="stat-row">
-        <div class="stat-label">SYSTEM_ACCESS_KEY</div>
-        <input type="password" id="admin-system-pass" class="login-input" placeholder="Enter System Password">
-    </div>
-    <button class="cyber-btn pink-bg" onclick="sendGlobalNotification()" style="width:220px;">SEND_BROADCAST</button>
-    <p id="admin-status" style="font-size: 0.6rem; margin-top: 10px; color: var(--cyan);"></p>
-</div>
 
-
-
-
-
-
-
-
-
-    
 
     
 <div id="login-modal" class="login-overlay">
@@ -1255,6 +1144,19 @@
 
 
 
+<div class="card" id="admin-entry-card" style="display: none; border-color: var(--pink);">
+    <div class="card-header-flex">
+        <i class="fas fa-lock" style="color: var(--pink);"></i>
+        <span class="live-tag" style="background: rgba(255, 0, 200, 0.1); color: var(--pink);">ROOT_ACCESS</span>
+    </div>
+    <h3>ADMIN_TERMINAL</h3>
+    <p style="font-size: 0.7rem; opacity: 0.6; margin: 10px 0;">Access the notification broadcast system and core controls.</p>
+    <button class="cyber-btn pink-bg" onclick="window.location.href='admin.html'">OPEN_TERMINAL</button>
+</div>
+
+
+
+        
         
         
         <div class="card">
@@ -1501,11 +1403,6 @@ const firebaseConfig = {
 
 
 
-
-
-
-
-        
 
 // --- 2. INITIALIZE FIREBASE FIRST ---
 if (!firebase.apps.length) {
@@ -1985,94 +1882,6 @@ initBattery();
             document.getElementById('view-title').innerHTML = `Vajira<br>${titles[viewId]}`;
             toggleMenu();
         }
-
-
-
-
-
-// --- NOTIFICATION CONFIGURATION ---
-const ADMIN_EMAIL = "vajirarathnayaka529@gmail.com"; // Set your login email
-const ADMIN_SYSTEM_KEY = "Vajira2003@";      // Set your broadcast password
-
-// Toggle Visibility
-function toggleNotifications() {
-    const dropdown = document.getElementById('notification-dropdown');
-    const dot = document.getElementById('nav-red-dot');
-    
-    if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-    } else {
-        dropdown.style.display = 'block';
-        dot.style.display = 'none'; // Clear red dot when viewed
-    }
-}
-
-// Override existing unlockSystem to show Admin Panel if user matches
-const originalUnlock = unlockSystem;
-unlockSystem = function(username) {
-    originalUnlock(username);
-    
-    // Check if logged in user is the Admin
-    const user = auth.currentUser;
-    if(user && user.email && user.email.toUpperCase() === ADMIN_EMAIL.toUpperCase()) {
-        document.getElementById('admin-panel').style.display = 'block';
-        console.log("ADMIN_SESSION_STARTED");
-    }
-};
-
-// Send Broadcast to Firebase
-function sendGlobalNotification() {
-    const msg = document.getElementById('admin-notif-msg').value;
-    const date = document.getElementById('admin-notif-date').value;
-    const key = document.getElementById('admin-system-pass').value;
-    const status = document.getElementById('admin-status');
-
-    if(!msg || !date) return alert("FIELDS_EMPTY");
-
-    if(key !== ADMIN_SYSTEM_KEY) {
-        status.innerText = "> ACCESS_DENIED: WRONG_SYSTEM_KEY";
-        status.style.color = "var(--pink)";
-        return;
-    }
-
-    db.ref('system/notifications').push({
-        message: msg,
-        timestamp: date,
-        type: "ADMIN_BROADCAST"
-    }).then(() => {
-        status.innerText = "> BROADCAST_SENT_SUCCESSFULLY";
-        status.style.color = "var(--cyan)";
-        document.getElementById('admin-notif-msg').value = "";
-        document.getElementById('admin-system-pass').value = "";
-    });
-}
-
-// Live Firebase Listener (For all users)
-db.ref('system/notifications').limitToLast(10).on('value', (snapshot) => {
-    const content = document.getElementById('notif-content');
-    const dot = document.getElementById('nav-red-dot');
-    content.innerHTML = ""; 
-
-    snapshot.forEach((child) => {
-        const data = child.val();
-        const html = `
-            <div class="notif-item">
-                <span class="notif-time">${data.timestamp}</span>
-                <div class="notif-text">${data.message}</div>
-            </div>
-        `;
-        content.insertAdjacentHTML('afterbegin', html);
-    });
-
-    // Show the red dot to everyone when a new notification is added
-    dot.style.display = 'block';
-});
-
-
-
-
-
-        
     </script>
 
 
