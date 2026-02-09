@@ -1957,6 +1957,57 @@ db.ref('notifications').limitToLast(5).on('value', (snapshot) => {
 
 
 
+
+
+function loadUserCoupons(uid) {
+    const promoContainer = document.getElementById('promo-list');
+    if (!promoContainer) return;
+
+    // Listen to the 'coupons' node for this specific user's UID
+    firebase.database().ref('coupons/' + uid).on('value', (snapshot) => {
+        if (snapshot.exists()) {
+            promoContainer.innerHTML = ''; // Clear the "NO_DATA" message
+            snapshot.forEach((child) => {
+                const data = child.val();
+                const div = document.createElement('div');
+                div.className = 'stat-row'; 
+                div.style.padding = "10px";
+                div.style.marginBottom = "10px";
+                div.style.border = "1px dashed var(--cyan)";
+                div.style.background = "rgba(0, 242, 255, 0.05)";
+                
+                div.innerHTML = `
+                    <div style="color:var(--pink); font-weight:bold;">CODE: ${data.code}</div>
+                    <div style="font-size:0.5rem; opacity:0.6;">TYPE: ${data.type || 'PROMO_DISCOUNT'}</div>
+                `;
+                promoContainer.appendChild(div);
+            });
+        }
+    });
+}
+
+
+
+function sendPromoCode() {
+    const targetUID = document.getElementById('target-uid').value; // Get UID from input
+    const newCode = document.getElementById('promo-code').value;  // Get Code from input
+
+    if(!targetUID || !newCode) return alert("UID and Code are required!");
+
+    firebase.database().ref('coupons/' + targetUID).push({
+        code: newCode,
+        type: "EXCLUSIVE_ACCESS",
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(() => {
+        alert("PROMO_CODE_SENT_TO_UID: " + targetUID);
+    });
+}
+
+
+        
+
+
+        
     function listenForCoupons() {
     const user = firebase.auth().currentUser;
     if (!user) return;
@@ -1994,6 +2045,24 @@ function unlockSystem(username) {
     listenForCoupons(); 
 }
     
+// MONITOR AUTHENTICATION STATE
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // User is signed in
+        const username = user.displayName || user.email?.split('@')[0] || "GUEST_USER";
+        console.log("SESSION_RESTORED: " + user.uid);
+        
+        // Auto-unlock the system if they refresh the page
+        unlockSystem(username.toUpperCase());
+        
+        // Load the coupons for this specific UID
+        loadUserCoupons(user.uid);
+    } else {
+        // No user is signed in
+        console.log("NO_ACTIVE_SESSION");
+        openLogin();
+    }
+});
 
 
         
