@@ -1161,21 +1161,6 @@
 
 <div class="card">
     <div class="card-header-flex">
-        <i class="fas fa-ticket-simple"></i>
-        <span class="live-tag">REWARDS</span>
-    </div>
-    <h3>PROMO_VAULT</h3>
-    <div id="promo-list" style="font-family:'JetBrains Mono'; font-size:0.7rem;">
-        <div style="opacity:0.4;">NO_ACTIVE_CODES</div>
-    </div>
-</div>
-
-
-
-
-        
-<div class="card">
-    <div class="card-header-flex">
         <i class="fas fa-network-wired"></i>
         <span class="live-tag"><span class="pulse-dot"></span> LIVE_TRAFFIC</span>
     </div>
@@ -1759,7 +1744,7 @@ function handleSignup() {
 
         
 
-/*function unlockSystem(username) {
+function unlockSystem(username) {
     alert("ACCESS_GRANTED: Welcome " + username);
     
     // Hide the login modal
@@ -1773,7 +1758,7 @@ function handleSignup() {
     
     // Optional: Play a sound or trigger a final "boot" animation here
     console.log("System fully unlocked for user: " + username);
-}*/
+}
 
 
 
@@ -1954,131 +1939,6 @@ db.ref('notifications').limitToLast(5).on('value', (snapshot) => {
     }
 });
 
-
-
-
-
-
-// 1. Rename or ensure this function matches what you call later
-function loadUserCoupons(uid) {
-    const promoContainer = document.getElementById('promo-list');
-    if (!promoContainer) return;
-
-    // Use the same path as your admin panel (user_promos or coupons)
-    // If your admin panel uses 'user_promos', change 'coupons' to 'user_promos' below
-    firebase.database().ref('coupons/' + uid).on('value', (snapshot) => {
-        if (snapshot.exists()) {
-            promoContainer.innerHTML = ''; 
-            snapshot.forEach((child) => {
-                const data = child.val();
-                const div = document.createElement('div');
-                div.style.padding = "10px";
-                div.style.marginTop = "5px";
-                div.style.background = "rgba(255, 0, 200, 0.1)";
-                div.style.borderLeft = "2px solid var(--pink)";
-                div.innerHTML = `
-                    <div style="color:var(--cyan)">CODE: ${data.code}</div>
-                    <small style="opacity:0.5">ISSUED: ${data.timestamp ? data.timestamp.split('T')[0] : 'RECENT'}</small>
-                `;
-                promoContainer.appendChild(div);
-            });
-        } else {
-            promoContainer.innerHTML = '<div style="opacity:0.4;">NO_ACTIVE_CODES</div>';
-        }
-    });
-}
-
-// 2. Fix the unlockSystem function to call the correct name
-function unlockSystem(username) {
-    showTechAlert("ACCESS_GRANTED", username);
-    closeLogin();
-    document.getElementById('main').classList.remove('locked');
-    document.getElementById('user-status-text').innerText = username;
-    
-    // GET THE CURRENT USER UID AND LOAD CODES
-    const user = firebase.auth().currentUser;
-    if (user) {
-        loadUserCoupons(user.uid); 
-    }
-}
-
-
-
-function sendPromoCode() {
-    const targetUID = document.getElementById('target-uid').value; // Get UID from input
-    const newCode = document.getElementById('promo-code').value;  // Get Code from input
-
-    if(!targetUID || !newCode) return alert("UID and Code are required!");
-
-    firebase.database().ref('coupons/' + targetUID).push({
-        code: newCode,
-        type: "EXCLUSIVE_ACCESS",
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-    }).then(() => {
-        alert("PROMO_CODE_SENT_TO_UID: " + targetUID);
-    });
-}
-
-
-        
-
-
-        
-    function listenForCoupons() {
-    const user = firebase.auth().currentUser;
-    if (!user) return;
-
-    const promoContainer = document.getElementById('promo-list');
-    
-    firebase.database().ref('coupons/' + user.uid).on('value', (snapshot) => {
-        if (snapshot.exists()) {
-            promoContainer.innerHTML = ''; // Clear "No codes" message
-            snapshot.forEach((child) => {
-                const data = child.val();
-                const div = document.createElement('div');
-                div.style.padding = "10px";
-                div.style.marginTop = "5px";
-                div.style.background = "rgba(255, 0, 200, 0.1)";
-                div.style.borderLeft = "2px solid var(--pink)";
-                div.innerHTML = `
-                    <div style="color:var(--cyan)">CODE: ${data.code}</div>
-                    <small style="opacity:0.5">ISSUED: ${data.timestamp.split('T')[0]}</small>
-                `;
-                promoContainer.appendChild(div);
-            });
-        }
-    });
-}
-
-// Update your existing unlockSystem function to include the listener:
-function unlockSystem(username) {
-    showTechAlert("ACCESS_GRANTED", username);
-    closeLogin();
-    document.getElementById('main').classList.remove('locked');
-    document.getElementById('user-status-text').innerText = username;
-    
-    // START LISTENING FOR PROMOS
-    listenForCoupons(); 
-}
-    
-// MONITOR AUTHENTICATION STATE
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        // User is signed in
-        const username = user.displayName || user.email?.split('@')[0] || "GUEST_USER";
-        console.log("SESSION_RESTORED: " + user.uid);
-        
-        // Auto-unlock the system if they refresh the page
-        unlockSystem(username.toUpperCase());
-        
-        // Load the coupons for this specific UID
-        loadUserCoupons(user.uid);
-    } else {
-        // No user is signed in
-        console.log("NO_ACTIVE_SESSION");
-        openLogin();
-    }
-});
 
 
         
