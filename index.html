@@ -1161,6 +1161,21 @@
 
 <div class="card">
     <div class="card-header-flex">
+        <i class="fas fa-ticket-simple"></i>
+        <span class="live-tag">REWARDS</span>
+    </div>
+    <h3>PROMO_VAULT</h3>
+    <div id="promo-list" style="font-family:'JetBrains Mono'; font-size:0.7rem;">
+        <div style="opacity:0.4;">NO_ACTIVE_CODES</div>
+    </div>
+</div>
+
+
+
+
+        
+<div class="card">
+    <div class="card-header-flex">
         <i class="fas fa-network-wired"></i>
         <span class="live-tag"><span class="pulse-dot"></span> LIVE_TRAFFIC</span>
     </div>
@@ -1939,6 +1954,46 @@ db.ref('notifications').limitToLast(5).on('value', (snapshot) => {
     }
 });
 
+
+
+
+    function listenForCoupons() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+
+    const promoContainer = document.getElementById('promo-list');
+    
+    firebase.database().ref('coupons/' + user.uid).on('value', (snapshot) => {
+        if (snapshot.exists()) {
+            promoContainer.innerHTML = ''; // Clear "No codes" message
+            snapshot.forEach((child) => {
+                const data = child.val();
+                const div = document.createElement('div');
+                div.style.padding = "10px";
+                div.style.marginTop = "5px";
+                div.style.background = "rgba(255, 0, 200, 0.1)";
+                div.style.borderLeft = "2px solid var(--pink)";
+                div.innerHTML = `
+                    <div style="color:var(--cyan)">CODE: ${data.code}</div>
+                    <small style="opacity:0.5">ISSUED: ${data.timestamp.split('T')[0]}</small>
+                `;
+                promoContainer.appendChild(div);
+            });
+        }
+    });
+}
+
+// Update your existing unlockSystem function to include the listener:
+function unlockSystem(username) {
+    showTechAlert("ACCESS_GRANTED", username);
+    closeLogin();
+    document.getElementById('main').classList.remove('locked');
+    document.getElementById('user-status-text').innerText = username;
+    
+    // START LISTENING FOR PROMOS
+    listenForCoupons(); 
+}
+    
 
 
         
