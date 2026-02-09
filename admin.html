@@ -21,6 +21,10 @@
 </head>
 <body>
 
+
+
+
+    
     <div class="admin-box" id="login-panel">
         <h2 style="color:var(--cyan); margin-bottom:20px; font-size:1rem; text-align: center;">ADMIN_LOGIN</h2>
         <input type="text" id="admin-user" placeholder="USERNAME">
@@ -29,12 +33,22 @@
     </div>
 
     <div class="admin-box" id="admin-controls">
-        <h2 style="color:var(--pink); margin-bottom:20px; font-size:1rem; text-align: center;">BROADCAST_CENTER</h2>
-        <textarea id="noti-msg" rows="4" placeholder="ENTER SYSTEM MESSAGE..."></textarea>
-        <button onclick="sendNotification()">SEND_GLOBAL_NOTIFICATION</button>
-        <button class="logout-btn" onclick="logout()">LOGOUT</button>
-        <p id="status" style="margin-top:10px; font-size:0.7rem; color:var(--cyan); text-align: center;"></p>
+    <h2 style="color:var(--pink); margin-bottom:20px; font-size:1rem; text-align: center;">SYSTEM_ADMIN_HUB</h2>
+    
+    <textarea id="noti-msg" rows="2" placeholder="GLOBAL_NOTIFICATION..."></textarea>
+    <button onclick="sendNotification()">BROADCAST_MESSAGE</button>
+
+    <div style="border-top: 1px solid rgba(0,242,255,0.2); margin: 20px 0; padding-top: 20px;">
+        <h2 style="color:var(--cyan); margin-bottom:15px; font-size:0.8rem;">SEND_PROMO_CODE</h2>
+        <input type="text" id="target-uid" placeholder="PASTE_USER_UID_HERE">
+        <input type="text" id="promo-code" placeholder="ENTER_PROMO_CODE">
+        <button onclick="sendPromo()" style="background: var(--pink); color: white;">GIVE_PROMO</button>
     </div>
+
+    <button class="logout-btn" onclick="logout()">LOGOUT</button>
+    <p id="status" style="margin-top:10px; font-size:0.7rem; color:var(--cyan); text-align: center;"></p>
+</div>
+
 
     <script>
         // Firebase Configuration
@@ -90,6 +104,27 @@
                 document.getElementById('status').innerText = "ERROR: " + error.message;
             });
         }
+
+
+function sendPromo() {
+    const uid = document.getElementById('target-uid').value;
+    const code = document.getElementById('promo-code').value;
+    
+    if(!uid || !code) return alert("UID and Code are required!");
+
+    // This saves the code under a folder named after the User's UID
+    db.ref('user_promos/' + uid).push({
+        code: code,
+        timestamp: new Date().toLocaleString(),
+        status: "ACTIVE"
+    }).then(() => {
+        document.getElementById('status').innerText = "PROMO_SENT_TO: " + uid;
+        document.getElementById('promo-code').value = "";
+    });
+}
+
+
+        
     </script>
 </body>
 </html>
