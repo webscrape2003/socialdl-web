@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpotifyStream | VajiraOfficial</title>
+    <title>Spotify Pro | VajiraOfficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -13,11 +13,13 @@
             --card: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
             --text-dim: #b3b3b3;
+            --danger: #eb4034;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
+            background-image: radial-gradient(circle at top left, #121212, #000);
             color: white;
             display: flex;
             flex-direction: column;
@@ -31,182 +33,198 @@
             width: 100%;
             max-width: 500px;
             background: var(--card);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
+            backdrop-filter: blur(25px);
+            border-radius: 35px;
             padding: 25px;
             border: 1px solid var(--border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
         }
-
-        .header { text-align: center; margin-bottom: 20px; }
-        .header i { color: var(--spotify-green); font-size: 2rem; margin-bottom: 10px; }
 
         /* Search Section */
-        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-area { margin-bottom: 25px; }
+        .input-group { display: flex; gap: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 20px; border: 1px solid var(--border); }
         input {
-            flex: 1;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border);
-            padding: 14px;
-            border-radius: 15px;
-            color: white;
-            outline: none;
+            flex: 1; background: transparent; border: none; padding: 10px 15px;
+            color: white; outline: none; font-size: 1rem;
         }
         #searchBtn {
-            background: var(--spotify-green);
-            border: none;
-            padding: 0 20px;
-            border-radius: 15px;
-            color: black;
-            font-weight: 800;
-            cursor: pointer;
+            background: var(--spotify-green); border: none; width: 45px; height: 45px;
+            border-radius: 15px; color: black; cursor: pointer; transition: 0.3s;
         }
+        #searchBtn:hover { transform: scale(1.05); filter: brightness(1.1); }
 
         /* Results List */
-        .results-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; }
+        .results-list { display: flex; flex-direction: column; gap: 12px; max-height: 450px; overflow-y: auto; padding-right: 5px; }
+        .results-list::-webkit-scrollbar { width: 4px; }
+        .results-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
         .song-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255,255,255,0.03);
-            padding: 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid transparent;
+            display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02);
+            padding: 12px; border-radius: 18px; cursor: pointer; transition: 0.2s; border: 1px solid var(--border);
         }
-        .song-item:hover { background: rgba(255,255,255,0.08); border-color: var(--spotify-green); }
-        .song-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-        .song-info { flex: 1; }
-        .song-info h4 { margin: 0; font-size: 0.9rem; }
-        .song-info p { margin: 0; font-size: 0.75rem; color: var(--text-dim); }
-
-        /* Player Section */
-        #playerArea { 
-            display: none; 
-            margin-top: 20px; 
-            text-align: center; 
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .preview-img { width: 180px; height: 180px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .song-item:hover { background: rgba(255,255,255,0.07); border-color: var(--spotify-green); }
+        .song-item img { width: 60px; height: 60px; border-radius: 12px; }
         
-        audio { width: 100%; margin: 15px 0; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
+        .song-meta { flex: 1; }
+        .song-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+        .explicit-badge { font-size: 0.6rem; background: var(--text-dim); color: black; padding: 1px 4px; border-radius: 3px; font-weight: 800; }
+        .song-artist { font-size: 0.8rem; color: var(--text-dim); }
+        .song-extra { font-size: 0.7rem; color: var(--spotify-green); margin-top: 4px; font-weight: 600; }
 
-        .dl-btn {
-            display: block;
-            background: white;
-            color: black;
-            text-decoration: none;
-            padding: 15px;
-            border-radius: 15px;
-            font-weight: 800;
-            margin-top: 10px;
-        }
+        /* Player UI */
+        #playerArea { display: none; text-align: center; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        #loader { display: none; color: var(--spotify-green); text-align: center; margin: 10px 0; font-size: 0.8rem; }
+        .album-art { width: 100%; aspect-ratio: 1/1; border-radius: 25px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        .track-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .info-pill { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; border: 1px solid var(--border); font-size: 0.75rem; text-align: left; }
+        .pill-label { color: var(--text-dim); display: block; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 2px; }
+
+        audio { width: 100%; margin: 20px 0; filter: invert(1) hue-rotate(180deg); }
+
+        .action-btns { display: flex; flex-direction: column; gap: 10px; }
+        .btn-main { background: #fff; color: #000; text-decoration: none; padding: 16px; border-radius: 18px; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-sub { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border); padding: 12px; border-radius: 15px; cursor: pointer; font-family: inherit; }
+
+        #loader { display: none; margin: 20px 0; text-align: center; font-weight: 700; color: var(--spotify-green); font-size: 0.8rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
-            <i class="fa-brands fa-spotify"></i>
-            <h2>Spotify <span style="color:var(--spotify-green)">Search</span></h2>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="queryInput" placeholder="Song name or Artist...">
-            <button id="searchBtn">SEARCH</button>
-        </div>
-
-        <div id="loader">⚡ SYNCING WITH SPOTIFY...</div>
-
-        <div id="resultsArea" class="results-list">
+        <div class="search-area" id="searchHeader">
+            <h2 style="margin-top:0">Spotify <span style="color:var(--spotify-green)">Premium</span></h2>
+            <div class="input-group">
+                <input type="text" id="queryInput" placeholder="Search tracks, artists, albums...">
+                <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
+        </div>
+
+        <div id="loader">⚡ FETCHING DATA...</div>
+
+        <div id="resultsArea" class="results-list"></div>
 
         <div id="playerArea">
-            <img id="pImg" src="" class="preview-img">
-            <h3 id="pTitle">Title</h3>
-            <p id="pArtist" style="color:var(--text-dim); font-size: 0.8rem;">Artist</p>
-            
+            <img id="pImg" class="album-art" src="">
+            <h2 id="pTitle" style="margin:0 0 5px 0"></h2>
+            <p id="pArtist" style="color:var(--spotify-green); font-weight:700; margin:0"></p>
+
+            <div class="track-info-grid">
+                <div class="info-pill">
+                    <span class="pill-label">Album</span>
+                    <span id="pAlbum" style="font-weight:600"></span>
+                </div>
+                <div class="info-pill">
+                    <span class="pill-label">Release Date</span>
+                    <span id="pDate" style="font-weight:600"></span>
+                </div>
+                <div class="info-pill">
+                    <span class="pill-label">Type</span>
+                    <span id="pType" style="font-weight:600; text-transform: capitalize;"></span>
+                </div>
+                <div class="info-pill">
+                    <span class="pill-label">Duration</span>
+                    <span id="pDuration" style="font-weight:600"></span>
+                </div>
+            </div>
+
             <audio id="audioPreview" controls></audio>
-            
-            <a id="dlLink" href="#" class="dl-btn" target="_blank">
-                <i class="fa-solid fa-download"></i> DOWNLOAD MP3
-            </a>
-            <button onclick="closePlayer()" style="background:none; border:none; color:var(--text-dim); margin-top:15px; cursor:pointer;">Back to search</button>
+
+            <div class="action-btns">
+                <a id="dlLink" href="#" class="btn-main" target="_blank">
+                    <i class="fa-solid fa-download"></i> DOWNLOAD MP3 FULL
+                </a>
+                <button class="btn-sub" onclick="goBack()">BACK TO SEARCH</button>
+            </div>
         </div>
     </div>
 
     <script>
         const API_KEY = "vajira-dbsonkgf46-1767792373072";
 
-        document.getElementById('searchBtn').addEventListener('click', async () => {
+        document.getElementById('searchBtn').addEventListener('click', performSearch);
+        document.getElementById('queryInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
+
+        async function performSearch() {
             const query = document.getElementById('queryInput').value.trim();
             if(!query) return;
 
-            showLoader(true);
-            document.getElementById('resultsArea').innerHTML = "";
-            document.getElementById('playerArea').style.display = "none";
+            toggleLoader(true);
+            const list = document.getElementById('resultsArea');
+            list.innerHTML = "";
 
             try {
                 const response = await fetch(`https://vajira-official-apis.vercel.app/api/spotifysearch?apikey=${API_KEY}&query=${encodeURIComponent(query)}`);
                 const data = await response.json();
 
                 if(data.status && data.result.search_data) {
-                    const list = document.getElementById('resultsArea');
                     data.result.search_data.forEach(song => {
-                        const div = document.createElement('div');
-                        div.className = 'song-item';
-                        div.innerHTML = `
+                        const item = document.createElement('div');
+                        item.className = 'song-item';
+                        item.innerHTML = `
                             <img src="${song.cover_img}">
-                            <div class="song-info">
-                                <h4>${song.title}</h4>
-                                <p>${song.artist} • ${song.duration}</p>
+                            <div class="song-meta">
+                                <div class="song-title">
+                                    ${song.title} 
+                                    ${song.explicit ? '<span class="explicit-badge">E</span>' : ''}
+                                </div>
+                                <div class="song-artist">${song.artist}</div>
+                                <div class="song-extra">
+                                    <i class="fa-solid fa-fire"></i> ${song.popularity} &nbsp; 
+                                    <i class="fa-regular fa-calendar"></i> ${song.release_date}
+                                </div>
                             </div>
                         `;
-                        div.onclick = () => fetchDetails(song.song_link);
-                        list.appendChild(div);
+                        item.onclick = () => getDownloadDetails(song.song_link, song);
+                        list.appendChild(item);
                     });
                 }
-            } catch (e) { alert("Search failed"); }
-            showLoader(false);
-        });
+            } catch (err) { alert("Search Error"); }
+            toggleLoader(false);
+        }
 
-        async function fetchDetails(songUrl) {
-            showLoader(true);
+        async function getDownloadDetails(url, searchData) {
+            toggleLoader(true);
             try {
-                // Using the detail API endpoint based on your logic
-                const res = await fetch(`https://vajira-official-apis.vercel.app/api/spotifydl?apikey=${API_KEY}&url=${encodeURIComponent(songUrl)}`);
+                const res = await fetch(`https://vajira-official-apis.vercel.app/api/spotifydl?apikey=${API_KEY}&url=${encodeURIComponent(url)}`);
                 const data = await res.json();
 
                 if(data.status) {
-                    const track = data.result;
-                    document.getElementById('pImg').src = track.preview.image;
-                    document.getElementById('pTitle').innerText = track.preview.title;
-                    document.getElementById('pArtist').innerText = track.preview.artist;
-                    document.getElementById('audioPreview').src = track.preview.audio;
-                    document.getElementById('dlLink').href = track.download;
+                    const result = data.result;
+                    const preview = result.preview;
 
+                    // Fill Player Data
+                    document.getElementById('pImg').src = preview.image;
+                    document.getElementById('pTitle').innerText = preview.title;
+                    document.getElementById('pArtist').innerText = preview.artist;
+                    document.getElementById('pAlbum').innerText = searchData.album || "Single";
+                    document.getElementById('pDate').innerText = new Date(preview.date).toLocaleDateString();
+                    document.getElementById('pType').innerText = preview.type;
+                    document.getElementById('pDuration').innerText = searchData.duration;
+                    
+                    document.getElementById('audioPreview').src = preview.audio;
+                    document.getElementById('dlLink').href = result.download;
+
+                    // Switch Views
+                    document.getElementById('searchHeader').style.display = "none";
                     document.getElementById('resultsArea').style.display = "none";
                     document.getElementById('playerArea').style.display = "block";
                 }
-            } catch (e) { alert("Error fetching song details"); }
-            showLoader(false);
+            } catch (err) { alert("Download API Error"); }
+            toggleLoader(false);
         }
 
-        function closePlayer() {
+        function goBack() {
+            document.getElementById('searchHeader').style.display = "block";
             document.getElementById('resultsArea').style.display = "flex";
             document.getElementById('playerArea').style.display = "none";
             document.getElementById('audioPreview').pause();
         }
 
-        function showLoader(show) {
+        function toggleLoader(show) {
             document.getElementById('loader').style.display = show ? "block" : "none";
+            document.getElementById('searchBtn').disabled = show;
         }
     </script>
 </body>
