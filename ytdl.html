@@ -78,154 +78,74 @@
         }
         #fetchBtn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
+        /* --- NEW SEARCH GRID STYLES --- */
+        #searchArea { display: none; flex-direction: column; gap: 12px; margin-bottom: 20px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
+        .search-card { 
+            display: flex; gap: 12px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 15px; 
+            border: 1px solid var(--border); cursor: pointer; transition: 0.2s; align-items: center;
+        }
+        .search-card:hover { border-color: var(--accent); background: rgba(255,45,85,0.05); }
+        .search-thumb { width: 100px; aspect-ratio: 16/9; border-radius: 8px; object-fit: cover; }
+        .search-info { flex: 1; }
+        .search-title { font-size: 0.8rem; font-weight: 700; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; }
+        .search-meta { font-size: 0.65rem; color: var(--text-dim); }
 
+        /* --- BANK PAYMENT SECTION --- */
+        .bank-card {
+            margin-top: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px dashed var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bank-card::before {
+            content: 'PREMIUM SUPPORT';
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            background: var(--accent);
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 30px;
+            transform: rotate(45deg);
+        }
+        .bank-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .bank-details { display: flex; flex-direction: column; gap: 8px; }
+        .detail-row { display: flex; justify-content: space-between; font-size: 0.8rem; }
+        .detail-label { color: var(--text-dim); }
+        .detail-value { color: #fff; font-weight: 600; }
+        .acc-number-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .acc-number-box:hover { border-color: var(--accent); background: rgba(255, 45, 85, 0.05); }
 
-
-/* --- BANK PAYMENT SECTION --- */
-.bank-card {
-    margin-top: 25px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 1px dashed var(--border);
-    border-radius: 20px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-.bank-card::before {
-    content: 'PREMIUM SUPPORT';
-    position: absolute;
-    top: 10px;
-    right: -20px;
-    background: var(--accent);
-    font-size: 0.6rem;
-    font-weight: 800;
-    padding: 2px 30px;
-    transform: rotate(45deg);
-}
-
-.bank-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: var(--accent);
-    font-size: 0.9rem;
-    font-weight: 700;
-}
-
-.bank-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-}
-
-.detail-label { color: var(--text-dim); }
-.detail-value { color: #fff; font-weight: 600; }
-
-.acc-number-box {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 12px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.acc-number-box:hover {
-    border-color: var(--accent);
-    background: rgba(255, 45, 85, 0.05);
-}
-
-#copyStatus {
-    font-size: 0.7rem;
-    color: var(--accent);
-    display: none;
-    margin-top: 5px;
-    text-align: center;
-}
-
-/* --- API PRICING BADGE --- */
-.api-badge {
-    position: absolute;
-    top: -15px;
-    right: 20px;
-    background: linear-gradient(45deg, #ff2d55, #ff7b00);
-    padding: 8px 15px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4);
-    z-index: 10;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    animation: pulse Glow 2s infinite;
-}
-
-.api-badge span {
-    background: rgba(0,0,0,0.2);
-    padding: 2px 6px;
-    border-radius: 6px;
-    font-family: monospace;
-}
-
-@keyframes pulseGlow {
-    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4); }
-    50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(255, 45, 85, 0.6); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4); }
-}
-
-
-        
         /* --- BEAUTIFUL PLAYER --- */
         #resultArea { display: none; animation: slideUp 0.6s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
         .player-frame {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-            margin-bottom: 15px;
+            width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden;
+            border: 2px solid var(--accent); box-shadow: 0 0 20px var(--accent-glow); margin-bottom: 15px;
         }
         video { width: 100%; height: 100%; display: block; object-fit: contain; }
-
         .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; line-height: 1.4; text-align: left; }
-        
-        .stats { 
-            display: flex; gap: 8px; font-size: 0.7rem; color: var(--text-dim); 
-            margin-bottom: 20px; flex-wrap: wrap; 
-        }
+        .stats { display: flex; gap: 8px; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 20px; flex-wrap: wrap; }
         .stats span { background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 8px; font-weight: 600; border: 1px solid var(--border); }
-
         .format-selection { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 5px; border-radius: 15px; }
-        
-        .sel-btn {
-            flex: 1; padding: 12px; border-radius: 12px; border: none;
-            background: transparent; color: white; font-weight: 700;
-            cursor: pointer; transition: 0.3s; font-size: 0.8rem;
-        }
+        .sel-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; background: transparent; color: white; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.8rem; }
         .sel-btn.active { background: var(--accent); box-shadow: 0 5px 15px var(--accent-glow); }
-
         .dl-list { display: none; grid-template-columns: 1fr 1fr; gap: 10px; }
         .dl-list.active { display: grid; }
-
         .dl-item {
             background: rgba(255,255,255,0.07); padding: 15px; border-radius: 18px;
             text-decoration: none; color: white; text-align: center; font-size: 0.85rem;
@@ -233,9 +153,7 @@
         }
         .dl-item:hover { border-color: var(--accent); background: rgba(255, 45, 85, 0.15); transform: scale(1.02); }
         .dl-item span { display: block; font-size: 0.65rem; opacity: 0.6; margin-top: 4px; text-transform: uppercase; }
-
         #loader { display: none; color: var(--accent); font-weight: 800; margin: 15px 0; text-align: center; letter-spacing: 1px; }
-
         footer { text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 700; color: var(--text-dim); letter-spacing: 1px; }
         footer span { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
     </style>
@@ -252,129 +170,53 @@
             <button id="fetchBtn">FETCH CONTENT</button>
         </div>
 
-        <div id="loader">⚡ BOOTING PLAYER...</div>
+        <div id="loader">⚡ PROCESSING...</div>
+
+        <div id="searchArea"></div>
 
         <div id="resultArea">
+            <button onclick="backToSearch()" id="backBtn" style="display:none; background:none; border:none; color:var(--accent); font-weight:700; font-size:0.7rem; cursor:pointer; margin-bottom:10px;">← BACK TO SEARCH</button>
             <div class="player-frame">
                 <video id="vidPlayer" controls></video>
             </div>
-
             <div id="vidTitle" class="title"></div>
-            
             <div class="stats">
                 <span id="vidAuthor"></span>
                 <span id="vidViews"></span>
                 <span id="vidAgo"></span>
                 <span id="vidTime"></span>
             </div>
-
             <div class="format-selection">
                 <button class="sel-btn active" id="btnVid" onclick="toggleDisplay('video')">VIDEO (MP4)</button>
                 <button class="sel-btn" id="btnAud" onclick="toggleDisplay('audio')">AUDIO (MP3)</button>
             </div>
-
             <div id="videoList" class="dl-list active"></div>
             <div id="audioList" class="dl-list"></div>
         </div>
     </div>
 
-
-
-<div class="bank-card">
-    <div class="bank-header">
-        <i class="fa-solid fa-crown"></i> GET PREMIUM ACCESS
-    </div>
-    
-    <div style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-        <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;">
-            Unlock high-speed downloads and unlimited requests. 
-            <strong style="color: #fff;">VajiraOfficial YTDL API Key</strong> is now available for a lifetime price.
-        </p>
-        <div style="margin-top: 8px; font-weight: 800; color: var(--accent); font-size: 0.9rem;">
-            PRICE: LKR 500.00
-        </div>
-    </div>
-
-    <div class="bank-details">
-        <div class="bank-header" style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 8px;">
-            <i class="fa-solid fa-building-columns"></i> PAYMENT DETAILS
-        </div>
-        
-        <div class="detail-row">
-            <span class="detail-label">Bank</span>
-            <span class="detail-value">Bank of Ceylon</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-label">Branch</span>
-            <span class="detail-value">Balangoda (688)</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-label">Holder</span>
-            <span class="detail-value">MR W M V RATHNAYAKA</span>
-        </div>
-        
-        <div class="acc-number-box" onclick="copyAccountNumber()" title="Click to copy account number">
-            <div>
-                <span class="detail-label" style="display:block; font-size:0.6rem;">ACCOUNT NUMBER</span>
-                <span id="accNum" style="letter-spacing: 1px; font-weight: 800;">0089860809</span>
+    <div class="bank-card" style="width: 100%; max-width: 480px;">
+        <div class="bank-header"><i class="fa-solid fa-crown"></i> GET PREMIUM ACCESS</div>
+        <div class="bank-details">
+            <div class="detail-row"><span class="detail-label">Price</span><span class="detail-value">LKR 500.00</span></div>
+            <div class="detail-row"><span class="detail-label">Bank</span><span class="detail-value">Bank of Ceylon</span></div>
+            <div class="detail-row"><span class="detail-label">Holder</span><span class="detail-value">MR W M V RATHNAYAKA</span></div>
+            <div class="acc-number-box" onclick="copyAccountNumber()">
+                <span id="accNum" style="font-weight: 800;">0089860809</span>
+                <i class="fa-regular fa-copy" style="color:var(--accent)"></i>
             </div>
-            <i class="fa-regular fa-copy" style="color:var(--accent)"></i>
+            <a href="https://wa.me/94719199757" target="_blank" style="text-decoration: none; margin-top: 10px;">
+                <button style="width: 100%; background: rgba(37, 211, 102, 0.1); border: 1px solid #25D366; color: #25D366; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer;">CONTACT OWNER</button>
+            </a>
+            <div id="copyStatus" style="display:none; text-align:center; font-size:0.7rem; color:var(--accent); margin-top:8px;">✅ Copied!</div>
         </div>
-
-        <div style="display: flex; gap: 8px; margin-top: 10px;">
-            <button onclick="copyApi('mp3')" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 6px; font-size: 0.65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
-                <i class="fa-solid fa-music" style="color: var(--accent);"></i> MP3 API
-            </button>
-            <button onclick="copyApi('mp4')" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 6px; font-size: 0.65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
-                <i class="fa-solid fa-video" style="color: var(--accent);"></i> MP4 API
-            </button>
-        </div>
-
-        <a href="https://wa.me/94719199757" target="_blank" style="text-decoration: none;">
-            <button style="width: 100%; margin-top: 8px; background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); color: #25D366; padding: 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class="fa-brands fa-whatsapp"></i> CONTACT OWNER
-            </button>
-        </a>
-
-        <div id="copyStatus" style="display:none; text-align:center; font-size:0.7rem; color:var(--accent); margin-top:8px;">✅ Copied to clipboard!</div>
-        
-        <p style="font-size: 0.65rem; color: var(--text-dim); text-align: center; margin-top: 12px; font-style: italic;">
-            *After payment, please send a screenshot to the admin to activate your API Key.
-        </p>
     </div>
-</div>
 
-    
-
-    <footer>
-        Powered by: Vajira <span>Rathnayaka</span>
-    </footer>
+    <footer>Powered by: Vajira <span>Rathnayaka</span></footer>
 
     <script>
-
-
-
-function copyAccountNumber() {
-    showStatus(document.getElementById('accNum').innerText);
-}
-
-function copyApi(type) {
-    const url = type === 'mp3' 
-        ? "https://vajira-official-apis.vercel.app/api/ytmp3?apikey=YOUR_KEY&url=" 
-        : "https://vajira-official-apis.vercel.app/api/ytmp4?apikey=YOUR_KEY&url=";
-    showStatus(url);
-}
-
-function showStatus(text) {
-    navigator.clipboard.writeText(text);
-    const status = document.getElementById('copyStatus');
-    status.style.display = 'block';
-    setTimeout(() => { status.style.display = 'none'; }, 2000);
-}
-
-
-        
-        const API_KEY = "vajira-1qg3lqmr60-1768268975394";
+        const SEARCH_API = "vajira-o0oujlyn32-1771089291985";
+        const DOWNLOAD_API = "vajira-1qg3lqmr60-1768268975394";
 
         function toggleDisplay(type) {
             document.getElementById('videoList').classList.toggle('active', type === 'video');
@@ -383,44 +225,88 @@ function showStatus(text) {
             document.getElementById('btnAud').classList.toggle('active', type === 'audio');
         }
 
-        document.getElementById('fetchBtn').addEventListener('click', async () => {
-            const url = document.getElementById('urlInput').value.trim();
-            if(!url) return alert("Please paste a link first!");
+        function copyAccountNumber() {
+            navigator.clipboard.writeText(document.getElementById('accNum').innerText);
+            const status = document.getElementById('copyStatus');
+            status.style.display = 'block';
+            setTimeout(() => { status.style.display = 'none'; }, 2000);
+        }
 
+        document.getElementById('fetchBtn').addEventListener('click', async () => {
+            const query = document.getElementById('urlInput').value.trim();
+            if(!query) return alert("Please enter something!");
+
+            if(query.includes("youtube.com") || query.includes("youtu.be")) {
+                loadDownloadLinks(query);
+            } else {
+                fetchSearch(query);
+            }
+        });
+
+        async function fetchSearch(q) {
             const loader = document.getElementById('loader');
+            const searchArea = document.getElementById('searchArea');
             const resultArea = document.getElementById('resultArea');
+            
             loader.style.display = "block";
+            searchArea.style.display = "none";
+            resultArea.style.display = "none";
+
+            try {
+                const res = await fetch(`https://vajira-official-apis.vercel.app/api/ytsearch?apikey=${SEARCH_API}&q=${encodeURIComponent(q)}`);
+                const data = await res.json();
+
+                if(data.status) {
+                    searchArea.innerHTML = "";
+                    data.results.forEach(vid => {
+                        searchArea.innerHTML += `
+                            <div class="search-card" onclick="loadDownloadLinks('${vid.url}')">
+                                <img src="${vid.media.thumbnail}" class="search-thumb">
+                                <div class="search-info">
+                                    <div class="search-title">${vid.title}</div>
+                                    <div class="search-meta">${vid.author.name} • ${vid.description.duration}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    loader.style.display = "none";
+                    searchArea.style.display = "flex";
+                }
+            } catch (err) { alert("Search Error"); loader.style.display = "none"; }
+        }
+
+        async function loadDownloadLinks(url) {
+            const loader = document.getElementById('loader');
+            const searchArea = document.getElementById('searchArea');
+            const resultArea = document.getElementById('resultArea');
+            const backBtn = document.getElementById('backBtn');
+            
+            loader.style.display = "block";
+            searchArea.style.display = "none";
             resultArea.style.display = "none";
 
             try {
                 const [vRes, aRes] = await Promise.all([
-                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp4?apikey=${API_KEY}&url=${encodeURIComponent(url)}`).then(r => r.json()),
-                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp3?apikey=${API_KEY}&url=${encodeURIComponent(url)}`).then(r => r.json())
+                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp4?apikey=${DOWNLOAD_API}&url=${encodeURIComponent(url)}`).then(r => r.json()),
+                    fetch(`https://vajira-official-apis.vercel.app/api/ytmp3?apikey=${DOWNLOAD_API}&url=${encodeURIComponent(url)}`).then(r => r.json())
                 ]);
 
-                if (vRes.status && aRes.status) {
+                if (vRes.status) {
                     const meta = vRes.metadata;
-                    
-                    // Set Player Video Source (Highest quality link)
-                    const player = document.getElementById('vidPlayer');
-                    player.src = vRes.downloads.video[0].url;
-                    player.poster = meta.thumbnails.max || meta.thumbnails.image;
-
-                    // Display Header Meta (Keeping all original info)
+                    document.getElementById('vidPlayer').src = vRes.downloads.video[0].url;
+                    document.getElementById('vidPlayer').poster = meta.thumbnails.max || meta.thumbnails.image;
                     document.getElementById('vidTitle').innerText = meta.title;
                     document.getElementById('vidAuthor').innerText = meta.author.name;
                     document.getElementById('vidViews').innerText = meta.viewsFormatted + " views";
                     document.getElementById('vidAgo').innerText = meta.ago;
                     document.getElementById('vidTime').innerText = meta.duration.timestamp;
 
-                    // Build Video Buttons (All qualities)
                     const vList = document.getElementById('videoList');
                     vList.innerHTML = "";
                     vRes.downloads.video.forEach(dl => {
                         vList.innerHTML += `<a href="${dl.url}" class="dl-item" target="_blank">${dl.quality}<span>${dl.format}</span></a>`;
                     });
 
-                    // Build Audio Buttons
                     const aList = document.getElementById('audioList');
                     aList.innerHTML = "";
                     aRes.data.downloads.forEach(dl => {
@@ -429,16 +315,15 @@ function showStatus(text) {
 
                     loader.style.display = "none";
                     resultArea.style.display = "block";
-                } else {
-                    alert("Error: Link invalid or API failed.");
+                    backBtn.style.display = "block";
                 }
-            } catch (err) {
-                console.error(err);
-                alert("Connection Failed.");
-            } finally {
-                loader.style.display = "none";
-            }
-        });
+            } catch (err) { alert("Download API Error"); loader.style.display = "none"; }
+        }
+
+        function backToSearch() {
+            document.getElementById('resultArea').style.display = "none";
+            document.getElementById('searchArea').style.display = "flex";
+        }
     </script>
 </body>
 </html>
