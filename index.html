@@ -3,209 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProEarn - Ultimate Earning Platform</title>
+    <title>ProEarn Ultimate | Complete Earning Solution</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .hidden { display: none; }
-        .active-tab { border-bottom: 4px solid #2563eb; color: #2563eb; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fade { animation: fadeIn 0.5s ease-in-out; }
+        .tab-active { border-bottom: 3px solid #2563eb; color: #2563eb; font-weight: 800; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="bg-gray-50 text-slate-800 pb-20 lg:pb-0">
 
-    <div id="auth-section" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md animate-fade">
-            <h2 class="text-3xl font-extrabold text-blue-600 mb-2">ProEarn</h2>
-            <p class="text-slate-500 mb-6" id="auth-title">Create an account to start earning.</p>
-            
-            <input type="text" id="username" placeholder="Username" class="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            <input type="password" id="password" placeholder="Password" class="w-full p-3 mb-6 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            
-            <button onclick="handleAuth()" id="auth-btn" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Get Started</button>
-            <p class="text-center mt-4 text-sm">Demo Mode: Any login works!</p>
+    <div id="login-screen" class="min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100">
+            <div class="text-center mb-8">
+                <div class="inline-block p-4 bg-blue-100 rounded-2xl text-blue-600 mb-4"><i class="fa-solid fa-wallet text-3xl"></i></div>
+                <h1 class="text-3xl font-black text-slate-900 leading-tight">ProEarn <span class="text-blue-600">Ultimate</span></h1>
+                <p class="text-slate-500">Sign in to access your rewards</p>
+            </div>
+            <input type="text" id="user-input" placeholder="Enter Username" class="w-full p-4 bg-gray-50 border rounded-xl mb-4 focus:ring-2 focus:ring-blue-400 outline-none transition">
+            <button onclick="login()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-blue-700 active:scale-95 transition">Access Dashboard</button>
         </div>
     </div>
 
-    <div id="app-section" class="hidden">
-        <nav class="bg-white shadow-md p-4 sticky top-0 z-50">
-            <div class="container mx-auto flex justify-between items-center">
-                <span class="text-xl font-black text-blue-600">PROEARN</span>
-                <div class="flex items-center gap-6">
-                    <div class="text-right">
-                        <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Wallet Balance</p>
-                        <p class="text-lg font-bold text-green-600" id="top-balance">$0.00</p>
-                    </div>
-                    <button onclick="logout()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-power-off text-xl"></i></button>
-                </div>
+    <div id="main-app" class="hidden min-h-screen">
+        <nav class="bg-white border-b sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
+            <h2 class="font-black text-blue-600 text-xl tracking-tighter">PROEARN</h2>
+            <div class="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-full border border-green-100">
+                <i class="fa-solid fa-coins text-yellow-500"></i>
+                <span id="bal-display" class="font-bold text-green-700">$0.00</span>
             </div>
         </nav>
 
-        <div class="container mx-auto p-4 lg:p-8 max-w-6xl">
-            <div class="flex gap-8 mb-8 border-b border-slate-200">
-                <button onclick="showTab('tasks')" id="tab-tasks" class="pb-2 font-bold active-tab">Tasks</button>
-                <button onclick="showTab('withdraw')" id="tab-withdraw" class="pb-2 font-bold text-slate-400">Withdraw</button>
-                <button onclick="showTab('history')" id="tab-history" class="pb-2 font-bold text-slate-400">History</button>
+        <div class="container mx-auto max-w-5xl p-4 lg:p-8">
+            <div class="flex overflow-x-auto no-scrollbar gap-8 mb-8 border-b text-slate-400 whitespace-nowrap">
+                <button onclick="switchTab('tasks')" id="btn-tasks" class="pb-3 tab-active">Tasks</button>
+                <button onclick="switchTab('refer')" id="btn-refer" class="pb-3">Refer & Earn</button>
+                <button onclick="switchTab('withdraw')" id="btn-withdraw" class="pb-3">Withdraw</button>
+                <button onclick="switchTab('leaderboard')" id="btn-leaderboard" class="pb-3">Leaderboard</button>
+                <button onclick="switchTab('support')" id="btn-support" class="pb-3">Support</button>
             </div>
 
-            <div id="content-tasks" class="animate-fade">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 task-card">
-                        <span class="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded">EASY</span>
-                        <h4 class="text-lg font-bold mt-2">Subscribe to YouTube</h4>
-                        <p class="text-slate-500 text-sm mb-4">Subscribe and like the latest video.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xl font-bold text-slate-700">$1.50</span>
-                            <button onclick="completeTask('YouTube Sub', 1.50, this)" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700">Go</button>
+            <div id="tab-tasks" class="animate-in fade-in duration-500">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 rounded-3xl text-white mb-8 shadow-lg flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold mb-1">Daily Bonus Available!</h3>
+                        <p class="opacity-80 text-sm">Claim your daily login reward of $0.50</p>
+                    </div>
+                    <button id="daily-btn" onclick="claimDaily()" class="bg-white text-blue-600 px-6 py-2 rounded-xl font-black hover:bg-gray-100 transition">Claim</button>
+                </div>
+
+                <h3 class="font-bold text-lg mb-4">Hot Offers</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="task-list">
+                    </div>
+            </div>
+
+            <div id="tab-refer" class="hidden text-center py-10">
+                <div class="max-w-md mx-auto">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" class="w-32 mx-auto mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Invite Friends</h2>
+                    <p class="text-slate-500 mb-6">Earn $2.00 for every friend who joins using your link.</p>
+                    <div class="flex gap-2 bg-white p-2 rounded-2xl border">
+                        <input type="text" readonly id="ref-link" class="w-full bg-transparent px-3 outline-none font-medium text-blue-600">
+                        <button onclick="copyRef()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-withdraw" class="hidden max-w-xl mx-auto">
+                <div class="bg-white p-8 rounded-3xl border shadow-sm">
+                    <h3 class="text-xl font-bold mb-6">Withdraw Funds</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 border-2 border-blue-600 bg-blue-50 rounded-2xl relative">
+                            <i class="fa-brands fa-paypal text-2xl text-blue-700"></i>
+                            <p class="mt-2 font-bold">PayPal</p>
+                            <div class="absolute top-2 right-2 text-blue-600"><i class="fa-solid fa-circle-check"></i></div>
+                        </div>
+                        <div class="p-4 border rounded-2xl opacity-50 cursor-not-allowed">
+                            <i class="fa-solid fa-building-columns text-2xl text-gray-700"></i>
+                            <p class="mt-2 font-bold">Bank Transfer</p>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 task-card">
-                        <span class="bg-orange-100 text-orange-600 text-xs font-bold px-2 py-1 rounded">MEDIUM</span>
-                        <h4 class="text-lg font-bold mt-2">Install Mobile App</h4>
-                        <p class="text-slate-500 text-sm mb-4">Install and open the 'CryptoTrack' app.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xl font-bold text-slate-700">$5.00</span>
-                            <button onclick="completeTask('App Install', 5.00, this)" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700">Go</button>
-                        </div>
+                    <label class="block text-sm font-bold mb-2 text-slate-500 uppercase">Payment Email</label>
+                    <input type="email" placeholder="paypal@example.com" class="w-full p-4 bg-gray-50 border rounded-xl mb-6">
+                    <button onclick="requestPayout()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-700">Request Payout ($10 Min)</button>
+                </div>
+            </div>
+
+            <div id="tab-leaderboard" class="hidden">
+                <div class="bg-white rounded-3xl border overflow-hidden">
+                    <div class="bg-slate-900 p-6 text-white text-center">
+                        <p class="text-yellow-400 font-bold uppercase tracking-widest text-xs mb-1">Top Earners</p>
+                        <h2 class="text-2xl font-bold italic">Global Ranking</h2>
                     </div>
+                    <div id="leader-list">
+                        </div>
                 </div>
             </div>
 
-            <div id="content-withdraw" class="hidden animate-fade">
-                <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-xl font-bold mb-4">Cash Out</h3>
-                    <p class="text-sm text-slate-500 mb-6">Min. Withdrawal: <span class="font-bold text-slate-800">$10.00</span></p>
-                    
-                    <label class="block text-sm font-bold mb-2">Method</label>
-                    <select id="method" class="w-full p-3 border rounded-lg mb-4">
-                        <option>PayPal</option>
-                        <option>Paytm / UPI</option>
-                        <option>Binance (USDT)</option>
-                    </select>
-
-                    <label class="block text-sm font-bold mb-2">Account Details</label>
-                    <input type="text" id="pay-info" placeholder="Email or Wallet ID" class="w-full p-3 border rounded-lg mb-6">
-
-                    <button onclick="requestWithdrawal()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700">Submit Request</button>
+            <div id="tab-support" class="hidden max-w-md mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold">Need Help?</h2>
+                    <p class="text-slate-500">Our team responds within 24 hours.</p>
                 </div>
+                <textarea placeholder="Describe your issue..." class="w-full p-4 bg-white border rounded-2xl h-40 mb-4 outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                <button onclick="alert('Ticket Submitted!')" class="w-full bg-slate-800 text-white py-4 rounded-2xl font-bold">Submit Ticket</button>
             </div>
-
-            <div id="content-history" class="hidden animate-fade">
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-100">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50">
-                            <tr>
-                                <th class="p-4 font-bold text-slate-500">Activity</th>
-                                <th class="p-4 font-bold text-slate-500">Amount</th>
-                                <th class="p-4 font-bold text-slate-500">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-body">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
     </div>
 
     <script>
-        // State Management
-        let user = JSON.parse(localStorage.getItem('earnUser')) || { 
-            name: '', 
-            balance: 0.00, 
-            history: [], 
-            isLoggedIn: false 
+        // CORE STATE ENGINE
+        let db = JSON.parse(localStorage.getItem('proEarnDB')) || {
+            user: { name: '', balance: 0.0, lastDaily: null, tasksCompleted: [] },
+            leaderboard: [
+                { name: 'CryptoKing', amount: 450.50 },
+                { name: 'Sarah_Earns', amount: 320.00 },
+                { name: 'LuckyJoe', amount: 285.40 }
+            ]
         };
 
-        // Initialize UI
-        if(user.isLoggedIn) showApp();
+        const tasks = [
+            { id: 1, title: 'Watch Video Ad', reward: 0.25, icon: 'fa-play', color: 'text-red-500' },
+            { id: 2, title: 'Follow on Instagram', reward: 0.50, icon: 'fa-camera', color: 'text-pink-500' },
+            { id: 3, title: 'Install & Open App', reward: 2.50, icon: 'fa-mobile-screen', color: 'text-blue-500' },
+            { id: 4, title: 'Leave a Review', reward: 1.00, icon: 'fa-star', color: 'text-yellow-500' }
+        ];
 
-        function handleAuth() {
-            const name = document.getElementById('username').value;
-            if(!name) return alert("Enter a username");
-            user.name = name;
-            user.isLoggedIn = true;
-            saveAndRefresh();
-            showApp();
+        // AUTH LOGIC
+        function login() {
+            const name = document.getElementById('user-input').value;
+            if(!name) return alert("Please enter a username");
+            db.user.name = name;
+            save();
+            renderApp();
         }
 
-        function showApp() {
-            document.getElementById('auth-section').classList.add('hidden');
-            document.getElementById('app-section').classList.remove('hidden');
+        function renderApp() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('ref-link').value = `https://proearn.com/ref?u=${db.user.name}`;
             updateUI();
+            renderTasks();
+            renderLeaderboard();
         }
 
-        function completeTask(name, amount, btn) {
-            user.balance += amount;
-            user.history.unshift({
-                task: name,
-                amount: `+$${amount.toFixed(2)}`,
-                status: 'Completed',
-                color: 'text-green-600'
+        // TAB SYSTEM
+        function switchTab(tabId) {
+            const tabs = ['tasks', 'refer', 'withdraw', 'leaderboard', 'support'];
+            tabs.forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`btn-${t}`).classList.remove('tab-active');
             });
-            btn.innerText = "Done ✓";
-            btn.disabled = true;
-            btn.classList.replace('bg-blue-600', 'bg-slate-300');
-            saveAndRefresh();
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabId}`).classList.add('tab-active');
         }
 
-        function requestWithdrawal() {
-            const amount = 10.00; // Example fixed min
-            const info = document.getElementById('pay-info').value;
-
-            if(user.balance < amount) {
-                alert("Insufficient funds. You need at least $10.00");
-            } else if(!info) {
-                alert("Please enter payment details");
-            } else {
-                user.balance -= amount;
-                user.history.unshift({
-                    task: 'Withdrawal Request',
-                    amount: `-$${amount.toFixed(2)}`,
-                    status: 'Pending',
-                    color: 'text-orange-500'
-                });
-                alert("Withdrawal request sent!");
-                saveAndRefresh();
-                showTab('history');
-            }
+        // TASK ENGINE
+        function renderTasks() {
+            const container = document.getElementById('task-list');
+            container.innerHTML = tasks.map(t => {
+                const isDone = db.user.tasksCompleted.includes(t.id);
+                return `
+                    <div class="bg-white p-5 rounded-2xl border flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="${t.color} text-2xl w-12 h-12 flex items-center justify-center bg-gray-50 rounded-xl">
+                                <i class="fa-solid ${t.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">${t.title}</h4>
+                                <p class="text-green-600 font-bold text-sm">+$${t.reward.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <button onclick="doTask(${t.id}, ${t.reward})" ${isDone ? 'disabled' : ''} 
+                            class="${isDone ? 'bg-gray-100 text-gray-400' : 'bg-blue-600 text-white shadow-md'} px-5 py-2 rounded-xl font-bold transition">
+                            ${isDone ? 'Done' : 'Start'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function showTab(tabName) {
-            // Hide all
-            ['tasks', 'withdraw', 'history'].forEach(t => {
-                document.getElementById(`content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('active-tab');
-                document.getElementById(`tab-${t}`).classList.add('text-slate-400');
-            });
-            // Show target
-            document.getElementById(`content-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabName}`).classList.add('active-tab');
+        function doTask(id, reward) {
+            db.user.balance += reward;
+            db.user.tasksCompleted.push(id);
+            save();
+            updateUI();
+            renderTasks();
+            alert("Reward added to wallet!");
         }
 
+        // DAILY REWARD LOGIC
+        function claimDaily() {
+            const today = new Date().toDateString();
+            if(db.user.lastDaily === today) return alert("Come back tomorrow!");
+            
+            db.user.balance += 0.50;
+            db.user.lastDaily = today;
+            save();
+            updateUI();
+            document.getElementById('daily-btn').innerText = "Claimed";
+            document.getElementById('daily-btn').disabled = true;
+        }
+
+        // WITHDRAWAL LOGIC
+        function requestPayout() {
+            if(db.user.balance < 10) return alert("Minimum balance of $10 required!");
+            db.user.balance -= 10;
+            save();
+            updateUI();
+            alert("Payout request submitted successfully!");
+        }
+
+        // UTILS
         function updateUI() {
-            document.getElementById('top-balance').innerText = `$${user.balance.toFixed(2)}`;
-            const historyBody = document.getElementById('history-body');
-            historyBody.innerHTML = user.history.map(item => `
-                <tr class="border-t border-slate-100">
-                    <td class="p-4 font-medium">${item.task}</td>
-                    <td class="p-4 font-bold ${item.color}">${item.amount}</td>
-                    <td class="p-4"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-bold">${item.status}</span></td>
-                </tr>
+            document.getElementById('bal-display').innerText = `$${db.user.balance.toFixed(2)}`;
+        }
+
+        function renderLeaderboard() {
+            const list = document.getElementById('leader-list');
+            list.innerHTML = db.leaderboard.map((u, i) => `
+                <div class="flex items-center justify-between p-4 border-b last:border-0">
+                    <div class="flex items-center gap-4">
+                        <span class="font-black text-slate-300 w-6">${i+1}</span>
+                        <span class="font-bold">${u.name}</span>
+                    </div>
+                    <span class="text-blue-600 font-black">$${u.amount.toFixed(2)}</span>
+                </div>
             `).join('');
         }
 
-        function saveAndRefresh() {
-            localStorage.setItem('earnUser', JSON.stringify(user));
-            updateUI();
+        function copyRef() {
+            const input = document.getElementById('ref-link');
+            input.select();
+            document.execCommand('copy');
+            alert("Link copied!");
         }
 
-        function logout() {
-            localStorage.removeItem('earnUser');
-            location.reload();
+        function save() {
+            localStorage.setItem('proEarnDB', JSON.stringify(db));
         }
+
+        // Auto-login if exists
+        if(db.user.name) renderApp();
     </script>
 </body>
 </html>
