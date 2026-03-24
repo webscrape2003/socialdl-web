@@ -1400,7 +1400,7 @@ window.addEventListener('load', () => {
 
 
         
-
+/*
         
 window.addEventListener('load', () => {
     setTimeout(() => {
@@ -1416,10 +1416,45 @@ window.addEventListener('load', () => {
             openLogin(); 
         }, 800);
     }, 2000);
+});*/
+
+
+
+window.addEventListener('load', () => {
+    // 1. Initial Loader Fade Out
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        
+        setTimeout(() => {
+            loader.style.display = 'none';
+            const mainContainer = document.getElementById('main');
+            mainContainer.classList.add('active');
+
+            // 2. CHECK AUTH STATE BEFORE LOCKING
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    // USER IS LOGGED IN: 
+                    // Strip the "locked" class and update UI
+                    mainContainer.classList.remove('locked');
+                    closeLogin();
+                    
+                    const displayName = user.displayName ? 
+                                      user.displayName.toUpperCase() : 
+                                      (user.email ? user.email.split('@')[0].toUpperCase() : "GUEST_USER");
+                    
+                    document.getElementById('user-status-text').innerText = displayName;
+                    console.log("Session restored for:", displayName);
+                } else {
+                    // NO USER: Lock system and force login
+                    mainContainer.classList.add('locked');
+                    openLogin();
+                    console.log("No active session. Shielding dashboard.");
+                }
+            });
+        }, 800);
+    }, 2000);
 });
-
-
-
 
 
 
@@ -1755,7 +1790,7 @@ function handleSignup() {
 }
 
         
-
+/*
 function unlockSystem(username) {
     alert("ACCESS_GRANTED: Welcome " + username);
     
@@ -1771,10 +1806,18 @@ function unlockSystem(username) {
     // Optional: Play a sound or trigger a final "boot" animation here
     console.log("System fully unlocked for user: " + username);
 }
+*/
 
 
-
-        
+ function unlockSystem(username, silent = false) {
+    if (!silent) {
+        showTechAlert("ACCESS_GRANTED", username);
+    }
+    closeLogin();
+    document.getElementById('main').classList.remove('locked');
+    document.getElementById('user-status-text').innerText = username;
+}
+       
         
 
 async function initBattery() {
