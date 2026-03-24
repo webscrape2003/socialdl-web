@@ -3,258 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMEVAULT | Pro PC Database</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>PC GAME HUB | VAJIRA OFFICIAL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            --accent: #00ffcc;
-            --bg: #0a0a0c;
-            --card: #141417;
-            --border: rgba(255,255,255,0.08);
-            --glass: rgba(255, 255, 255, 0.03);
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg: #06070a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 242, 255, 0.2);
         }
 
         * { box-sizing: border-box; transition: all 0.3s ease; }
-        
+
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
-            color: #eee;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #06070a 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        /* Navbar/Search */
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-weight: 800; letter-spacing: -1px; color: var(--accent); margin-bottom: 5px; }
-        
-        .search-box {
-            display: flex;
-            background: var(--card);
-            padding: 8px;
-            border-radius: 12px;
+        /* Header & Search */
+        header { text-align: center; margin-bottom: 50px; }
+        .logo { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 5px;
+            color: #fff;
+            text-shadow: 0 0 15px var(--primary);
+        }
+        .logo span { color: var(--primary); }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        input#searchInput {
+            width: 100%;
+            padding: 18px 25px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border);
-            gap: 10px;
-        }
-
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 12px;
+            border-radius: 50px;
             color: white;
-            font-size: 16px;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
             outline: none;
         }
 
-        button {
-            background: var(--accent);
-            color: black;
+        input#searchInput:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
             border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            font-weight: 700;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
             cursor: pointer;
+            color: #000;
         }
 
-        button:hover { opacity: 0.8; transform: translateY(-2px); }
-
-        /* Grid */
-        #gameGrid {
+        /* Game Grid */
+        .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .game-card {
-            background: var(--card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 25px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
-        .game-card:hover { border-color: var(--accent); background: #1c1c21; }
-        .game-card span { font-size: 12px; color: var(--accent); font-weight: 600; }
-        .game-card h3 { margin: 10px 0; font-size: 18px; line-height: 1.4; }
-        .game-card small { color: #888; display: block; }
-
-        /* Detail View */
-        #detailView { display: none; background: var(--card); border-radius: 20px; padding: 30px; border: 1px solid var(--border); }
-        .back-btn { margin-bottom: 20px; display: inline-block; color: var(--accent); cursor: pointer; font-weight: 600; }
-        
-        .hero-info { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
-        @media (max-width: 768px) { .hero-info { grid-template-columns: 1fr; } }
-
-        .tag { background: var(--glass); padding: 5px 12px; border-radius: 6px; font-size: 12px; margin: 3px; display: inline-block; border: 1px solid var(--border); }
-        
-        .screenshot-grid { 
-            display: flex; 
-            overflow-x: auto; 
-            gap: 15px; 
-            margin: 20px 0;
-            padding-bottom: 10px;
+        .game-card:hover {
+            background: rgba(0, 242, 255, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-5px);
         }
-        .screenshot-grid img { height: 150px; border-radius: 10px; border: 1px solid var(--border); }
 
-        .dl-section { margin-top: 30px; }
-        .dl-group { background: var(--glass); border-radius: 12px; margin-bottom: 10px; padding: 15px; border-left: 4px solid var(--accent); }
-        .dl-group h4 { margin: 0 0 10px 0; font-size: 15px; color: #fff; }
-        .link-list { display: flex; flex-wrap: wrap; gap: 8px; }
-        .link-item { 
-            background: #222; 
-            color: #ddd; 
-            text-decoration: none; 
-            padding: 6px 12px; 
-            border-radius: 5px; 
-            font-size: 13px; 
-        }
-        .link-item:hover { background: var(--accent); color: black; }
+        .game-card h3 { margin: 0 0 10px 0; font-size: 1.2rem; color: #fff; line-height: 1.4; }
+        .game-card .meta { font-size: 0.85rem; color: #888; display: flex; gap: 15px; }
+        .meta i { color: var(--primary); margin-right: 5px; }
 
-        .loader { 
-            display: none; 
-            width: 40px; height: 40px; 
-            border: 4px solid var(--glass); 
-            border-top: 4px solid var(--accent); 
-            border-radius: 50%; 
-            animation: spin 1s linear infinite; 
-            margin: 20px auto;
+        /* Modal Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            overflow-y: auto;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .modal-content {
+            background: #111218;
+            border: 1px solid var(--border);
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 30px; cursor: pointer; color: #666; }
+        .close-btn:hover { color: #fff; }
+
+        /* Detail Elements */
+        .tag { background: var(--secondary); color: white; padding: 4px 12px; border-radius: 5px; font-size: 0.75rem; margin-right: 8px; text-transform: uppercase; }
+        .screenshot-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 25px 0; }
+        .screenshot-container img { width: 100%; border-radius: 10px; border: 1px solid #333; }
+
+        .download-list { margin-top: 30px; }
+        .dl-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #00f2ff, #7000ff);
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin: 10px 10px 0 0;
+            width: 100%;
+        }
+
+        .dl-btn:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(112, 0, 255, 0.4); }
+
+        /* Loader */
+        .loader { text-align: center; padding: 50px; color: var(--primary); font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>GAME<span style="color:white">VAULT</span></h1>
-        <p style="color:#666">Ultimate PC Games Database</p>
+    <div class="container">
+        <header>
+            <h1 class="logo">VAJIRA<span> GAME</span></h1>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Enter game name (e.g. GTA 5)..." onkeypress="if(event.key === 'Enter') searchGames()">
+                <button class="search-btn" onclick="searchGames()"><i class="fas fa-search"></i></button>
+            </div>
+        </header>
+
+        <div id="gameGrid" class="game-grid">
+            </div>
     </div>
 
-    <div id="searchView">
-        <div class="search-box">
-            <input type="text" id="gameInput" placeholder="Enter game name (e.g. GTA 5)...">
-            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-        </div>
-        <div class="loader" id="loader"></div>
-        <div id="gameGrid" style="margin-top: 30px;"></div>
-    </div>
-
-    <div id="detailView">
-        <div class="back-btn" onclick="closeDetails()"><i class="fa-solid fa-arrow-left"></i> Back to results</div>
-        <h2 id="gTitle" style="margin-top:0"></h2>
-        
-        <div id="gTags" style="margin-bottom:20px"></div>
-        
-        <div class="screenshot-grid" id="gScreens"></div>
-
-        <div id="gMeta" style="color:#aaa; font-size:14px; line-height:1.6"></div>
-
-        <div class="dl-section">
-            <h3 style="color:var(--accent)"><i class="fa-solid fa-download"></i> Download Links</h3>
-            <div id="gLinks"></div>
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modalBody">
+                </div>
         </div>
     </div>
-</div>
 
-<script>
-    const KEY = "mrhansamala-pcGAME-DB-FreeYRLKK1";
-    const BASE_URL = "https://pc-game-db.vercel.app/api";
-    // Proxy for CORS if needed: https://cors-anywhere.herokuapp.com/
-    
-    document.getElementById('searchBtn').addEventListener('click', searchGames);
-    document.getElementById('gameInput').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') searchGames();
-    });
+    <script>
+        const API_KEY = "mrhansamala-pcGAME-DB-FreeYRLKK1";
+        const BASE_SEARCH = "https://pc-game-db.vercel.app/api/search";
+        const BASE_INFO = "https://pc-game-db.vercel.app/api/info";
 
-    async function searchGames() {
-        const query = document.getElementById('gameInput').value;
-        if(!query) return;
+        async function searchGames() {
+            const query = document.getElementById('searchInput').value;
+            const grid = document.getElementById('gameGrid');
+            
+            if(!query) return;
 
-        toggleLoader(true);
-        const grid = document.getElementById('gameGrid');
-        grid.innerHTML = "";
+            grid.innerHTML = '<div class="loader"><i class="fas fa-circle-notch fa-spin"></i> SCANNING DATABASE...</div>';
 
-        try {
-            const res = await fetch(`${BASE_URL}/search?q=${encodeURIComponent(query)}&key=${KEY}`);
-            const data = await res.json();
+            try {
+                const response = await fetch(`${BASE_SEARCH}?q=${encodeURIComponent(query)}&key=${API_KEY}`);
+                const results = await response.json();
 
-            if(!data || data.length === 0) {
-                grid.innerHTML = `<p style="text-align:center; width:100%">No games found for "${query}"</p>`;
-            } else {
-                data.forEach(game => {
+                grid.innerHTML = '';
+
+                if(results.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center; width:100%;">No games found for that search.</p>';
+                    return;
+                }
+
+                results.forEach(game => {
                     const card = document.createElement('div');
                     card.className = 'game-card';
+                    card.onclick = () => showDetails(game.link);
                     card.innerHTML = `
-                        <span>${game.date}</span>
                         <h3>${game.title}</h3>
-                        <small>Uploaded by: ${game.author}</small>
+                        <div class="meta">
+                            <span><i class="far fa-calendar-alt"></i> ${game.date}</span>
+                            <span><i class="far fa-user"></i> ${game.author}</span>
+                        </div>
                     `;
-                    card.onclick = () => fetchDetails(game.link);
                     grid.appendChild(card);
                 });
+            } catch (err) {
+                grid.innerHTML = '<p style="color:red; text-align:center;">Network Error. Check console.</p>';
             }
-        } catch (e) {
-            alert("API Error. Please try again.");
         }
-        toggleLoader(false);
-    }
 
-    async function fetchDetails(gameUrl) {
-        toggleLoader(true);
-        try {
-            const res = await fetch(`${BASE_URL}/info?url=${encodeURIComponent(gameUrl)}&key=${KEY}`);
-            const g = await res.json();
-
-            document.getElementById('gTitle').innerText = g.title;
+        async function showDetails(url) {
+            const modal = document.getElementById('gameModal');
+            const body = document.getElementById('modalBody');
             
-            // Render Tags
-            document.getElementById('gTags').innerHTML = g.tags.map(t => `<span class="tag">${t}</span>`).join('');
-            
-            // Render Screenshots
-            document.getElementById('gScreens').innerHTML = g.screenshots.map(img => `<img src="${img}" onerror="this.style.display='none'">`).join('');
+            modal.style.display = "block";
+            body.innerHTML = '<div class="loader"><i class="fas fa-spinner fa-spin"></i> RETRIEVING DATA...</div>';
 
-            // Render Meta/Desc
-            document.getElementById('gMeta').innerHTML = `
-                <p><b>Release Date:</b> ${g.meta.date} | <b>Repacker:</b> ${g.meta.author}</p>
-                <div style="margin-top:15px">${g.description.join('<br>')}</div>
-            `;
+            try {
+                const response = await fetch(`${BASE_INFO}?url=${encodeURIComponent(url)}&key=${API_KEY}`);
+                const data = await response.json();
 
-            // Render Torrent/File Links
-            const linkBox = document.getElementById('gLinks');
-            linkBox.innerHTML = g.torrents.map(group => `
-                <div class="dl-group">
-                    <h4>${group.text.split('\n')[0]}</h4>
-                    <div class="link-list">
-                        ${group.links.map(l => `<a href="${l.link}" target="_blank" class="link-item">${l.text}</a>`).join('')}
+                const tags = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                const screens = data.screenshots.slice(0, 4).map(s => `<img src="${s}">`).join('');
+                
+                // Extracting magnet link if available
+                let magnetLink = '';
+                data.torrents.forEach(t => {
+                    const found = t.links.find(l => l.text.toLowerCase().includes('magnet'));
+                    if(found) magnetLink = found.link;
+                });
+
+                body.innerHTML = `
+                    <h2 style="color: var(--primary); margin-top:0;">${data.title}</h2>
+                    <div style="margin-bottom: 20px;">${tags}</div>
+                    
+                    <div class="meta" style="margin-bottom:20px;">
+                        <span><i class="fas fa-user-edit"></i> ${data.meta.author}</span>
+                        <span><i class="fas fa-clock"></i> ${data.meta.date}</span>
                     </div>
-                </div>
-            `).join('');
 
-            document.getElementById('searchView').style.display = "none";
-            document.getElementById('detailView').style.display = "block";
-            window.scrollTo(0,0);
-        } catch (e) {
-            alert("Error fetching game details.");
+                    <h4 style="border-left: 3px solid var(--primary); padding-left:10px;">SCREENSHOTS</h4>
+                    <div class="screenshot-container">${screens}</div>
+
+                    <div class="download-list">
+                        ${magnetLink ? `
+                            <a href="${magnetLink}" class="dl-btn">
+                                <i class="fas fa-magnet" style="margin-right:10px;"></i> 
+                                DOWNLOAD TORRENT (MAGNET)
+                            </a>
+                        ` : '<p>Magnet link not directly available. Check original source.</p>'}
+                        
+                        <a href="${url}" target="_blank" class="dl-btn" style="background: transparent; border: 1px solid #444;">
+                            <i class="fas fa-external-link-alt" style="margin-right:10px;"></i>
+                            VIEW ORIGINAL REPACK PAGE
+                        </a>
+                    </div>
+                `;
+
+            } catch (err) {
+                body.innerHTML = '<p>Failed to load game details.</p>';
+            }
         }
-        toggleLoader(false);
-    }
 
-    function closeDetails() {
-        document.getElementById('searchView').style.display = "block";
-        document.getElementById('detailView').style.display = "none";
-    }
+        function closeModal() {
+            document.getElementById('gameModal').style.display = "none";
+        }
 
-    function toggleLoader(show) {
-        document.getElementById('loader').style.display = show ? "block" : "none";
-    }
-</script>
-
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('gameModal')) closeModal();
+        }
+    </script>
 </body>
 </html>
